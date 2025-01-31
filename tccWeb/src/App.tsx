@@ -1,33 +1,67 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { FaRegEye, FaRegEyeSlash, FaRegUser } from "react-icons/fa";
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [email, setEmail] = useState('')
+  const [senha, setSenha] = useState('')
+  const [hidePass, setHidePass] = useState(true)
+
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className='nav'>
+       
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+
+      <div className='container'>
+        <img className='imgPreview' src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
+
+        <form className='form' >
+
+          <div className='inputArea'>
+
+            <input
+              type="text"
+              value={email}
+              onChange={(e) => { setEmail(e.target.value) }}
+              placeholder='Email...'
+              required
+            />
+            <FaRegUser />
+
+          </div>
+
+
+          <div className='inputArea'>
+            <input
+              type={hidePass ? "password" : "text"}
+              value={senha}
+              onChange={(e) => { setSenha(e.target.value) }}
+              placeholder='Senha...'
+              required
+            />
+            <div className='verSenha' onClick={() => { setHidePass(!hidePass) }}>
+              {
+                hidePass
+                  ?
+                  <FaRegEye />
+                  :
+                  <FaRegEyeSlash />
+              }
+            </div >
+          </div>
+
+
+          <button>Entrar</button>
+          <a href="">Não lembro minha senha!</a>
+
+        </form>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
+      <div className='footer'>
+        <a href="">c</a>
+      </div>
     </>
   )
 }
