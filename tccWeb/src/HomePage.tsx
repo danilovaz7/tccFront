@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react';
 import './HomePage.css'
-import { MdMenu } from "react-icons/md";
+import { MdMenu,MdKeyboardArrowRight } from "react-icons/md";
+
 
 export function HomePage() {
 
@@ -42,7 +43,7 @@ export function HomePage() {
                             value={matricula}
                             onChange={(e) => { setMatricula(e.target.value.replace(/[^0-9]/g, '')) }}
                         />
-                        <button>CONVIDAR</button>
+                        <button className='btn'>CONVIDAR</button>
                     </form>
                 </div>
 
@@ -52,7 +53,7 @@ export function HomePage() {
                 </div>
 
                 <div className='right'>
-                    <h1>TOP <span style={{ color: 'yellow' }}>10</span></h1>
+                    <h1>Ranking da <span style={{ color: 'yellow' }}>sala</span></h1>
                     <div className='areaTop10'>
 
                         <div className='aluno1'>
@@ -81,33 +82,7 @@ export function HomePage() {
                             <p>Aluno da Silva</p>
                             <p>Nivel 20</p>
                         </div>
-                        <div className='aluno'>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            <p>Aluno da Silva</p>
-                            <p>Nivel 20</p>
-                        </div>
-                        <div className='aluno'>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            <p>Aluno da Silva</p>
-                            <p>Nivel 20</p>
-                        </div>
-                        <div className='aluno'>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            <p>Aluno da Silva</p>
-                            <p>Nivel 20</p>
-                        </div>
-                        <div className='aluno'>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            <p>Aluno da Silva</p>
-                            <p>Nivel 20</p>
-                        </div>
-                        <div className='aluno'>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            <p>Aluno da Silva</p>
-                            <p>Nivel 20</p>
-                        </div>
-                        
-
+                        <button className='btn'>Ver mais <span><MdKeyboardArrowRight size={16} /></span></button>
                     </div>
                 </div>
             </div>

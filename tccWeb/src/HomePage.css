@@ -70,6 +70,7 @@
 
 .page {
     width: 100%;
+    flex-wrap: wrap;
     display: flex;
     justify-content: space-around;
 }
@@ -80,6 +81,7 @@
 
 .left {
     width: 20%;
+    height: fit-content;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -109,10 +111,14 @@
     font-size: 18px;
 }
 
-.conviteJogo button {
+.btn {
     background-color: #00E5FF;
-    width: 30%;
+    width: 40%;
     font-size: 14px;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    gap: 10%;
     color: black;
     border: 1px solid transparent;
     cursor: pointer;
@@ -122,6 +128,7 @@
 
 .center {
     width: 50%;
+    height: fit-content;
     padding: 15px;
     display: flex;
     flex-direction: column;
@@ -142,36 +149,8 @@
     font-size: 2rem;
     white-space: nowrap;
     overflow: hidden;
-    border-right: 3px solid #00FFFF;
-    width: 0;
-
-
-    animation: typing 3s steps(30, end) forwards, blink 0.7s infinite;
 }
 
-/* Animação de digitação */
-@keyframes typing {
-    from {
-        width: 0;
-    }
-
-    to {
-        width: 60%;
-    }
-}
-
-/* Animação do cursor piscando */
-@keyframes blink {
-
-    0%,
-    100% {
-        border-color: transparent;
-    }
-
-    50% {
-        border-color: #00FFFF;
-    }
-}
 
 
 .right {
@@ -203,7 +182,7 @@
     justify-content: space-around;
     align-items: center;
     color: black;
-    font-size: 20px;
+    font-size: 1.2rem;
     border-radius: 5px;
 }
 
@@ -228,3 +207,4 @@
     border: 1px solid black;
     border-radius: 50%;
 }
+
