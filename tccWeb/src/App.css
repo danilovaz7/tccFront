@@ -3,11 +3,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   margin: 0 auto;
   text-align: center;
-  
-  
+  background-color: rgb(41, 41, 41);
+
 }
 
 .nav {
@@ -29,18 +29,16 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 70px;
-  width: 30%;
-  height: 60%;
+  gap: 20px;
+  width: 35%;
   border-radius: 5px;
   padding: 10px;
   border: 1px solid cyan;
 }
 
 .imgPreview {
-  width: 200px;
-  height: 200px;
-  border: 2px solid black;
+  width: 40%;
+  border: 2px solid cyan;
   border-radius: 50%;
 }
 
@@ -78,6 +76,10 @@
   border-radius: 5px;
 }
 
+.form input::placeholder {
+  color: white; 
+}
+
 .form input:focus {
   outline: none;
 }
@@ -91,6 +93,26 @@
 
 .form a {
   font-size: 14px;
+}
+
+.termos {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  width: 90%;
+}
+
+.termos input {
+  width: 10%;
+  margin: 0;
+}
+
+.termos label {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  width: 80%;
+  color: white;
 }
 
 .footer {
