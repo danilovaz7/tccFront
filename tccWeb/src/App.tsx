@@ -68,9 +68,9 @@ function App() {
           <button>Entrar</button>
           <a href="">Não lembro minha senha!</a>
 
-          <NavLink to="/sobre" end>
-        ir para sobre
-      </NavLink>
+          <NavLink to="/home" end>
+            ir para home
+          </NavLink>
 
         </form>
       </div>
