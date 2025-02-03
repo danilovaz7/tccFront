@@ -65,7 +65,7 @@ function App() {
             <label htmlFor="">Li e aceito os termos de uso</label>
           </div>
 
-          <button>Entrar</button>
+          <button className='btnLogin'>Entrar</button>
           <a href="">Não lembro minha senha!</a>
 
           <NavLink to="/home" end>
