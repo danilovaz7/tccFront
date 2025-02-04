@@ -60,28 +60,28 @@ export function HomePage() {
                             <div className='aluno1'>
                                 <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
                                 <p>Aluno da Silva</p>
-                                <p>Nivel 20</p>
+                                <p>Lvl 20</p>
                             </div>
 
                             <div className='aluno'>
                                 <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
                                 <p>Aluno da Silva</p>
-                                <p>Nivel 20</p>
+                                <p>Lvl 20</p>
                             </div>
                             <div className='aluno'>
                                 <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
                                 <p>Aluno da Silva</p>
-                                <p>Nivel 20</p>
+                                <p>Lvl 20</p>
                             </div>
                             <div className='aluno'>
                                 <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
                                 <p>Aluno da Silva</p>
-                                <p>Nivel 20</p>
+                                <p>Lvl 20</p>
                             </div>
                             <div className='aluno'>
                                 <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
                                 <p>Aluno da Silva</p>
-                                <p>Nivel 20</p>
+                                <p>Lvl 20</p>
                             </div>
                             <button className='btn'>Ver mais <span><MdKeyboardArrowRight size={16} /></span></button>
                         </div>
@@ -91,6 +91,7 @@ export function HomePage() {
                 <div className='treinamentoMaterias'>
 
                     <h1 style={{ color: 'cyan' }}>Aperfeiçoe seus conhecimentos</h1>
+                    <h3>Selecione a materia que deseja treinar</h3>
 
                     <div className='materias'>
                         <div className='materia'>

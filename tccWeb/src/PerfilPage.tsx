@@ -39,6 +39,21 @@ export function PerfilPage() {
                         </div>
                     </div>
 
+                    <div className='caracteristicasGerais'>
+                        <div className='status'>
+                            <p>Perguntas totais</p>
+                            <p>45</p>
+                        </div>
+                        <div className='status'>
+                            <p>Perguntas acertadas</p>
+                            <p>31</p>
+                        </div>
+                        <div className='status'>
+                            <p>Disputas</p>
+                            <p>10</p>
+                        </div>
+                    </div>
+
                     <div className='alunoStats'>
                         <div className='materias'>
                             <div className='materia'>

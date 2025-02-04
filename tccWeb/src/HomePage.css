@@ -57,6 +57,7 @@
     justify-content: space-around;
     align-items: center;
     gap: 10px;
+    padding: 5px;
     border: 1px solid white;
     border-radius: 5px;
 }
@@ -138,6 +139,7 @@
 .gif {
     width: 40%;
     border-radius: 50%;
+    box-shadow: 0px 0px 50px rgba(5, 238, 255, 0.5);
 }
 
 .typewriter {
@@ -180,7 +182,13 @@
     align-items: center;
     color: black;
     font-size: 1.2rem;
+    cursor: pointer;
     border-radius: 5px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.aluno1:hover {
+    transform: scale(1.05);
 }
 
 .aluno1 img {
@@ -193,10 +201,16 @@
     width: 90%;
     background-color: gray;
     display: flex;
+    cursor: pointer;
     justify-content: space-around;
     align-items: center;
     color: black;
     border-radius: 5px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.aluno:hover {
+    transform: scale(1.02);
 }
 
 .aluno img {
@@ -216,12 +230,13 @@
 }
 
 .materias {
-    width: 90%;
+    width: 80%;
     padding: 10px;
-    box-shadow: 10px 8px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 5px 4px 30px rgba(5, 238, 255, 0.2);
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
+    border-radius: 10px;
     justify-content: center;
     align-items: center;
 }

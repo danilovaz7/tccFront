@@ -15,24 +15,23 @@
     justify-content: start;
     align-items: center;
     height: 100vh;
-    gap: 100px;
+    gap: 50px;
+    margin-bottom: 60px;
 }
 
 .perfilStats {
     width: 80%;
-    border: 1px solid white;
     padding: 25px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 30px;
+    gap: 40px;
 }
 
 .perfilTop {
     width: 100%;
     display: flex;
-    border: 1px solid white;
     padding: 10px;
     justify-content: start;
     align-items: center;
@@ -45,6 +44,25 @@
 
 .imgContainer img {
     width: 50%;
+}
+
+.caracteristicasGerais {
+    border: 1px solid white;
+    border-radius: 7px;
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: start;
+    flex-wrap: wrap;
+}
+
+.status {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
 }
 
 .alunoInfo {
@@ -62,4 +80,8 @@
     flex-direction: column;
     justify-content: start;
     align-items: center;
+}
+
+.materia {
+    width: 30%;
 }
