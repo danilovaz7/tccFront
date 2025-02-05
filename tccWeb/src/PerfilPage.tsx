@@ -13,15 +13,14 @@ export function PerfilPage() {
                     </div>
 
                     <div className='logoIcon'>
-                        <img src="./src/assets/logo1Play2Learn.png" alt="" />
+                        <NavLink to="/home" end>
+                            <img src="./src/assets/logo1Play2Learn.png" alt="" />
+                        </NavLink>
                     </div>
 
                     <div className='perfilContainer'>
                         <div className='perfil'>
-
-                            <NavLink to="/perfil" end>
-                                Nivel 20
-                            </NavLink>
+                            <p>Nivel 20</p>
                             <img className='imgPerfil' src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
                         </div>
                     </div>
@@ -55,51 +54,11 @@ export function PerfilPage() {
                     </div>
 
                     <div className='alunoStats'>
-                        <div className='materias'>
-                            <div className='materia'>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                                <p>Matematica</p>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            </div>
-                            <div className='materia'>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                                <p>Fisica</p>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            </div>
-                            <div className='materia'>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                                <p>Ingles</p>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            </div>
-                            <div className='materia'>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                                <p>Historia</p>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            </div>
-                            <div className='materia'>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                                <p>Portugues</p>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            </div>
-                            <div className='materia'>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                                <p>Quimica</p>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            </div>
-                            <div className='materia'>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                                <p>Biologia</p>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            </div>
-                            <div className='materia'>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                                <p>Filosofia</p>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            </div><div className='materia'>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                                <p>Sociologia</p>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            </div>
+                        <div className='materiasName'>
+                            
+                        </div>
+                        <div className='materiasStats'>
+                            
                         </div>
                     </div>
 

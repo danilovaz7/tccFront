@@ -246,16 +246,28 @@
     flex-direction: row;
     justify-content: space-around;
     gap: 10px;
+    border-radius: 5px;
     padding: 5px;
     align-items: center;
-    border: 1px solid white;
+    color: black;
+    background-color: aliceblue;
     width: 20%;
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
 }
 
-.materia img {
+.materiaSection {
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.materiaLogo {
     width: 50px;
+}
+.icon {
+    width: 80px;
 }
 
 .materia:hover {

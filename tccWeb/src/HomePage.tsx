@@ -1,17 +1,102 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import './HomePage.css'
 import { MdMenu, MdKeyboardArrowRight } from "react-icons/md";
 import { NavLink } from 'react-router';
+import { useTokenStore } from './hooks/useTokenStore';
+
+interface Usuario {
+    id: number,
+    nome: string,
+    foto: string,
+    nivel: string,
+    id_turma: number,
+    id_escola: number
+}
+
+interface EloMateria {
+    id: number,
+    usuario_id: number,
+    materia_id: number,
+    elo_id: number,
+    subelo_id: number,
+    perguntas_acertadas: string,
+    elo: {
+        nome: string,
+        elo1: string,
+        elo2: string,
+        elo3: string
+    },
+    materia: {
+        nome: string,
+        icone: string
+    }
+}
+
 
 export function HomePage() {
 
     const [matricula, setMatricula] = useState('')
+    const { token, user } = useTokenStore();
+    const [usuario, setUsuario] = useState<Usuario>();
+    const [eloMaterias, setEloMaterias] = useState<EloMateria[]>([]);
+    const [usuarios, setUsers] = useState<Usuario[]>([])
+
 
     function formSubmit(evento: FormEvent<HTMLFormElement>) {
         evento.preventDefault()
         alert(matricula)
     }
 
+    useEffect(() => {
+        async function pegaUsuarios() {
+            // Faz requisição autenticada usando o token
+            const response = await fetch(`http://localhost:3000/usuarios/${user?.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            const usuarioAtual = await response.json();
+            setUsuario(usuarioAtual);
+        }
+        pegaUsuarios();
+    }, []);
+
+
+    useEffect(() => {
+        async function pegaEloMaterias() {
+            // Faz requisição autenticada usando o token
+            const response = await fetch(`http://localhost:3000/eloMaterias/${user?.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            const eloMaterias = await response.json();
+            setEloMaterias(eloMaterias);
+        }
+        pegaEloMaterias();
+    }, []);
+
+    useEffect(() => {
+        async function pegaUsuarios() {
+            // Faz requisição autenticada usando o token
+            const response = await fetch(`http://localhost:3000/usuarios`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            })
+            const usuarios = await response.json()
+            setUsers(usuarios)
+        }
+        pegaUsuarios();
+    }, [])
+
+    console
 
     return (
         <>
@@ -25,13 +110,12 @@ export function HomePage() {
                     </div>
 
                     <div className='perfilContainer'>
-                        <div className='perfil'>
-
-                            <NavLink to="/perfil" end>
-                                Nivel 20
-                            </NavLink>
-                            <img className='imgPerfil' src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                        </div>
+                        <NavLink to="/perfil" end>
+                            <div className='perfil'>
+                                <p>Nível {usuario?.nivel}</p>
+                                <img className='imgPerfil' src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
+                            </div>
+                        </NavLink>
                     </div>
                 </div>
 
@@ -57,32 +141,32 @@ export function HomePage() {
                     <div className='right'>
                         <h1>Ranking da <span style={{ color: 'yellow' }}>sala</span></h1>
                         <div className='areaTop10'>
-                            <div className='aluno1'>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                                <p>Aluno da Silva</p>
-                                <p>Lvl 20</p>
-                            </div>
+                            {
+                                usuarios.map((usuarioRank, index) => {
 
-                            <div className='aluno'>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                                <p>Aluno da Silva</p>
-                                <p>Lvl 20</p>
-                            </div>
-                            <div className='aluno'>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                                <p>Aluno da Silva</p>
-                                <p>Lvl 20</p>
-                            </div>
-                            <div className='aluno'>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                                <p>Aluno da Silva</p>
-                                <p>Lvl 20</p>
-                            </div>
-                            <div className='aluno'>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                                <p>Aluno da Silva</p>
-                                <p>Lvl 20</p>
-                            </div>
+                                    if (usuario?.id_turma === usuarioRank.id_turma && usuario?.id_escola === usuarioRank.id_escola) {
+                                        if (index == 0) {
+                                            return (
+                                                <div className='aluno1'>
+                                                    <img src={usuarioRank.foto} alt="" />
+                                                    <p>{usuarioRank.nome}</p>
+                                                    <p>Lvl {usuarioRank.nivel}</p>
+                                                </div>
+                                            )
+                                        }
+
+                                        return (
+                                            <div className='aluno'>
+                                                <img src={usuarioRank.foto} alt="" />
+                                                <p>{usuarioRank.nome}</p>
+                                                <p>Lvl {usuarioRank.nivel}</p>
+                                            </div>
+                                        );
+                                    }
+
+                                })
+                            }
+
                             <button className='btn'>Ver mais <span><MdKeyboardArrowRight size={16} /></span></button>
                         </div>
                     </div>
@@ -94,50 +178,39 @@ export function HomePage() {
                     <h3>Selecione a materia que deseja treinar</h3>
 
                     <div className='materias'>
-                        <div className='materia'>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            <p>Matematica</p>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                        </div>
-                        <div className='materia'>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            <p>Fisica</p>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                        </div>
-                        <div className='materia'>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            <p>Ingles</p>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                        </div>
-                        <div className='materia'>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            <p>Historia</p>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                        </div>
-                        <div className='materia'>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            <p>Portugues</p>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                        </div>
-                        <div className='materia'>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            <p>Quimica</p>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                        </div>
-                        <div className='materia'>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            <p>Biologia</p>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                        </div>
-                        <div className='materia'>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            <p>Filosofia</p>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                        </div><div className='materia'>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                            <p>Sociologia</p>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
-                        </div>
+                        {
+                            eloMaterias.map((eloMateria, index) => {
+                                let eloIcon = '';
+
+                                // Lógica para escolher o ícone dependendo do subelo_id
+                                switch (eloMateria.subelo_id) {
+                                    case 1:
+                                        eloIcon = eloMateria.elo.elo1;
+                                        break;
+                                    case 2:
+                                        eloIcon = eloMateria.elo.elo2;
+                                        break;
+                                    case 3:
+                                        eloIcon = eloMateria.elo.elo3;
+                                        break;
+                                    default:
+                                        eloIcon = ''; // Valor default caso não haja subelo
+                                }
+
+                                return (
+                                    <div key={index} className='materia'>
+                                        <img className='materiaLogo' src={eloMateria.materia.icone} alt="" />
+                                        <div className='materiaSection'>
+                                            <p>{eloMateria.materia.nome}</p>
+                                            <img className='icon' src={eloIcon} alt="" />
+                                        </div>
+                                    </div>
+
+                                );
+                            })
+
+                        }
+
                     </div>
 
 
