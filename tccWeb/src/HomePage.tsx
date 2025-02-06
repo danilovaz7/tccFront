@@ -9,6 +9,7 @@ interface Usuario {
     nome: string,
     foto: string,
     nivel: string,
+    tipo_usuario_id: number,
     id_turma: number,
     id_escola: number
 }
@@ -113,7 +114,7 @@ export function HomePage() {
                         <NavLink to="/perfil" end>
                             <div className='perfil'>
                                 <p>Nível {usuario?.nivel}</p>
-                                <img className='imgPerfil' src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
+                                <img className='imgPerfil'src={usuario?.foto} alt="" />
                             </div>
                         </NavLink>
                     </div>
@@ -177,43 +178,58 @@ export function HomePage() {
                     <h1 style={{ color: 'cyan' }}>Aperfeiçoe seus conhecimentos</h1>
                     <h3>Selecione a materia que deseja treinar</h3>
 
-                    <div className='materias'>
-                        {
-                            eloMaterias.map((eloMateria, index) => {
-                                let eloIcon = '';
+                    {
+                        usuario?.tipo_usuario_id === 2
+                            ?
+                            <div className='materias'>
+                                {
+                                    eloMaterias.map((eloMateria, index) => {
+                                        let eloIcon = '';
 
-                                // Lógica para escolher o ícone dependendo do subelo_id
-                                switch (eloMateria.subelo_id) {
-                                    case 1:
-                                        eloIcon = eloMateria.elo.elo1;
-                                        break;
-                                    case 2:
-                                        eloIcon = eloMateria.elo.elo2;
-                                        break;
-                                    case 3:
-                                        eloIcon = eloMateria.elo.elo3;
-                                        break;
-                                    default:
-                                        eloIcon = ''; // Valor default caso não haja subelo
+                                        // Lógica para escolher o ícone dependendo do subelo_id
+                                        switch (eloMateria.subelo_id) {
+                                            case 1:
+                                                eloIcon = eloMateria.elo.elo1;
+                                                break;
+                                            case 2:
+                                                eloIcon = eloMateria.elo.elo2;
+                                                break;
+                                            case 3:
+                                                eloIcon = eloMateria.elo.elo3;
+                                                break;
+                                            default:
+                                                eloIcon = ''; // Valor default caso não haja subelo
+                                        }
+
+                                        return (
+                                            <div key={index} className='materia'>
+                                                <img className='materiaLogo' src={eloMateria.materia.icone} alt="" />
+                                                <div className='materiaSection'>
+                                                    <p>{eloMateria.materia.nome}</p>
+                                                    <img className='icon' src={eloIcon} alt="" />
+                                                </div>
+                                            </div>
+
+                                        );
+                                    })
+
                                 }
 
-                                return (
-                                    <div key={index} className='materia'>
-                                        <img className='materiaLogo' src={eloMateria.materia.icone} alt="" />
-                                        <div className='materiaSection'>
-                                            <p>{eloMateria.materia.nome}</p>
-                                            <img className='icon' src={eloIcon} alt="" />
-                                        </div>
-                                    </div>
+                            </div>
+                            :
+                            null
+                    }
 
-                                );
-                            })
-
-                        }
-
-                    </div>
-
-
+                    {
+                         usuario?.tipo_usuario_id === 1
+                         ?
+                         <div>
+                              <NavLink to="/addAluno" end><button>Adicionar aluno</button> </NavLink>
+                            <button>Adicionar turma</button>
+                         </div>
+                         : 
+                         null
+                    }
                 </div>
             </div>
 

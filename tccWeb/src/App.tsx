@@ -12,16 +12,6 @@ function App() {
   const navigate = useNavigate();
   const { setToken, setUser } = useTokenStore();
 
-  function formSubmit(evento: FormEvent<HTMLFormElement>) {
-    evento.preventDefault()
-    if (!isCheked) {
-      alert('campo necessario faltando')
-    } else {
-      alert('sucesso no login')
-      setEmail('')
-      setSenha('')
-    }
-  }
 
   async function handleSubmit(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault();
@@ -39,20 +29,19 @@ function App() {
         console.log('respoonse', response.ok);
 
         if (!response.ok) {
-            const errorText = await response.text(); // Captura a resposta do servidor para debug
+            const errorText = await response.text(); 
             console.error('Erro no login:', errorText);
             alert('Falha no login');
             return;
         }
 
-        const json = await response.json(); // Aguarda o JSON corretamente
+        const json = await response.json(); 
 
-        // Faz a requisição para obter os dados do usuário autenticado
         const respostaEu = await fetch(`http://localhost:3000/eu`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${json.token}`, // Aqui você envia o token
+                'Authorization': `Bearer ${json.token}`, 
             },
             credentials: 'include',
         });
@@ -66,9 +55,8 @@ function App() {
             return;
         }
 
-        const user = await respostaEu.json(); // Aguarda o JSON corretamente
+        const user = await respostaEu.json(); 
 
-        // Salva o token e o usuário na store global
         setToken(json.token);
         setUser(user);
 

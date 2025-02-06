@@ -63,8 +63,7 @@
 }
 
 .imgPerfil {
-    width: 25%;
-    border: 2px solid white;
+    width: 30%;
     border-radius: 50%;
 }
 
@@ -150,8 +149,6 @@
     overflow: hidden;
 }
 
-
-
 .right {
     width: 20%;
     border: 1px solid black;
@@ -182,6 +179,7 @@
     align-items: center;
     color: black;
     font-size: 1.2rem;
+    padding: 5px;
     cursor: pointer;
     border-radius: 5px;
     transition: transform 0.3s ease-in-out;
@@ -192,8 +190,7 @@
 }
 
 .aluno1 img {
-    width: 15%;
-    border: 1px solid black;
+    width: 20%;
     border-radius: 50%;
 }
 
@@ -204,6 +201,7 @@
     cursor: pointer;
     justify-content: space-around;
     align-items: center;
+    padding: 5px;
     color: black;
     border-radius: 5px;
     transition: transform 0.3s ease-in-out;
@@ -214,8 +212,7 @@
 }
 
 .aluno img {
-    width: 10%;
-    border: 1px solid black;
+    width: 20%;
     border-radius: 50%;
 }
 
