@@ -46,8 +46,6 @@ function App() {
             credentials: 'include',
         });
 
-        console.log('respoonseEu', respostaEu.ok);
-
         if (!respostaEu.ok) {
             const errorText = await respostaEu.text();
             console.error('Erro ao obter dados do usuário:', errorText);
@@ -72,7 +70,7 @@ function App() {
 
 
   return (
-    <>
+   
       <div className='container'>
         <img className='imgPreview' src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
 
@@ -111,15 +109,10 @@ function App() {
             </div >
           </div>
 
-          <div className='termos'>
-            <input type="checkbox" value={isCheked.toString()} onChange={(e) => setIsChecked(e.target.checked)} />
-            <label htmlFor="">Li e aceito os termos de uso</label>
-          </div>
-
           <button className='btnLogin'>Entrar</button>
           <a href="">Não lembro minha senha!</a>
 
-          <NavLink to="/home" end>
+          <NavLink to="/home" >
             ir para home
           </NavLink>
 
@@ -127,7 +120,7 @@ function App() {
       </div>
 
 
-    </>
+   
   )
 }
 

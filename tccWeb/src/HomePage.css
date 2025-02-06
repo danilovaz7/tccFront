@@ -23,27 +23,21 @@
     display: flex;
     width: 100%;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.5);
 }
 
-.menu {
-    border: 1px solid white;
-    border-radius: 5px;
-}
-
-.menuIcon {
-    width: 10%;
-}
 
 .logoIcon {
-    width: 15%;
+    width: 80%;
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .logoIcon img {
-    width: 100%
+    padding-left: 10%;
+    width: 30%
 }
 
 .perfilContainer {
@@ -51,7 +45,7 @@
 }
 
 .perfil {
-    width: 90%;
+    width: 100%;
     height: 50%;
     display: flex;
     justify-content: space-around;
@@ -112,7 +106,7 @@
 
 .btn {
     background-color: #00E5FF;
-    width: 40%;
+    width: 50%;
     font-size: 14px;
     display: flex;
     justify-content: center; 
@@ -178,7 +172,7 @@
     justify-content: space-around;
     align-items: center;
     color: black;
-    font-size: 1.2rem;
+    font-size: 1rem;
     padding: 5px;
     cursor: pointer;
     border-radius: 5px;
@@ -227,7 +221,7 @@
 }
 
 .materias {
-    width: 80%;
+    width: 90%;
     padding: 10px;
     box-shadow: 5px 4px 30px rgba(5, 238, 255, 0.2);
     display: flex;
@@ -246,25 +240,25 @@
     border-radius: 5px;
     padding: 5px;
     align-items: center;
-    color: black;
-    background-color: aliceblue;
+    color: white;
+    background-color: rgb(9, 31, 51);
     width: 20%;
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
 }
 
 .materiaSection {
-    width: 70%;
+    width: 80%;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .materiaLogo {
-    width: 50px;
+    width: 20%;
 }
 .icon {
-    width: 80px;
+    width: 30%;
 }
 
 .materia:hover {

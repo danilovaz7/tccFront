@@ -100,18 +100,15 @@ export function HomePage() {
     console
 
     return (
-        <>
+        
             <div className='containerHome'>
                 <div className='nav'>
-                    <div className='menuIcon'>
-                    </div>
-
                     <div className='logoIcon'>
                         <img src="./src/assets/logo1Play2Learn.png" alt="" />
                     </div>
 
                     <div className='perfilContainer'>
-                        <NavLink to="/perfil" end>
+                        <NavLink to="/perfil" >
                             <div className='perfil'>
                                 <p>Nível {usuario?.nivel}</p>
                                 <img className='imgPerfil'src={usuario?.foto} alt="" />
@@ -129,6 +126,7 @@ export function HomePage() {
                                 type="text"
                                 placeholder='Insira a matrícula'
                                 value={matricula}
+                                maxLength={6}
                                 onChange={(e) => { setMatricula(e.target.value.replace(/[^0-9]/g, '')) }}
                             />
                             <button className='btn'>CONVIDAR</button>
@@ -224,7 +222,7 @@ export function HomePage() {
                          usuario?.tipo_usuario_id === 1
                          ?
                          <div>
-                              <NavLink to="/addAluno" end><button>Adicionar aluno</button> </NavLink>
+                              <NavLink to="/addAluno" ><button>Adicionar aluno</button> </NavLink>
                             <button>Adicionar turma</button>
                          </div>
                          : 
@@ -234,6 +232,6 @@ export function HomePage() {
             </div>
 
 
-        </>
+        
     )
 }
