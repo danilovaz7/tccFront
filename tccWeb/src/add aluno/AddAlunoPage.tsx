@@ -1,15 +1,16 @@
 import { FormEvent, useState } from 'react';
 import './addAlunoPage.css';
 import { NavLink, useNavigate } from 'react-router';
-import { useTokenStore } from './hooks/useTokenStore';
+import { useTokenStore } from '../hooks/useTokenStore';
 import imageCompression from 'browser-image-compression';  // Importando a biblioteca
 
 export function AddAlunoPage() {
     const navigate = useNavigate();
     const { token, user } = useTokenStore();
 
-    const [foto, setFoto] = useState<string | null>(null); 
+    const [foto, setFoto] = useState<string | null>(null);
     const [nome, setNome] = useState("");
+    const [id_avatar, setIdAvatar] = useState("");
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
     const [matricula, setMatricula] = useState("");
@@ -17,7 +18,20 @@ export function AddAlunoPage() {
     const [escola, setEscola] = useState("");
     const [genero, setGenero] = useState("");
 
-   
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64Image = reader.result as string;
+                setFoto(base64Image); // Armazenando a imagem em Base64
+            };
+            reader.readAsDataURL(file); // Lê o arquivo como Base64
+        } else {
+            setFoto(null); // Limpar a imagem quando não houver arquivo
+        }
+    };
 
     // Função para lidar com o envio do formulário
     async function handleSubmit(evento: FormEvent<HTMLFormElement>) {
@@ -33,7 +47,7 @@ export function AddAlunoPage() {
                 nome: nome,
                 email: email,
                 senha: senha,
-                foto: foto,
+                id_avatar: id_avatar,
                 matricula: matricula,
                 id_turma: parseInt(turma),
                 id_escola: parseInt(escola),
@@ -49,7 +63,7 @@ export function AddAlunoPage() {
             alert("Erro ao salvar usuario")
         }
 
-    
+
     }
 
     return (
@@ -119,12 +133,25 @@ export function AddAlunoPage() {
                     </select>
                 </div>
                 <div className='inputAreaAluno'>
+                    <label htmlFor="">Avatar</label>
+                    <div className='avatarPreview'>
+                        <div className='avatarPreviewImg'></div>
+                        <div className='btnAvatar'>
+                            <button>a</button>
+                            <button>b</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div className='inputAreaAluno'>
                     <label>Foto</label>
                     <div className="custom-file-upload">
                         <label className="file-upload-label">
                             Escolher arquivo
                             <input
                                 type="file"
+                                onChange={handleFileChange}
                             />
                         </label>
                         <span className="file-name">
@@ -135,7 +162,7 @@ export function AddAlunoPage() {
 
                 <h2>Previsualização</h2>
                 <div className='alunoDefault'>
-                    <img src={foto ? foto : "./src/assets/userDefault.png"} alt="" />
+                    <img src={foto ? foto : "/src/assets/userDefault.png"} alt="" />
                     <p>{nome ? nome : 'Nome aluno'}</p>
                     <p>Lvl 0</p>
                 </div>

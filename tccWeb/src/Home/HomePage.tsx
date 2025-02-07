@@ -2,16 +2,20 @@ import { FormEvent, useEffect, useState } from 'react';
 import './HomePage.css'
 import { MdMenu, MdKeyboardArrowRight } from "react-icons/md";
 import { NavLink } from 'react-router';
-import { useTokenStore } from './hooks/useTokenStore';
+import { useTokenStore } from '../hooks/useTokenStore';
+import Navbar from '../components/Navbar/Navbar';
 
 interface Usuario {
     id: number,
     nome: string,
-    foto: string,
     nivel: string,
     tipo_usuario_id: number,
     id_turma: number,
     id_escola: number
+    avatar: {
+        nome: string,
+        caminho: string
+    }
 }
 
 interface EloMateria {
@@ -50,7 +54,6 @@ export function HomePage() {
 
     useEffect(() => {
         async function pegaUsuarios() {
-            // Faz requisição autenticada usando o token
             const response = await fetch(`http://localhost:3000/usuarios/${user?.id}`, {
                 method: 'GET',
                 headers: {
@@ -67,7 +70,6 @@ export function HomePage() {
 
     useEffect(() => {
         async function pegaEloMaterias() {
-            // Faz requisição autenticada usando o token
             const response = await fetch(`http://localhost:3000/eloMaterias/${user?.id}`, {
                 method: 'GET',
                 headers: {
@@ -97,25 +99,13 @@ export function HomePage() {
         pegaUsuarios();
     }, [])
 
-    console
+    console.log(usuario?.avatar.caminho)
 
     return (
         
             <div className='containerHome'>
-                <div className='nav'>
-                    <div className='logoIcon'>
-                        <img src="./src/assets/logo1Play2Learn.png" alt="" />
-                    </div>
-
-                    <div className='perfilContainer'>
-                        <NavLink to="/perfil" >
-                            <div className='perfil'>
-                                <p>Nível {usuario?.nivel}</p>
-                                <img className='imgPerfil'src={usuario?.foto} alt="" />
-                            </div>
-                        </NavLink>
-                    </div>
-                </div>
+                
+               <Navbar id={user?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho}/>
 
                 <div className='page'>
                     <div className='left'>
@@ -147,7 +137,7 @@ export function HomePage() {
                                         if (index == 0) {
                                             return (
                                                 <div className='aluno1'>
-                                                    <img src={usuarioRank.foto} alt="" />
+                                                    <img src={usuarioRank.avatar.caminho} alt="" />
                                                     <p>{usuarioRank.nome}</p>
                                                     <p>Lvl {usuarioRank.nivel}</p>
                                                 </div>
@@ -156,7 +146,7 @@ export function HomePage() {
 
                                         return (
                                             <div className='aluno'>
-                                                <img src={usuarioRank.foto} alt="" />
+                                                <img src={usuarioRank.avatar.caminho} alt="" />
                                                 <p>{usuarioRank.nome}</p>
                                                 <p>Lvl {usuarioRank.nivel}</p>
                                             </div>

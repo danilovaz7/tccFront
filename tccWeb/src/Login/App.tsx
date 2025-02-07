@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, useState } from 'react'
 import { FaRegEye, FaRegEyeSlash, FaRegUser } from "react-icons/fa";
 import './App.css'
 import { NavLink, useNavigate } from 'react-router';
-import { useTokenStore } from './hooks/useTokenStore';
+import { useTokenStore } from '../hooks/useTokenStore';
 
 function App() {
   const [email, setEmail] = useState('')
