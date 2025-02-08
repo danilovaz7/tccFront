@@ -39,11 +39,11 @@
 }
 
 .imgContainer {
-    width: 30%;
+    width: 20%;
 }
 
 .imgContainer img {
-    width: 50%;
+    width: 100%;
 }
 
 .caracteristicasGerais {
@@ -70,9 +70,9 @@
     width: 80%;
     display: flex;
     flex-direction: row;
-    justify-content: start;
-    gap: 20%;
-    font-size: 22px;
+    justify-content: center;
+gap: 10%;
+    font-size: 20px;
     align-items: center;
 }
 

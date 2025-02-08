@@ -1,14 +1,27 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import './addAlunoPage.css';
 import { NavLink, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
-import imageCompression from 'browser-image-compression';  // Importando a biblioteca
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+
+interface Avatar {
+    id: number,
+    nome: string,
+    caminho: string
+}
+
+interface Escola {
+    id: number,
+    nome: string,
+}
 
 export function AddAlunoPage() {
     const navigate = useNavigate();
     const { token, user } = useTokenStore();
+    const [avatares, setAvatares] = useState<Avatar[]>([]);
+    const [escolas, setEscolas] = useState<Escola[]>([]);
+    const [contador, setContador] = useState(0);
 
-    const [foto, setFoto] = useState<string | null>(null);
     const [nome, setNome] = useState("");
     const [id_avatar, setIdAvatar] = useState("");
     const [email, setEmail] = useState("");
@@ -18,22 +31,38 @@ export function AddAlunoPage() {
     const [escola, setEscola] = useState("");
     const [genero, setGenero] = useState("");
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
+  
 
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const base64Image = reader.result as string;
-                setFoto(base64Image); // Armazenando a imagem em Base64
-            };
-            reader.readAsDataURL(file); // Lê o arquivo como Base64
-        } else {
-            setFoto(null); // Limpar a imagem quando não houver arquivo
+    useEffect(() => {
+        async function carregarAvatares() {
+            const response = await fetch(`http://localhost:3000/avatares`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            const estaticasUsuario = await response.json();
+            setAvatares(estaticasUsuario);
         }
-    };
+        carregarAvatares();
+    }, [token]);
 
-    // Função para lidar com o envio do formulário
+    useEffect(() => {
+        async function carregaEscolas() {
+            const response = await fetch(`http://localhost:3000/escolas`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            const escolasResponse = await response.json();
+            setEscolas(escolasResponse);
+        }
+        carregaEscolas();
+    }, [token]);
+
     async function handleSubmit(evento: FormEvent<HTMLFormElement>) {
         evento.preventDefault();
 
@@ -47,23 +76,21 @@ export function AddAlunoPage() {
                 nome: nome,
                 email: email,
                 senha: senha,
-                id_avatar: id_avatar,
+                id_avatar: contador + 1,
                 matricula: matricula,
                 id_turma: parseInt(turma),
                 id_escola: parseInt(escola),
                 genero: genero,
                 tipo_usuario_id: 2
             })
-        })
+        });
 
         if (resposta.ok) {
-            alert('Usuario salvo com sucesso')
+            alert('Usuario salvo com sucesso');
             navigate('/home');
         } else {
-            alert("Erro ao salvar usuario")
+            alert("Erro ao salvar usuario");
         }
-
-
     }
 
     return (
@@ -128,45 +155,45 @@ export function AddAlunoPage() {
                     <label htmlFor="">Escola</label>
                     <select name="escola" required value={escola} onChange={(e) => { setEscola(e.target.value) }}>
                         <option value="">Selecione...</option>
-                        <option value="1">Escola X</option>
-                        <option value="2">Escola Z</option>
+                        {
+                            escolas.map((escola, index) => {
+                                    return (
+                                        <option value={index+1}>{escola.nome}</option>
+                                    );
+                                })
+                        }
                     </select>
                 </div>
                 <div className='inputAreaAluno'>
                     <label htmlFor="">Avatar</label>
                     <div className='avatarPreview'>
-                        <div className='avatarPreviewImg'></div>
+                        {avatares[contador] ? (
+                            <img className='avatarPreviewImg' src={avatares[contador].caminho} alt="" />
+                        ) : (
+                            <div>Carregando Avatar...</div>
+                        )}
                         <div className='btnAvatar'>
-                            <button>a</button>
-                            <button>b</button>
+                            <button type="button" onClick={() => setContador(contador => (contador > 0 ? contador - 1 : 0))}>
+                            <FaArrowLeft />
+                                </button>
+                            <button type="button" onClick={() => setContador(contador => (contador < avatares.length - 1 ? contador + 1 : avatares.length - 1))}>
+                            <FaArrowRight />
+                            </button>
                         </div>
-                    </div>
-
-                </div>
-
-                <div className='inputAreaAluno'>
-                    <label>Foto</label>
-                    <div className="custom-file-upload">
-                        <label className="file-upload-label">
-                            Escolher arquivo
-                            <input
-                                type="file"
-                                onChange={handleFileChange}
-                            />
-                        </label>
-                        <span className="file-name">
-                            {foto ? "Imagem carregada" : "Nenhum arquivo selecionado"}
-                        </span>
                     </div>
                 </div>
 
                 <h2>Previsualização</h2>
                 <div className='alunoDefault'>
-                    <img src={foto ? foto : "/src/assets/userDefault.png"} alt="" />
-                    <p>{nome ? nome : 'Nome aluno'}</p>
-                    <p>Lvl 0</p>
-                </div>
+                    {avatares[contador] ? (
+                        <img className='avatarPreviewImg' src={avatares[contador].caminho} alt="" />
+                    ) : (
+                        <img src="/src/assets/userDefault.png" alt="" />
+                    )}
 
+                    <p>{nome ? nome : 'Nome aluno'}</p>
+                    <p>Lvl 1</p>
+                </div>
                 <button>Mandar</button>
             </form>
         </>

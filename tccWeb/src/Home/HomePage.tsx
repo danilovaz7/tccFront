@@ -102,126 +102,122 @@ export function HomePage() {
     console.log(usuario?.avatar.caminho)
 
     return (
-        
-            <div className='containerHome'>
-                
-               <Navbar id={user?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho}/>
 
-                <div className='page'>
-                    <div className='left'>
-                        <h1>Que tal jogar com um amigo?</h1>
-                        <p>É sempre melhor evoluir juntos!</p>
-                        <form onSubmit={(evento) => formSubmit(evento)} className='conviteJogo'>
-                            <input
-                                type="text"
-                                placeholder='Insira a matrícula'
-                                value={matricula}
-                                maxLength={6}
-                                onChange={(e) => { setMatricula(e.target.value.replace(/[^0-9]/g, '')) }}
-                            />
-                            <button className='btn'>CONVIDAR</button>
-                        </form>
-                    </div>
+        <div className='containerHome'>
 
-                    <div className='center'>
-                        <img className='gif' src="./src/assets/gifCentro.gif" alt="" />
-                    </div>
+            <Navbar id={user?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho} />
 
-                    <div className='right'>
-                        <h1>Ranking da <span style={{ color: 'yellow' }}>sala</span></h1>
-                        <div className='areaTop10'>
-                            {
-                                usuarios.map((usuarioRank, index) => {
+            <div className='page'>
+                <div className='left'>
+                    <h1>Que tal jogar com um amigo?</h1>
+                    <p>É sempre melhor evoluir juntos!</p>
+                    <form onSubmit={(evento) => formSubmit(evento)} className='conviteJogo'>
+                        <input
+                            type="text"
+                            placeholder='Insira a matrícula'
+                            value={matricula}
+                            maxLength={6}
+                            onChange={(e) => { setMatricula(e.target.value.replace(/[^0-9]/g, '')) }}
+                        />
+                        <button className='btn'>CONVIDAR</button>
+                    </form>
+                </div>
 
-                                    if (usuario?.id_turma === usuarioRank.id_turma && usuario?.id_escola === usuarioRank.id_escola) {
-                                        if (index == 0) {
-                                            return (
-                                                <div className='aluno1'>
-                                                    <img src={usuarioRank.avatar.caminho} alt="" />
-                                                    <p>{usuarioRank.nome}</p>
-                                                    <p>Lvl {usuarioRank.nivel}</p>
-                                                </div>
-                                            )
-                                        }
+                <div className='center'>
+                    <img className='gif' src="./src/assets/gifCentro.gif" alt="" />
+                </div>
 
+                <div className='right'>
+                    <h1>Ranking da <span style={{ color: 'yellow' }}>sala</span></h1>
+                    <div className='areaTop10'>
+                        {
+                            usuarios.map((usuarioRank, index) => {
+                                if (usuario?.id_turma === usuarioRank.id_turma && usuario?.id_escola === usuarioRank.id_escola) {
+                                    if (index == 0) {
                                         return (
-                                            <div className='aluno'>
+                                            <div className='aluno1'>
                                                 <img src={usuarioRank.avatar.caminho} alt="" />
                                                 <p>{usuarioRank.nome}</p>
                                                 <p>Lvl {usuarioRank.nivel}</p>
                                             </div>
-                                        );
+                                        )
                                     }
-
-                                })
-                            }
-
-                            <button className='btn'>Ver mais <span><MdKeyboardArrowRight size={16} /></span></button>
-                        </div>
-                    </div>
-                </div>
-
-                <div className='treinamentoMaterias'>
-
-                    <h1 style={{ color: 'cyan' }}>Aperfeiçoe seus conhecimentos</h1>
-                    <h3>Selecione a materia que deseja treinar</h3>
-
-                    {
-                        usuario?.tipo_usuario_id === 2
-                            ?
-                            <div className='materias'>
-                                {
-                                    eloMaterias.map((eloMateria, index) => {
-                                        let eloIcon = '';
-
-                                        // Lógica para escolher o ícone dependendo do subelo_id
-                                        switch (eloMateria.subelo_id) {
-                                            case 1:
-                                                eloIcon = eloMateria.elo.elo1;
-                                                break;
-                                            case 2:
-                                                eloIcon = eloMateria.elo.elo2;
-                                                break;
-                                            case 3:
-                                                eloIcon = eloMateria.elo.elo3;
-                                                break;
-                                            default:
-                                                eloIcon = ''; // Valor default caso não haja subelo
-                                        }
-
-                                        return (
-                                            <div key={index} className='materia'>
-                                                <img className='materiaLogo' src={eloMateria.materia.icone} alt="" />
-                                                <div className='materiaSection'>
-                                                    <p>{eloMateria.materia.nome}</p>
-                                                    <img className='icon' src={eloIcon} alt="" />
-                                                </div>
-                                            </div>
-
-                                        );
-                                    })
-
+                                    return (
+                                        <div className='aluno'>
+                                            <img src={usuarioRank.avatar.caminho} alt="" />
+                                            <p>{usuarioRank.nome}</p>
+                                            <p>Lvl {usuarioRank.nivel}</p>
+                                        </div>
+                                    );
                                 }
-
-                            </div>
-                            :
-                            null
-                    }
-
-                    {
-                         usuario?.tipo_usuario_id === 1
-                         ?
-                         <div>
-                              <NavLink to="/addAluno" ><button>Adicionar aluno</button> </NavLink>
-                            <button>Adicionar turma</button>
-                         </div>
-                         : 
-                         null
-                    }
+                            })
+                        }
+                        <button className='btn'>Ver mais <span><MdKeyboardArrowRight size={16} /></span></button>
+                    </div>
                 </div>
             </div>
 
+            <div className='treinamentoMaterias'>
 
-        
+                <h1 style={{ color: 'cyan' }}>Aperfeiçoe seus conhecimentos</h1>
+                <h3>Selecione a materia que deseja treinar</h3>
+
+                {
+                    usuario?.tipo_usuario_id === 2
+                        ?
+                        <div className='materias'>
+                            {
+                                eloMaterias.map((eloMateria, index) => {
+                                    let eloIcon = '';
+
+                                    // Lógica para escolher o ícone dependendo do subelo_id
+                                    switch (eloMateria.subelo_id) {
+                                        case 1:
+                                            eloIcon = eloMateria.elo.elo1;
+                                            break;
+                                        case 2:
+                                            eloIcon = eloMateria.elo.elo2;
+                                            break;
+                                        case 3:
+                                            eloIcon = eloMateria.elo.elo3;
+                                            break;
+                                        default:
+                                            eloIcon = ''; // Valor default caso não haja subelo
+                                    }
+
+                                    return (
+                                        <div key={index} className='materia'>
+                                            <img className='materiaLogo' src={eloMateria.materia.icone} alt="" />
+                                            <div className='materiaSection'>
+                                                <p>{eloMateria.materia.nome}</p>
+                                                <img className='icon' src={eloIcon} alt="" />
+                                            </div>
+                                        </div>
+
+                                    );
+                                })
+
+                            }
+
+                        </div>
+                        :
+                        null
+                }
+
+                {
+                    usuario?.tipo_usuario_id === 1
+                        ?
+                        <div>
+                            <NavLink to="/addAluno" ><button>Adicionar aluno</button> </NavLink>
+                            <button>Adicionar turma</button>
+                        </div>
+                        :
+                        null
+                }
+            </div>
+        </div>
+
+
+
     )
 }
