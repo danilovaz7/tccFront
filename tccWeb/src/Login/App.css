@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: space-around;
   margin: 0 auto;
-  gap: 40px;
+  gap: 2.5em;
   text-align: center;
   background-color: #1C1C1C;
 }
@@ -16,10 +16,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 1.25em;
   width: 35%;
-  border-radius: 5px;
-  padding: 20px;
+  border-radius: 0.3125em;
+  padding: 1.25em;
   box-shadow: 10px 8px 100px rgba(0, 0, 0, 1);
 }
 
@@ -31,13 +31,13 @@
 
 .form {
   display: flex;
-  border-radius: 7px;
+  border-radius: 0.4375em;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 90%;
-  padding: 15px;
-  gap: 20px;
+  padding: 10.3125em;
+  gap: 1.25em;
 }
 
 .inputArea {
@@ -47,19 +47,19 @@
   align-items: center;
   background-color: transparent;
   border: 1px solid #00E5FF;
-  border-radius: 5px;
+  border-radius: 0.3125em;
   color: white;
-  padding: 10px;
+  padding:  0.625em;
 }
 
 .form input {
   width: 80%;
-  padding: 5px;
+  padding: 0.3125em;
   border: none;
-  font-size: 14px;
+  font-size: 0.875em;
   color: white;
   background-color: transparent;
-  border-radius: 5px;
+  border-radius: 0.3125em;
 }
 
 .form input::placeholder {
@@ -73,15 +73,15 @@
 .btnLogin {
   background-color: #00E5FF;
   width: 40%;
-  font-size: 16px;
+  font-size: 1em;
   display: flex;
   justify-content: center;
   align-items: center;
   color: black;
   border: 1px solid transparent;
   cursor: pointer;
-  padding: 10px;
-  border-radius: 5px;
+  padding:  0.625em;
+  border-radius: 0.3125em;
   transition: transform 0.3s ease-in-out;
 }
 
@@ -90,7 +90,7 @@
 }
 
 .form a {
-  font-size: 14px;
+  font-size: 0.875em;
 }
 
 .termos {

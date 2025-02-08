@@ -17,110 +17,109 @@ function App() {
     evento.preventDefault();
 
     try {
-        const response = await fetch(`http://localhost:3000/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify({ email, senha }),
-        });
+      const response = await fetch(`http://localhost:3000/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ email, senha }),
+      });
 
-        console.log('respoonse', response.ok);
+      console.log('respoonse', response.ok);
 
-        if (!response.ok) {
-            const errorText = await response.text(); 
-            console.error('Erro no login:', errorText);
-            alert('Falha no login');
-            return;
-        }
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Erro no login:', errorText);
+        alert('Falha no login');
+        return;
+      }
 
-        const json = await response.json(); 
+      const json = await response.json();
 
-        const respostaEu = await fetch(`http://localhost:3000/eu`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${json.token}`, 
-            },
-            credentials: 'include',
-        });
+      const respostaEu = await fetch(`http://localhost:3000/eu`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${json.token}`,
+        },
+        credentials: 'include',
+      });
 
-        if (!respostaEu.ok) {
-            const errorText = await respostaEu.text();
-            console.error('Erro ao obter dados do usuário:', errorText);
-            alert('Erro ao obter dados do usuário');
-            return;
-        }
+      if (!respostaEu.ok) {
+        const errorText = await respostaEu.text();
+        console.error('Erro ao obter dados do usuário:', errorText);
+        alert('Erro ao obter dados do usuário');
+        return;
+      }
 
-        const user = await respostaEu.json(); 
+      const user = await respostaEu.json();
 
-        setToken(json.token);
-        setUser(user);
+      setToken(json.token);
+      setUser(user);
 
-        localStorage.setItem('token', json.token);
-            localStorage.setItem('user', JSON.stringify(user));
-
-            navigate('/home');
+      localStorage.setItem('token', json.token);
+      localStorage.setItem('user', JSON.stringify(user));
+      navigate('/home');
     } catch (error) {
-        console.error('Erro ao fazer login:', error);
-        alert('Erro inesperado, tente novamente.');
+      console.error('Erro ao fazer login:', error);
+      alert('Erro inesperado, tente novamente.');
     }
-}
+  }
 
 
   return (
-   
-      <div className='container'>
-        <img className='imgPreview' src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
 
-        <form className='form' onSubmit={(evento) => handleSubmit(evento)} >
+    <div className='container'>
+      <img className='imgPreview' src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
 
-          <div className='inputArea'>
+      <form className='form' onSubmit={(evento) => handleSubmit(evento)} >
 
-            <input
-              type="text"
-              value={email}
-              onChange={(e) => { setEmail(e.target.value) }}
-              placeholder='Email...'
-              required
-            />
-            <FaRegUser />
+        <div className='inputArea'>
 
-          </div>
+          <input
+            type="text"
+            value={email}
+            onChange={(e) => { setEmail(e.target.value) }}
+            placeholder='Email...'
+            required
+          />
+          <FaRegUser />
 
-
-          <div className='inputArea'>
-            <input
-              type={hidePass ? "password" : "text"}
-              value={senha}
-              onChange={(e) => { setSenha(e.target.value) }}
-              placeholder='Senha...'
-              required
-            />
-            <div className='verSenha' onClick={() => { setHidePass(!hidePass) }}>
-              {
-                hidePass
-                  ?
-                  <FaRegEye />
-                  :
-                  <FaRegEyeSlash />
-              }
-            </div >
-          </div>
-
-          <button className='btnLogin'>Entrar</button>
-          <a href="">Não lembro minha senha!</a>
-
-          <NavLink to="/home" >
-            ir para home
-          </NavLink>
-
-        </form>
-      </div>
+        </div>
 
 
-   
+        <div className='inputArea'>
+          <input
+            type={hidePass ? "password" : "text"}
+            value={senha}
+            onChange={(e) => { setSenha(e.target.value) }}
+            placeholder='Senha...'
+            required
+          />
+          <div className='verSenha' onClick={() => { setHidePass(!hidePass) }}>
+            {
+              hidePass
+                ?
+                <FaRegEye />
+                :
+                <FaRegEyeSlash />
+            }
+          </div >
+        </div>
+
+        <button className='btnLogin'>Entrar</button>
+        <a href="">Não lembro minha senha!</a>
+
+        <NavLink to="/home" >
+          ir para home
+        </NavLink>
+
+      </form>
+    </div>
+
+
+
   )
 }
 

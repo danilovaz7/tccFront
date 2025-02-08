@@ -15,7 +15,7 @@
     justify-content: space-between;
     align-items: center;
     height: 100vh;
-    gap: 20px;
+    gap: 1.25em;
 }
 
 .page {
@@ -26,45 +26,45 @@
 }
 
 .page h1 {
-    font-size: 26px;
+    font-size: 1.625em;
 }
 
 .left {
     width: 20%;
     height: fit-content;
-    padding: 20px;
+    padding: 1.25em;
     display: flex;
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    border-radius: 5px;
+    border-radius: 0.3125em;
 }
 
 .conviteJogo {
     width: 100%;
     display: flex;
-    padding: 10px;
+    padding: 0.625em;
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    gap: 20px;
-    border-radius: 5px;
+    gap: 1.25em;
+    border-radius: 0.3125em;
     border: 1px solid black;
     box-shadow: 10px 8px 5px rgba(0, 0, 0, 0.5);
 }
 
 .conviteJogo input {
-    padding: 10px;
+    padding: 0.625em;
     width: 90%;
-    border-radius: 5px;
+    border-radius: 0.3125em;
     border: 1px solid white;
-    font-size: 18px;
+    font-size: 1.125em;
 }
 
 .btn {
     background-color: #00E5FF;
     width: 50%;
-    font-size: 14px;
+    font-size: 0.875em;
     display: flex;
     justify-content: center; 
     align-items: center;
@@ -72,14 +72,14 @@
     color: black;
     border: 1px solid transparent;
     cursor: pointer;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 0.625em;
+    border-radius: 0.3125em;
 }
 
 .center {
     width: 45%;
     height: 100%;
-    padding: 15px;
+    padding: 0.9375em;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -104,22 +104,22 @@
     width: 25%;
     border: 1px solid black;
     box-shadow: 10px 8px 5px rgba(0, 0, 0, 0.5);
-    padding: 10px;
+    padding: 0.625em;
     display: flex;
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    border-radius: 5px;
+    border-radius: 0.3125em;
 }
 
 .areaTop10 {
     width: 90%;
-    padding: 10px;
+    padding: 0.625em;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 0.625em;
 }
 
 .aluno1 {
@@ -130,9 +130,9 @@
     align-items: center;
     color: black;
     font-size: 1rem;
-    padding: 5px;
+    padding: 0.3125em;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 0.3125em;
     transition: transform 0.3s ease-in-out;
 }
 
@@ -152,9 +152,9 @@
     cursor: pointer;
     justify-content: space-around;
     align-items: center;
-    padding: 5px;
+    padding: 0.3125em;
     color: black;
-    border-radius: 5px;
+    border-radius: 0.3125em;
     transition: transform 0.3s ease-in-out;
 }
 
@@ -174,17 +174,17 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding-bottom: 50px;
+    padding-bottom: 3.125em;
 }
 
 .materias {
     width: 90%;
-    padding: 10px;
+    padding: 0.625em;
     box-shadow: 5px 4px 30px rgba(5, 238, 255, 0.2);
     display: flex;
-    gap: 20px;
+    gap: 1.25em;
     flex-wrap: wrap;
-    border-radius: 10px;
+    border-radius: 0.625em;
     justify-content: center;
     align-items: center;
 }
@@ -193,9 +193,9 @@
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    gap: 10px;
-    border-radius: 5px;
-    padding: 5px;
+    gap: 0.625em;
+    border-radius: 0.3125em;
+    padding: 0.3125em;
     align-items: center;
     color: white;
     background-color: rgb(9, 31, 51);

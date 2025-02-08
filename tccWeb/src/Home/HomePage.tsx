@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from 'react';
 import './HomePage.css'
 import { MdMenu, MdKeyboardArrowRight } from "react-icons/md";
-import { NavLink } from 'react-router';
+import { NavLink, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 import Navbar from '../components/Navbar/Navbar';
 
@@ -39,6 +39,7 @@ interface EloMateria {
 
 
 export function HomePage() {
+    const navigate = useNavigate();
 
     const [matricula, setMatricula] = useState('')
     const { token, user } = useTokenStore();
@@ -86,7 +87,7 @@ export function HomePage() {
     useEffect(() => {
         async function pegaUsuarios() {
             // Faz requisição autenticada usando o token
-            const response = await fetch(`http://localhost:3000/usuarios`, {
+            const response = await fetch(`http://localhost:3000/usuarios?limit=5`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -152,7 +153,7 @@ export function HomePage() {
                                 }
                             })
                         }
-                        <button className='btn'>Ver mais <span><MdKeyboardArrowRight size={16} /></span></button>
+                        <button className='btn' onClick={() => { navigate('/ranking');}}>Ver mais <span><MdKeyboardArrowRight size={16} /></span></button>
                     </div>
                 </div>
             </div>

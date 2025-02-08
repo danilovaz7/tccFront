@@ -31,8 +31,6 @@ export function AddAlunoPage() {
     const [escola, setEscola] = useState("");
     const [genero, setGenero] = useState("");
 
-  
-
     useEffect(() => {
         async function carregarAvatares() {
             const response = await fetch(`http://localhost:3000/avatares`, {
@@ -91,6 +89,11 @@ export function AddAlunoPage() {
         } else {
             alert("Erro ao salvar usuario");
         }
+    }
+
+    function selecionarAvatarAleatorio() {
+        const randomIndex = Math.floor(Math.random() * avatares.length);
+        setContador(randomIndex);
     }
 
     return (
@@ -157,10 +160,10 @@ export function AddAlunoPage() {
                         <option value="">Selecione...</option>
                         {
                             escolas.map((escola, index) => {
-                                    return (
-                                        <option value={index+1}>{escola.nome}</option>
-                                    );
-                                })
+                                return (
+                                    <option value={index + 1}>{escola.nome}</option>
+                                );
+                            })
                         }
                     </select>
                 </div>
@@ -174,10 +177,11 @@ export function AddAlunoPage() {
                         )}
                         <div className='btnAvatar'>
                             <button type="button" onClick={() => setContador(contador => (contador > 0 ? contador - 1 : 0))}>
-                            <FaArrowLeft />
-                                </button>
+                                <FaArrowLeft />
+                            </button>
+                            <button type='button' onClick={selecionarAvatarAleatorio}><strong>?</strong></button>
                             <button type="button" onClick={() => setContador(contador => (contador < avatares.length - 1 ? contador + 1 : avatares.length - 1))}>
-                            <FaArrowRight />
+                                <FaArrowRight />
                             </button>
                         </div>
                     </div>

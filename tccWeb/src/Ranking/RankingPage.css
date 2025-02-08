@@ -1,0 +1,91 @@
+#root {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    text-align: center;
+    background-color: #1C1C1C;
+}
+
+.containerRanking {
+    width: 100%; 
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    height: 100vh;
+    gap: 3.125em;
+    margin-bottom: 3.75em;
+}
+
+.rank {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+    padding:0.3125em ;
+    border: 1px solid white;
+}
+
+.cardsTurma {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding:0.3125em ;
+    gap: 0.625em;
+    border: 1px solid red;
+}
+
+.aluno1Rank {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625em;
+    padding: 0.3em;
+    border-radius: 0.625em;
+    background-color: rgb(95, 63, 109);
+}
+
+.aluno1Rank img {
+    width: 25%;
+}
+
+.aluno1RankStats {
+    width: 80%;
+    font-size: 1.2em;
+    display: flex;
+    justify-content: start;
+    gap: 1em;
+    align-items: center;
+}
+
+
+.alunoRank {
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625em;
+    padding: 0.3em;
+    border-radius: 0.625em;
+    background-color: rgb(54, 122, 52);
+}
+
+.alunoRank img {
+    width: 25%;
+}
+
+.alunoRankStats {
+    width: 80%;
+    font-size: 1em;
+    display: flex;
+    justify-content: start;
+    gap: 1em;
+    align-items: center;
+}
+

@@ -98,24 +98,18 @@ export function PerfilPage() {
         { name: "Disputas Perdidas", value: disputasPerdidas || 0 },
     ];
 
-    // Adicionando a "Nenhuma Partida" somente se `total_disputas` for 0
     if (dados?.total_disputas === 0) {
         dataGraficoPizza.push({ name: "Nenhuma Partida", value: 1 });
     }
 
-    // Se o total de disputas for maior que 0, removemos a "Nenhuma Partida"
     if (totalDisputas > 0) {
         const index = dataGraficoPizza.findIndex(item => item.name === "Nenhuma Partida");
         if (index > -1) {
             dataGraficoPizza.splice(index, 1);
         }
     }
-
-
-    console.log("Dados de disputas:", dados?.total_disputas_ganhas, disputasPerdidas);
-    // Cores para as fatias do gráfico
-    const COLORS = ['#82ca9d', '#ff6347', '#FFD700']; // Verde para ganhas, vermelho para perdidas e amarelo para "Nenhuma Partida"
-
+   
+    const COLORS = ['#82ca9d', '#ff6347', '#FFD700']; 
     if (carregando) return <p>Carregando estatísticas...</p>;
     if (!dados) return <p>Erro ao carregar estatísticas.</p>;
 
