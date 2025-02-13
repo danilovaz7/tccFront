@@ -204,7 +204,6 @@ export function HomePage() {
                         :
                         null
                 }
-
                 {
                     usuario?.tipo_usuario_id === 1
                         ?
@@ -217,8 +216,5 @@ export function HomePage() {
                 }
             </div>
         </div>
-
-
-
     )
 }
