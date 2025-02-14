@@ -4,7 +4,7 @@ import './Navbar.css'
 // Definição das props com TypeScript
 interface NavbarProps {
     id: number;
-    nivel: string;
+    nivel: number;
     avatar: string;
 }
 

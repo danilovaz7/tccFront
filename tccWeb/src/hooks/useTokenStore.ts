@@ -5,7 +5,10 @@ interface User {
   nome: string;
   email: string;
   senha: string;
-  foto: string;
+  avatar: {
+    nome: string,
+    caminho: string
+  }
   nivel: number;
   matricula: string;
   experiencia: number;

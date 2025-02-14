@@ -3,6 +3,7 @@ import './RankingPage.css'
 import { NavLink, useParams } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 import Navbar from '../components/Navbar/Navbar';
+import UserCardRank from '../components/UserCardRank/UserCardRank';
 
 interface Usuario {
     id: number,
@@ -14,6 +15,12 @@ interface Usuario {
     avatar: {
         nome: string,
         caminho: string
+    },
+    estatisticas_gerais: {
+        total_disputas: number;
+        total_disputas_ganhas: number;
+        total_perguntas: number;
+        total_perguntas_acertadas: number;
     }
 }
 
@@ -24,7 +31,6 @@ export function RankingPage() {
 
     useEffect(() => {
         async function pegaUsuarios() {
-            // Faz requisição autenticada usando o token
             const response = await fetch(`http://localhost:3000/usuarios`, {
                 method: 'GET',
                 headers: {
@@ -37,9 +43,6 @@ export function RankingPage() {
         }
         pegaUsuarios();
     }, [])
-
-
-
 
     useEffect(() => {
         async function pegaUsuarios() {
@@ -56,8 +59,6 @@ export function RankingPage() {
         pegaUsuarios();
     }, []);
 
-
-
     return (
         <>
             <div className='containerRanking'>
@@ -67,28 +68,18 @@ export function RankingPage() {
                     <div className='cardsTurma'>
                         {
                             usuarios.map((usuarioRank, index) => {
+                              let porcentAcerto = ((usuarioRank.estatisticas_gerais.total_disputas_ganhas / usuarioRank.estatisticas_gerais.total_disputas) * 100)
+                                if (isNaN(porcentAcerto)) {
+                                    porcentAcerto = 0
+                                }
                                 if (usuario?.id_turma === usuarioRank.id_turma && usuario?.id_escola === usuarioRank.id_escola) {
                                     if (index == 0) {
                                         return (
-                                            <div className='aluno1Rank'>
-                                                <img src={usuarioRank?.avatar.caminho} alt="" />
-                                                <div className='aluno1RankStats'>
-                                                    <p>Nome: {usuarioRank?.nome}</p>
-                                                    <p>Acertos 20%</p>
-                                                    <p>Lvl {usuarioRank?.nivel}</p>
-                                                </div>
-                                            </div>
+                                           <UserCardRank id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} acertos={porcentAcerto} classe={'aluno1Rank'} classeStats={'aluno1RankStats'}  />
                                         )
                                     }
                                     return (
-                                        <div className='alunoRank'>
-                                            <img src={usuarioRank?.avatar.caminho} alt="" />
-                                            <div className='alunoRankStats'>
-                                                <p>Nome: {usuarioRank?.nome}</p>
-                                                <p>Acertos 20%</p>
-                                                <p>Lvl {usuarioRank?.nivel}</p>
-                                            </div>
-                                        </div>
+                                        <UserCardRank id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} acertos={porcentAcerto} classe={'alunoRank'} classeStats={'alunoRankStats'}  />
                                     );
                                 }
                             })

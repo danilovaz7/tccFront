@@ -122,50 +122,6 @@
     gap: 0.625em;
 }
 
-.aluno1 {
-    width: 100%;
-    background-color: yellow;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    color: black;
-    font-size: 1rem;
-    padding: 0.3125em;
-    cursor: pointer;
-    border-radius: 0.3125em;
-    transition: transform 0.3s ease-in-out;
-}
-
-.aluno1:hover {
-    transform: scale(1.05);
-}
-
-.aluno1 img {
-    width: 20%;
-    border-radius: 50%;
-}
-
-.aluno {
-    width: 90%;
-    background-color: gray;
-    display: flex;
-    cursor: pointer;
-    justify-content: space-around;
-    align-items: center;
-    padding: 0.3125em;
-    color: black;
-    border-radius: 0.3125em;
-    transition: transform 0.3s ease-in-out;
-}
-
-.aluno:hover {
-    transform: scale(1.02);
-}
-
-.aluno img {
-    width: 20%;
-    border-radius: 50%;
-}
 
 .treinamentoMaterias {
     width: 90%;
@@ -188,38 +144,4 @@
     justify-content: center;
     align-items: center;
 }
-
-.materia {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    gap: 0.625em;
-    border-radius: 0.3125em;
-    padding: 0.3125em;
-    align-items: center;
-    color: white;
-    background-color: rgb(9, 31, 51);
-    width: 20%;
-    cursor: pointer;
-    transition: transform 0.3s ease-in-out;
-}
-
-.materiaSection {
-    width: 80%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.materiaLogo {
-    width: 20%;
-}
-.icon {
-    width: 30%;
-}
-
-.materia:hover {
-    transform: scale(1.05);
-}
-
 

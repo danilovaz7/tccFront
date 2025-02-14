@@ -25,18 +25,18 @@ interface Estatisticas {
     total_perguntas_acertadas: number;
 }
 
-
 export function PerfilPage() {
     let { idUsuario } = useParams();
     const { token, user } = useTokenStore();
     const [usuario, setUsuario] = useState<Usuario>();
+    const [usuarioNavBar, setUsuarioNavBar] = useState<Usuario>();
     const [usuarios, setUsers] = useState<Usuario[]>([])
     const [dados, setDados] = useState<Estatisticas | null>(null);
     const [carregando, setCarregando] = useState(true);
 
     useEffect(() => {
         async function pegaUsuarios() {
-            // Faz requisição autenticada usando o token
+
             const response = await fetch(`http://localhost:3000/usuarios`, {
                 method: 'GET',
                 headers: {
@@ -48,10 +48,10 @@ export function PerfilPage() {
             setUsers(usuarios)
         }
         pegaUsuarios();
-    }, [])
+    }, [idUsuario])
 
     useEffect(() => {
-        async function pegaUsuarios() {
+        async function pegaUsuario() {
             const response = await fetch(`http://localhost:3000/usuarios/${idUsuario}`, {
                 method: 'GET',
                 headers: {
@@ -62,8 +62,23 @@ export function PerfilPage() {
             const usuarioAtual = await response.json();
             setUsuario(usuarioAtual);
         }
-        pegaUsuarios();
-    }, []);
+        pegaUsuario();
+    }, [idUsuario]);
+
+    useEffect(() => {
+        async function pegaUsuarioNav() {
+            const response = await fetch(`http://localhost:3000/usuarios/${user?.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            const userNav = await response.json();
+            setUsuarioNavBar(userNav);
+        }
+        pegaUsuarioNav();
+    }, [idUsuario]);
 
     useEffect(() => {
         async function carregarDados() {
@@ -79,7 +94,7 @@ export function PerfilPage() {
             setCarregando(false);
         }
         carregarDados();
-    }, [])
+    }, [idUsuario])
 
     const dataGrafico = [
         {
@@ -113,15 +128,18 @@ export function PerfilPage() {
     if (carregando) return <p>Carregando estatísticas...</p>;
     if (!dados) return <p>Erro ao carregar estatísticas.</p>;
 
+    console.log(user)
+
     return (
         <>
             <div className='containerPerfil'>
-                <Navbar id={usuario?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho} />
+                
+                <Navbar id={usuarioNavBar?.id} nivel={usuarioNavBar?.nivel} avatar={usuarioNavBar?.avatar.caminho || ''} />
 
                 <div className='perfilStats'>
                     <div className='perfilTop'>
                         <div className='imgContainer'>
-                            <img className='imgPerfil' src={usuario?.avatar.caminho} alt="" />
+                            {usuario?.avatar && <img className='imgPerfil' src={usuario?.avatar.caminho} alt="Perfil" />}
                         </div>
                         <div className='alunoInfo'>
                             <p>Nome:  {usuario?.nome} </p>
@@ -130,7 +148,7 @@ export function PerfilPage() {
                                 usuarios.map((usuarioRank, index) => {
                                     if (usuario?.id === usuarioRank.id) {
                                         return (
-                                            <p>Ranking: {index + 1}º  </p>
+                                            <p key={index}>Ranking: {index + 1}º  </p>
                                         );
                                     }
                                 })
