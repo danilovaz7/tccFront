@@ -4,6 +4,8 @@ import { MdMenu, MdKeyboardArrowRight } from "react-icons/md";
 import { NavLink, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 import Navbar from '../components/Navbar/Navbar';
+import UserCard from '../components/UserCard/UserCard';
+import CardMateria from '../components/CardMateria/CardMateria';
 
 interface Usuario {
     id: number,
@@ -100,27 +102,17 @@ export function HomePage() {
         pegaUsuarios();
     }, [])
 
-    console.log(usuario?.avatar.caminho)
-
     return (
 
         <div className='containerHome'>
-
-            <Navbar id={user?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho} />
+            <Navbar id={usuario?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho} />
 
             <div className='page'>
                 <div className='left'>
                     <h1>Que tal jogar com um amigo?</h1>
                     <p>É sempre melhor evoluir juntos!</p>
                     <form onSubmit={(evento) => formSubmit(evento)} className='conviteJogo'>
-                        <input
-                            type="text"
-                            placeholder='Insira a matrícula'
-                            value={matricula}
-                            maxLength={6}
-                            onChange={(e) => { setMatricula(e.target.value.replace(/[^0-9]/g, '')) }}
-                        />
-                        <button className='btn'>CONVIDAR</button>
+                        <button className='btn'>CRIAR SALA</button>
                     </form>
                 </div>
 
@@ -136,24 +128,16 @@ export function HomePage() {
                                 if (usuario?.id_turma === usuarioRank.id_turma && usuario?.id_escola === usuarioRank.id_escola) {
                                     if (index == 0) {
                                         return (
-                                            <div className='aluno1'>
-                                                <img src={usuarioRank.avatar.caminho} alt="" />
-                                                <p>{usuarioRank.nome}</p>
-                                                <p>Lvl {usuarioRank.nivel}</p>
-                                            </div>
+                                            <UserCard id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} classe={'aluno1'} />
                                         )
                                     }
                                     return (
-                                        <div className='aluno'>
-                                            <img src={usuarioRank.avatar.caminho} alt="" />
-                                            <p>{usuarioRank.nome}</p>
-                                            <p>Lvl {usuarioRank.nivel}</p>
-                                        </div>
+                                        <UserCard id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} classe={'aluno'} />
                                     );
                                 }
                             })
                         }
-                        <button className='btn' onClick={() => { navigate('/ranking');}}>Ver mais <span><MdKeyboardArrowRight size={16} /></span></button>
+                        <button className='btn' onClick={() => { navigate('/ranking'); }}>Ver mais <span><MdKeyboardArrowRight size={16} /></span></button>
                     </div>
                 </div>
             </div>
@@ -187,14 +171,7 @@ export function HomePage() {
                                     }
 
                                     return (
-                                        <div key={index} className='materia'>
-                                            <img className='materiaLogo' src={eloMateria.materia.icone} alt="" />
-                                            <div className='materiaSection'>
-                                                <p>{eloMateria.materia.nome}</p>
-                                                <img className='icon' src={eloIcon} alt="" />
-                                            </div>
-                                        </div>
-
+                                        <CardMateria id={0} materiaLogo={eloMateria.materia.icone} nome={eloMateria.materia.nome} icon={eloIcon} />
                                     );
                                 })
 
@@ -204,7 +181,6 @@ export function HomePage() {
                         :
                         null
                 }
-
                 {
                     usuario?.tipo_usuario_id === 1
                         ?
@@ -217,8 +193,5 @@ export function HomePage() {
                 }
             </div>
         </div>
-
-
-
     )
 }

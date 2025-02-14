@@ -91,14 +91,37 @@
     padding: 0.3125em;
     border: 1px solid green;
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.materiasContainer {
+    width: 80%;
+    height: 90%;
+    border: 1px solid white;
+    padding:1em;
+    gap: 12em;
+    display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
 }
 
-.materiasStats {
-    width: 80%;
-    border: 1px solid white;
-    padding: 0.3125em;
+.materiasContainer img {
+    width: 30%;
 }
 
+.materiasStats {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+}
+
+.materiaStats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+}

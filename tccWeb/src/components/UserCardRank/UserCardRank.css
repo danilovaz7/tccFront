@@ -1,0 +1,53 @@
+
+.aluno1Rank {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625em;
+    padding: 0.6em;
+    color: black;
+    border-radius: 0.625em;
+    background-color: yellow;
+    cursor: pointer;
+}
+
+.aluno1Rank img {
+    width: 25%;
+}
+
+.aluno1RankStats {
+    width: 80%;
+    font-size: 1.5em;
+    display: flex;
+    justify-content: start;
+    gap: 0.8em;
+    align-items: center;
+}
+
+.alunoRank {
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625em;
+    padding: 0.6em;
+    color: black;
+    border-radius: 0.625em;
+    background-color: gray;
+    cursor: pointer;
+}
+
+.alunoRank img {
+    width: 25%;
+}
+
+.alunoRankStats {
+    width: 80%;
+    font-size: 1.5em;
+    display: flex;
+    justify-content: start;
+    gap: 0.8em;
+    align-items: center;
+}
+

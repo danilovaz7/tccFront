@@ -25,18 +25,55 @@ interface Estatisticas {
     total_perguntas_acertadas: number;
 }
 
+interface EloMateria {
+    id: number,
+    usuario_id: number,
+    materia_id: number,
+    elo_id: number,
+    subelo_id: number,
+    respostas_corretas_elo: string,
+    respostas_corretas_total: string,
+    eloIcon: string,
+    elo: {
+        nome: string,
+        elo1: string,
+        elo2: string,
+        elo3: string
+    },
+    materia: {
+        nome: string,
+        icone: string
+    }
+}
+
 
 export function PerfilPage() {
     let { idUsuario } = useParams();
     const { token, user } = useTokenStore();
     const [usuario, setUsuario] = useState<Usuario>();
-    const [usuarios, setUsers] = useState<Usuario[]>([])
+    const [usuarioNavBar, setUsuarioNavBar] = useState<Usuario>();
+    const [usuarios, setUsers] = useState<Usuario[]>([]);
     const [dados, setDados] = useState<Estatisticas | null>(null);
+    const [eloMaterias, setEloMaterias] = useState<EloMateria[]>([]);
     const [carregando, setCarregando] = useState(true);
+    const [materiaSelecionada, setMateriaSelecionada] = useState<EloMateria | null>(null);
+
+    const getEloIcon = (eloMateria: EloMateria) => {
+        switch (eloMateria.subelo_id) {
+            case 1:
+                return eloMateria.elo.elo1;
+            case 2:
+                return eloMateria.elo.elo2;
+            case 3:
+                return eloMateria.elo.elo3;
+            default:
+                return ''; // Valor padrão caso não haja subelo
+        }
+    };
 
     useEffect(() => {
         async function pegaUsuarios() {
-            // Faz requisição autenticada usando o token
+
             const response = await fetch(`http://localhost:3000/usuarios`, {
                 method: 'GET',
                 headers: {
@@ -48,10 +85,10 @@ export function PerfilPage() {
             setUsers(usuarios)
         }
         pegaUsuarios();
-    }, [])
+    }, [idUsuario])
 
     useEffect(() => {
-        async function pegaUsuarios() {
+        async function pegaUsuario() {
             const response = await fetch(`http://localhost:3000/usuarios/${idUsuario}`, {
                 method: 'GET',
                 headers: {
@@ -62,8 +99,46 @@ export function PerfilPage() {
             const usuarioAtual = await response.json();
             setUsuario(usuarioAtual);
         }
-        pegaUsuarios();
-    }, []);
+        pegaUsuario();
+    }, [idUsuario]);
+
+    useEffect(() => {
+        async function pegaUsuarioNav() {
+            const response = await fetch(`http://localhost:3000/usuarios/${user?.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            const userNav = await response.json();
+            setUsuarioNavBar(userNav);
+        }
+        pegaUsuarioNav();
+    }, [idUsuario]);
+
+    useEffect(() => {
+        async function pegaEloMaterias() {
+            const response = await fetch(`http://localhost:3000/eloMaterias/${usuario?.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            const eloMaterias = await response.json();
+            setEloMaterias(eloMaterias);
+        }
+        pegaEloMaterias();
+    }, [usuario]);
+
+    const handleMateriaClick = (materia: EloMateria) => {
+        setMateriaSelecionada({
+            ...materia,
+            eloIcon: getEloIcon(materia),
+        });
+    };
+
 
     useEffect(() => {
         async function carregarDados() {
@@ -79,7 +154,8 @@ export function PerfilPage() {
             setCarregando(false);
         }
         carregarDados();
-    }, [])
+    }, [idUsuario])
+
 
     const dataGrafico = [
         {
@@ -108,20 +184,23 @@ export function PerfilPage() {
             dataGraficoPizza.splice(index, 1);
         }
     }
-   
-    const COLORS = ['#82ca9d', '#ff6347', '#FFD700']; 
+
+    const COLORS = ['#82ca9d', '#ff6347', '#FFD700'];
     if (carregando) return <p>Carregando estatísticas...</p>;
     if (!dados) return <p>Erro ao carregar estatísticas.</p>;
+
+    console.log(eloMaterias)
 
     return (
         <>
             <div className='containerPerfil'>
-                <Navbar id={usuario?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho} />
+
+                <Navbar id={usuarioNavBar?.id} nivel={usuarioNavBar?.nivel} avatar={usuarioNavBar?.avatar.caminho || ''} />
 
                 <div className='perfilStats'>
                     <div className='perfilTop'>
                         <div className='imgContainer'>
-                            <img className='imgPerfil' src={usuario?.avatar.caminho} alt="" />
+                            {usuario?.avatar && <img className='imgPerfil' src={usuario?.avatar.caminho} alt="Perfil" />}
                         </div>
                         <div className='alunoInfo'>
                             <p>Nome:  {usuario?.nome} </p>
@@ -130,7 +209,7 @@ export function PerfilPage() {
                                 usuarios.map((usuarioRank, index) => {
                                     if (usuario?.id === usuarioRank.id) {
                                         return (
-                                            <p>Ranking: {index + 1}º  </p>
+                                            <p key={index}>Ranking: {index + 1}º  </p>
                                         );
                                     }
                                 })
@@ -184,11 +263,50 @@ export function PerfilPage() {
 
                     <div className='alunoStats'>
                         <div className='materiasName'>
-
+                            {eloMaterias.map((eloMateria, index) => (
+                                <p key={index} onClick={() => handleMateriaClick(eloMateria)}>
+                                    {eloMateria.materia.nome}
+                                </p>
+                            ))}
                         </div>
-                        <div className='materiasStats'>
 
-                        </div>
+                        {
+                            materiaSelecionada
+                                ?
+                                (
+                                    <div className='materiasContainer'>
+                                        <div className='materiasStats'>
+                                            <div className='materiaStats'>
+                                                <h2>Nome: </h2>
+                                                <p>{materiaSelecionada.materia.nome}</p>
+                                            </div>
+                                            <div className='materiaStats'>
+                                                <h2>Elo: </h2>
+                                                <p>{materiaSelecionada.elo.nome} {materiaSelecionada.subelo_id}</p>
+                                            </div>
+                                            <div className='materiaStats'>
+                                                <h2>Respostas corretas no elo: </h2>
+                                                <p>{materiaSelecionada.respostas_corretas_elo}</p>
+                                            </div>
+                                            <div className='materiaStats'>
+                                                <h2>Respostas corretas na matéra: </h2>
+                                                <p>{materiaSelecionada.respostas_corretas_total}</p>
+                                            </div>
+                                        </div>
+
+                                        <img src={materiaSelecionada.eloIcon} alt="" />
+                                    </div>
+
+
+                                )
+                                :
+                                (
+                                    <p>Selecione uma matéria para ver mais detalhes.</p>
+                                )
+                        }
+
+
+
                     </div>
 
                 </div>
