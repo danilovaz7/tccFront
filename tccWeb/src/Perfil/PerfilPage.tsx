@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from 'react';
-import './PerfilPage.css'
+
 import { NavLink, useParams } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 import Navbar from '../components/Navbar/Navbar';
@@ -188,48 +188,44 @@ export function PerfilPage() {
     const COLORS = ['#82ca9d', '#ff6347', '#FFD700'];
     if (carregando) return <p>Carregando estatísticas...</p>;
     if (!dados) return <p>Erro ao carregar estatísticas.</p>;
-
-    console.log(eloMaterias)
-
     return (
         <>
-            <div className='containerPerfil'>
-
+            <div className="w-full flex flex-col justify-start items-center min-h-screen gap-12 mb-40">
                 <Navbar id={usuarioNavBar?.id} nivel={usuarioNavBar?.nivel} avatar={usuarioNavBar?.avatar.caminho || ''} />
 
-                <div className='perfilStats'>
-                    <div className='perfilTop'>
-                        <div className='imgContainer'>
-                            {usuario?.avatar && <img className='imgPerfil' src={usuario?.avatar.caminho} alt="Perfil" />}
+                <div className="w-4/5 flex flex-col justify-center items-center gap-10">
+                    <div className="w-full flex p-2.5 justify-center items-center text-lg">
+                        <div className="w-1/5">
+                            {usuario?.avatar && <img className="w-full" src={usuario?.avatar.caminho} alt="Perfil" />}
                         </div>
-                        <div className='alunoInfo'>
-                            <p>Nome:  {usuario?.nome} </p>
-                            <p>Sala:  {usuario?.id_turma}º ano</p>
+                        <div className="w-4/5 flex flex-row justify-center gap-10 items-center">
+                            <p className="text-2xl font-bold">Nome: {usuario?.nome}</p>
+                            <p className="text-2xl font-bold">Sala: {usuario?.id_turma}º ano</p>
                             {
                                 usuarios.map((usuarioRank, index) => {
                                     if (usuario?.id === usuarioRank.id) {
                                         return (
-                                            <p key={index}>Ranking: {index + 1}º  </p>
+                                            <p key={index} className="text-2xl font-bold">Ranking: {index + 1}º </p>
                                         );
                                     }
+                                    return null;
                                 })
                             }
-
                         </div>
                     </div>
 
-                    <div className='caracteristicasGerais'>
-                        <div className='status'>
-                            <p>Perguntas totais</p>
-                            <p>{dados.total_perguntas}</p>
+                    <div className="w-9/10 border border-white rounded p-5 gap-6 flex flex-row justify-around items-start flex-wrap">
+                        <div className="w-1/4 flex flex-col justify-center items-center">
+                            <p className='text-2xl'>Perguntas totais</p>
+                            <p className='text-xl'>{dados.total_perguntas}</p>
                         </div>
-                        <div className='status'>
-                            <p>Perguntas acertadas</p>
-                            <p>{dados.total_perguntas_acertadas}</p>
+                        <div className="w-1/4 flex flex-col justify-center items-center">
+                            <p className='text-2xl'>Perguntas acertadas</p>
+                            <p className='text-xl'>{dados.total_perguntas_acertadas}</p>
                         </div>
-                        <div className='status'>
-                            <p>Disputas</p>
-                            <p>{dados.total_disputas}</p>
+                        <div className="w-1/4 flex flex-col justify-center items-center">
+                            <p className='text-2xl'>Disputas</p>
+                            <p className='text-xl'>{dados.total_disputas}</p>
                         </div>
 
                         <BarChart width={500} height={300} data={dataGrafico}>
@@ -261,10 +257,10 @@ export function PerfilPage() {
                         </PieChart>
                     </div>
 
-                    <div className='alunoStats'>
-                        <div className='materiasName'>
+                    <div className="w-full flex flex-row justify-start items-center mb-10">
+                        <div className="w-1/6 p-1 gap-2 flex flex-col justify-center items-start">
                             {eloMaterias.map((eloMateria, index) => (
-                                <p key={index} onClick={() => handleMateriaClick(eloMateria)}>
+                                <p className="text-2xl" key={index} onClick={() => handleMateriaClick(eloMateria)}>
                                     {eloMateria.materia.nome}
                                 </p>
                             ))}
@@ -272,42 +268,42 @@ export function PerfilPage() {
 
                         {
                             materiaSelecionada
-                                ?
-                                (
-                                    <div className='materiasContainer'>
-                                        <div className='materiasStats'>
-                                            <div className='materiaStats'>
-                                                <h2>Nome: </h2>
-                                                <p>{materiaSelecionada.materia.nome}</p>
+                                ? (
+                                    <div className="w-4/5 h-9/10 border border-white rounded p-5 gap-48 flex flex-row justify-center items-center">
+                                        <div className="flex flex-col justify-center items-start gap-10">
+                                            <div className="flex justify-center items-center gap-4">
+                                                <h2 className="text-3xl">Nome:</h2>
+                                                <p className="text-2xl">{materiaSelecionada.materia.nome}</p>
                                             </div>
-                                            <div className='materiaStats'>
-                                                <h2>Elo: </h2>
-                                                <p>{materiaSelecionada.elo.nome} {materiaSelecionada.subelo_id}</p>
+                                            <div className="flex justify-center items-center gap-4">
+                                                <h2 className="text-3xl">Elo:</h2>
+                                                <p className="text-2xl">{materiaSelecionada.elo.nome} {materiaSelecionada.subelo_id}</p>
                                             </div>
-                                            <div className='materiaStats'>
-                                                <h2>Respostas corretas no elo: </h2>
-                                                <p>{materiaSelecionada.respostas_corretas_elo}</p>
+                                            <div className="flex justify-center items-center gap-4">
+                                                <h2 className="text-2xl">Respostas corretas no elo:</h2>
+                                                <p className="text-3xl">{materiaSelecionada.respostas_corretas_elo}</p>
                                             </div>
-                                            <div className='materiaStats'>
-                                                <h2>Respostas corretas na matéra: </h2>
-                                                <p>{materiaSelecionada.respostas_corretas_total}</p>
+                                            <div className="flex justify-center items-center gap-4">
+                                                <h2 className="text-2xl">Respostas corretas na matéria:</h2>
+                                                <p className="text-3xl">{materiaSelecionada.respostas_corretas_total}</p>
                                             </div>
                                         </div>
 
-                                        <img src={materiaSelecionada.eloIcon} alt="" />
+                                        <img src={materiaSelecionada.eloIcon} alt="" className="w-1/4" />
                                     </div>
-
-
-                                )
-                                :
+                                ) :
                                 (
-                                    <p>Selecione uma matéria para ver mais detalhes.</p>
+                                    <div className="w-4/5 h-9/10 border border-white rounded p-5 gap-48 flex flex-row justify-center items-center">
+                                        <p>Selecione uma matéria para ver mais detalhes.</p>
+                                    </div>
                                 )
                         }
                     </div>
                 </div>
             </div>
-
         </>
-    )
+    );
+
+
+
 }

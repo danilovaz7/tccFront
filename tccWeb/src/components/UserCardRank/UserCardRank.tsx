@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router';
-import './UserCardRank.css'
+
 
 // Definição das props com TypeScript
 interface UserCardRankProps {
@@ -10,9 +10,10 @@ interface UserCardRankProps {
     acertos: number;
     classe: string;
     classeStats: string;
+    classeImg: string;
 }
 
-function UserCardRank({ id, nivel, avatar, nome, acertos,classe,classeStats }: UserCardRankProps) {
+function UserCardRank({ id, nivel, avatar, nome, acertos,classe,classeStats,classeImg }: UserCardRankProps) {
     const navigate = useNavigate();
 
     function carregaPerfil() {
@@ -21,10 +22,10 @@ function UserCardRank({ id, nivel, avatar, nome, acertos,classe,classeStats }: U
 
     return (
         <div className={classe} onClick={() => {carregaPerfil()}}>
-            <img src={avatar} alt="" />
+            <img className={classeImg} src={avatar} alt="" />
             <div className={classeStats}>
                 <p>Nome: {nome}</p>
-                <p>Acertos {acertos}%</p>
+                <p>Win rate {acertos}%</p>
                 <p>Lvl {nivel}</p>
             </div>
         </div>

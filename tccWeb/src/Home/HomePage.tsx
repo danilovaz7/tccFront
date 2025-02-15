@@ -1,6 +1,5 @@
 import { FormEvent, useEffect, useState } from 'react';
-import './HomePage.css'
-import { MdMenu, MdKeyboardArrowRight } from "react-icons/md";
+import { MdKeyboardArrowRight } from "react-icons/md";
 import { NavLink, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 import Navbar from '../components/Navbar/Navbar';
@@ -88,7 +87,6 @@ export function HomePage() {
 
     useEffect(() => {
         async function pegaUsuarios() {
-            // Faz requisição autenticada usando o token
             const response = await fetch(`http://localhost:3000/usuarios?limit=5`, {
                 method: 'GET',
                 headers: {
@@ -104,55 +102,62 @@ export function HomePage() {
 
     return (
 
-        <div className='containerHome'>
+        <div className="w-full flex flex-col justify-between items-center h-screen gap-30">
             <Navbar id={usuario?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho} />
 
-            <div className='page'>
-                <div className='left'>
-                    <h1>Que tal jogar com um amigo?</h1>
+            <div className="w-11/12 flex flex-wrap justify-around">
+                <div className="w-1/5 h-auto p-5 flex flex-col justify-start items-center gap-3 rounded-md">
+                    <h1 className="text-lg">Que tal jogar com um amigo?</h1>
                     <p>É sempre melhor evoluir juntos!</p>
-                    <form onSubmit={(evento) => formSubmit(evento)} className='conviteJogo'>
-                        <button className='btn'>CRIAR SALA</button>
+                    <form onSubmit={(evento) => formSubmit(evento)} className="w-full flex p-2.5 flex-col justify-start items-center gap-5 rounded-md border border-black shadow-xl">
+                        <button className="bg-cyan-400 w-1/2 text-sm flex justify-center items-center gap-2.5 text-black border border-transparent cursor-pointer p-2.5 rounded-md">CRIAR SALA</button>
                     </form>
                 </div>
 
-                <div className='center'>
-                    <img className='gif' src="./src/assets/gifCentro.gif" alt="" />
+                <div className="w-9/20 h-full p-3 flex flex-col justify-center items-center">
+                    <img className="w-2/5 rounded-full shadow-xl" src="./src/assets/gifCentro.gif" alt="" />
                 </div>
 
-                <div className='right'>
-                    <h1>Ranking da <span style={{ color: 'yellow' }}>sala</span></h1>
-                    <div className='areaTop10'>
+                <div className="w-1/4 border border-black shadow-xl p-2.5 flex flex-col justify-start items-center rounded-md">
+                    <h1 className="text-lg">Ranking da <span className="text-yellow-400">sala</span></h1>
+                    <div className="w-11/12 p-2.5 flex flex-col justify-center items-center gap-2.5">
                         {
                             usuarios.map((usuarioRank, index) => {
                                 if (usuario?.id_turma === usuarioRank.id_turma && usuario?.id_escola === usuarioRank.id_escola) {
-                                    if (index == 0) {
+                                    if (index === 0) {
                                         return (
-                                            <UserCard id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} classe={'aluno1'} />
+                                            <UserCard id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} 
+                                            classe="w-full bg-yellow-400 flex justify-around items-center text-black p-2.5 cursor-point rounded-md transition-transform ease-in-out hover:scale-105" 
+                                            imgClasse='w-1/5 rounded-full' />
                                         )
                                     }
                                     return (
-                                        <UserCard id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} classe={'aluno'} />
+                                        <UserCard id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} 
+                                        classe="w-9/10 bg-gray-400 flex justify-around items-center text-black p-2.5 cursor-point rounded-md transition-transform ease-in-out hover:scale-102" 
+                                        imgClasse='w-1/5 rounded-full' />
                                     );
                                 }
+                                return null;
                             })
                         }
-                        <button className='btn' onClick={() => { navigate('/ranking'); }}>Ver mais <span><MdKeyboardArrowRight size={16} /></span></button>
+                        <button className="bg-cyan-400 w-1/2 text-sm flex justify-center items-center gap-2.5 text-black border border-transparent cursor-pointer p-2.5 rounded-md" onClick={() => { navigate('/ranking'); }}>Ver mais <span><MdKeyboardArrowRight size={16} /></span></button>
                     </div>
                 </div>
             </div>
 
-            <div className='treinamentoMaterias'>
 
-                <h1 style={{ color: 'cyan' }}>Aperfeiçoe seus conhecimentos</h1>
-                <h3>Selecione a materia que deseja treinar</h3>
 
-                {
-                    usuario?.tipo_usuario_id === 2
-                        ?
-                        <div className='materias'>
+            {
+                usuario?.tipo_usuario_id === 2
+                    ?
+
+                    <div className="w-11/12 flex flex-col justify-center items-center pb-12.5">
+                        <h1 className="text-cyan-400">Aperfeiçoe seus conhecimentos</h1>
+                        <h3 className="text-lg">Selecione a matéria que deseja treinar</h3>
+
+                        <div className="w-11/12 p-2.5 shadow-2xl flex gap-5 flex-wrap rounded-lg justify-center items-center">
                             {
-                                eloMaterias.map((eloMateria, index) => {
+                                eloMaterias.map((eloMateria) => {
                                     let eloIcon = '';
 
                                     // Lógica para escolher o ícone dependendo do subelo_id
@@ -178,20 +183,23 @@ export function HomePage() {
                             }
 
                         </div>
-                        :
-                        null
-                }
-                {
-                    usuario?.tipo_usuario_id === 1
-                        ?
+                    </div>
+                    :
+                    null
+            }
+            {
+                usuario?.tipo_usuario_id === 1
+                    ?
+                    <div className="w-11/12 flex flex-col justify-center items-center pb-12.5">
                         <div>
-                            <NavLink to="/addAluno" ><button>Adicionar aluno</button></NavLink>
-                            <button>Adicionar turma</button>
+                            <NavLink to="/addAluno"><button className="bg-cyan-400 p-2.5 rounded-md">Adicionar aluno</button></NavLink>
+                            <button className="bg-cyan-400 p-2.5 rounded-md">Adicionar turma</button>
                         </div>
-                        :
-                        null
-                }
-            </div>
+                    </div>
+                    :
+                    null
+            }
+
         </div>
     )
 }

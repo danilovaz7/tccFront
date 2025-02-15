@@ -1,4 +1,4 @@
-import './UserCard.css'
+
 import { NavLink, useNavigate } from 'react-router';
 
 interface UserCardProps {
@@ -7,10 +7,11 @@ interface UserCardProps {
     nome: string;
     avatar: string;
     classe: string;
-}
+    imgClasse: string;
+    } 
 
 
-function UserCard({ id, nivel, avatar, nome, classe, }: UserCardProps) {
+function UserCard({ id, nivel, avatar, nome, classe,imgClasse }: UserCardProps) {
     const navigate = useNavigate();
 
     function carregaPerfil() {
@@ -19,7 +20,7 @@ function UserCard({ id, nivel, avatar, nome, classe, }: UserCardProps) {
 
     return (
         <div className={classe} onClick={() => { carregaPerfil() }}>
-            <img src={avatar} alt="" />
+            <img className={imgClasse} src={avatar} alt="" />
             <p>{nome}</p>
             <p>Lvl {nivel}</p>
         </div>

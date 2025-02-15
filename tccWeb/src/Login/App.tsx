@@ -1,6 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { FaRegEye, FaRegEyeSlash, FaRegUser } from "react-icons/fa";
-import './App.css'
 import { NavLink, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 
@@ -72,9 +71,9 @@ function App() {
     <div className='flex flex-col h-full justify-center items-center gap-4 '>
       <img className='w-[40%] border-2 border-black rounded-[50%] ' src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
 
-      <form className='flex flex-col justify-center items-center rounded-2xl w-[90%] gap-2 p-1 ' onSubmit={(evento) => handleSubmit(evento)} >
+      <form className='flex flex-col justify-center items-center rounded-2xl w-[90%] gap-4 p-1 ' onSubmit={(evento) => handleSubmit(evento)} >
 
-        <div className='w-[90%] flex flex-row justify-around items-center border-cyan-400 border-1 rounded-s p-2 '>
+        <div className='w-[90%] flex flex-row justify-around items-center border-cyan-400 border-1 rounded-sm  p-2 '>
 
           <input
             className=' w-[80%] p-0.5 border-0 text-white focus:outline-0'
@@ -89,7 +88,7 @@ function App() {
         </div>
 
 
-        <div className='w-[90%] flex flex-row justify-around items-center border-cyan-400 border-1 rounded-s p-2 '>
+        <div className='w-[90%] flex flex-row justify-around items-center border-cyan-400 border-1 rounded-sm p-2 '>
           <input
            className=' w-[80%] p-0.5 border-0 text-white focus:outline-0'
             type={hidePass ? "password" : "text"}
@@ -109,8 +108,8 @@ function App() {
           </div >
         </div>
 
-        <button className='btnLogin'>Entrar</button>
-        <a href="">Não lembro minha senha!</a>
+        <button className='w-[35%] bg-cyan-400 flex justify-center items-center p-1.5 rounded-md text-black hover:bg-cyan-700  '>Entrar</button>
+        <NavLink to="/recupera-senha" ><button>Esqueci minha senha</button></NavLink>
       </form>
     </div>
 
