@@ -98,7 +98,8 @@ export function AddAlunoPage() {
 
     return (
         <>
-            <h1>Adicione aqui um aluno novo</h1>
+        <div className='containerAddAluno'>
+        <h1>Adicione aqui um aluno novo</h1>
             <form className='formAluno' onSubmit={handleSubmit}>
                 <div className='inputAreaAluno'>
                     <label htmlFor="">Nome</label>
@@ -200,6 +201,8 @@ export function AddAlunoPage() {
                 </div>
                 <button>Mandar</button>
             </form>
+        </div>
+           
         </>
     );
 }

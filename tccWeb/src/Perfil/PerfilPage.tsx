@@ -304,11 +304,7 @@ export function PerfilPage() {
                                     <p>Selecione uma matéria para ver mais detalhes.</p>
                                 )
                         }
-
-
-
                     </div>
-
                 </div>
             </div>
 

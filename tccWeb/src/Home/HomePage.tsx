@@ -185,7 +185,7 @@ export function HomePage() {
                     usuario?.tipo_usuario_id === 1
                         ?
                         <div>
-                            <NavLink to="/addAluno" ><button>Adicionar aluno</button> </NavLink>
+                            <NavLink to="/addAluno" ><button>Adicionar aluno</button></NavLink>
                             <button>Adicionar turma</button>
                         </div>
                         :
