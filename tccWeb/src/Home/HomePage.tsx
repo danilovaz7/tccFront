@@ -5,6 +5,7 @@ import { useTokenStore } from '../hooks/useTokenStore';
 import Navbar from '../components/Navbar/Navbar';
 import UserCard from '../components/UserCard/UserCard';
 import CardMateria from '../components/CardMateria/CardMateria';
+import ConfirmationPopup from '../components/ConfirmationPopup/ConfirmationPopup';
 
 interface Usuario {
     id: number,
@@ -47,12 +48,30 @@ export function HomePage() {
     const [usuario, setUsuario] = useState<Usuario>();
     const [eloMaterias, setEloMaterias] = useState<EloMateria[]>([]);
     const [usuarios, setUsers] = useState<Usuario[]>([])
-
+    const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
+    const [materiaSelecionada, setMateriaSelecionada] = useState<EloMateria | null>(null);
 
     function formSubmit(evento: FormEvent<HTMLFormElement>) {
         evento.preventDefault()
         alert(matricula)
     }
+
+    const handleShowPopup = () => setIsPopupOpen(true);
+    const handleConfirm = () => {
+        setIsPopupOpen(false);
+        navigate(`/materias/${materiaSelecionada?.materia.nome}`)
+    };
+    const handleCancel = () => {
+        setIsPopupOpen(false);
+    };
+
+    const handleMateriaClick = (materia: EloMateria) => {
+        setMateriaSelecionada({
+            ...materia,
+        });
+    };
+
+
 
     useEffect(() => {
         async function pegaUsuarios() {
@@ -126,15 +145,15 @@ export function HomePage() {
                                 if (usuario?.id_turma === usuarioRank.id_turma && usuario?.id_escola === usuarioRank.id_escola) {
                                     if (index === 0) {
                                         return (
-                                            <UserCard id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} 
-                                            classe="w-full bg-yellow-400 flex justify-around items-center text-black p-2.5 cursor-point rounded-md transition-transform ease-in-out hover:scale-105" 
-                                            imgClasse='w-1/5 rounded-full' />
+                                            <UserCard id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho}
+                                                classe="w-full bg-yellow-400 flex justify-around items-center text-black p-2.5 cursor-point rounded-md transition-transform ease-in-out hover:scale-105"
+                                                imgClasse='w-1/5 rounded-full' />
                                         )
                                     }
                                     return (
-                                        <UserCard id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} 
-                                        classe="w-9/10 bg-gray-400 flex justify-around items-center text-black p-2.5 cursor-point rounded-md transition-transform ease-in-out hover:scale-102" 
-                                        imgClasse='w-1/5 rounded-full' />
+                                        <UserCard id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho}
+                                            classe="w-9/10 bg-gray-400 flex justify-around items-center text-black p-2.5 cursor-point rounded-md transition-transform ease-in-out hover:scale-102"
+                                            imgClasse='w-1/5 rounded-full' />
                                     );
                                 }
                                 return null;
@@ -160,7 +179,6 @@ export function HomePage() {
                                 eloMaterias.map((eloMateria) => {
                                     let eloIcon = '';
 
-                                    // Lógica para escolher o ícone dependendo do subelo_id
                                     switch (eloMateria.subelo_id) {
                                         case 1:
                                             eloIcon = eloMateria.elo.elo1;
@@ -172,17 +190,29 @@ export function HomePage() {
                                             eloIcon = eloMateria.elo.elo3;
                                             break;
                                         default:
-                                            eloIcon = ''; // Valor default caso não haja subelo
+                                            eloIcon = '';
                                     }
 
                                     return (
-                                        <CardMateria id={0} materiaLogo={eloMateria.materia.icone} nome={eloMateria.materia.nome} icon={eloIcon} />
+                                        <>
+                                            <CardMateria id={0} materiaLogo={eloMateria.materia.icone} nome={eloMateria.materia.nome} icon={eloIcon} onClick={() => {
+                                                handleMateriaClick(eloMateria)
+                                                handleShowPopup()
+                                                }
+                                            } />
+                                        </>
+
+
                                     );
                                 })
-
                             }
-
                         </div>
+                        <ConfirmationPopup
+                            isOpen={isPopupOpen}
+                            message={`Deseja treinar ${materiaSelecionada?.materia.nome} ?`}
+                            onConfirm={handleConfirm}
+                            onCancel={handleCancel}
+                        />
                     </div>
                     :
                     null
