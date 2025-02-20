@@ -96,7 +96,7 @@ export function AddAlunoPage() {
     }
     
     return (
-        <div className="w-[100%] flex flex-col justify-center items-center gap-8">
+        <div className="size-[90vw] flex flex-col justify-center items-center gap-8">
             <h1 className="text-2xl font-bold">Adicione aqui um aluno novo</h1>
             <form className="w-full p-5 border border-white flex flex-col justify-center items-center gap-5 mb-10" onSubmit={handleSubmit}>
                 <div className="w-full flex justify-start items-center gap-5">
@@ -132,9 +132,9 @@ export function AddAlunoPage() {
                 <div className="w-full flex justify-start items-center gap-5">
                     <label className="w-1/10 p-2">Gênero</label>
                     <select name="genero" required value={genero} onChange={(e) => { setGenero(e.target.value) }} className="w-1/5 p-2 text-base">
-                        <option value="">Selecione...</option>
-                        <option value="M">Masculino</option>
-                        <option value="F">Feminino</option>
+                        <option className='text-black' value="">Selecione...</option>
+                        <option className='text-black' value="M">Masculino</option>
+                        <option className='text-black' value="F">Feminino</option>
                     </select>
                 </div>
                 <div className="w-full flex justify-start items-center gap-5">
@@ -152,9 +152,9 @@ export function AddAlunoPage() {
                     <label className="w-1/10 p-2">Turma</label>
                     <select name="turma" required value={turma} onChange={(e) => { setTurma(e.target.value) }} className="w-1/5 p-2 text-base">
                         <option value="">Selecione...</option>
-                        <option value="1">1 ano</option>
-                        <option value="2">2 ano</option>
-                        <option value="3">3 ano</option>
+                        <option className='text-black' value="1">1 ano</option>
+                        <option className='text-black' value="2">2 ano</option>
+                        <option className='text-black' value="3">3 ano</option>
                     </select>
                 </div>
                 <div className="w-full flex justify-start items-center gap-5">
@@ -164,7 +164,7 @@ export function AddAlunoPage() {
                         {
                             escolas.map((escola, index) => {
                                 return (
-                                    <option key={index} value={index + 1}>{escola.nome}</option>
+                                    <option className='text-black' key={index} value={index + 1}>{escola.nome}</option>
                                 );
                             })
                         }

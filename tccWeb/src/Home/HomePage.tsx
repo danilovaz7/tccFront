@@ -126,7 +126,7 @@ export function HomePage() {
 
             <div className="w-11/12 flex flex-wrap justify-around">
                 <div className="w-1/5 h-auto p-5 flex flex-col justify-start items-center gap-3 rounded-md">
-                    <h1 className="text-lg">Que tal jogar com um amigo?</h1>
+                    <h1 className="text-4xl">Que tal jogar com um amigo?</h1>
                     <p>É sempre melhor evoluir juntos!</p>
                     <form onSubmit={(evento) => formSubmit(evento)} className="w-full flex p-2.5 flex-col justify-start items-center gap-5 rounded-md border border-black shadow-xl">
                         <button className="bg-cyan-400 w-1/2 text-sm flex justify-center items-center gap-2.5 text-black border border-transparent cursor-pointer p-2.5 rounded-md">CRIAR SALA</button>
@@ -138,7 +138,7 @@ export function HomePage() {
                 </div>
 
                 <div className="w-1/4 border border-black shadow-xl p-2.5 flex flex-col justify-start items-center rounded-md">
-                    <h1 className="text-lg">Ranking da <span className="text-yellow-400">sala</span></h1>
+                    <h1 className="text-4xl">Ranking da <span className="text-yellow-400">sala</span></h1>
                     <div className="w-11/12 p-2.5 flex flex-col justify-center items-center gap-2.5">
                         {
                             usuarios.map((usuarioRank, index) => {
