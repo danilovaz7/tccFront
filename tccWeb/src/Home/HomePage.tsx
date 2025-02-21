@@ -170,9 +170,9 @@ export function HomePage() {
                 usuario?.tipo_usuario_id === 2
                     ?
 
-                    <div className="w-11/12 flex flex-col justify-center items-center pb-12.5">
-                        <h1 className="text-cyan-400">Aperfeiçoe seus conhecimentos</h1>
-                        <h3 className="text-lg">Selecione a matéria que deseja treinar</h3>
+                    <div className="w-11/12 flex flex-col justify-center items-center gap-4 pb-12.5">
+                        <h1 className="text-cyan-400 text-5xl">Aperfeiçoe seus conhecimentos</h1>
+                        <h3 className="text-3xl">Selecione a matéria que deseja treinar</h3>
 
                         <div className="w-11/12 p-2.5 shadow-2xl flex gap-5 flex-wrap rounded-lg justify-center items-center">
                             {
