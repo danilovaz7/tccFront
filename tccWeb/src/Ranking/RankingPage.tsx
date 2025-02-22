@@ -64,7 +64,7 @@ export function RankingPage() {
                 <Navbar id={usuario?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho} />
                 <div className="flex flex-col justify-center items-center w-7/10 gap-10 ">
                     <h1>Rank de sala do {usuario?.id_turma}º ano</h1>
-                    <div className="w-4/5 flex flex-col justify-center items-center p-1 gap-2.5">
+                    <div className="w-[80%] flex flex-col justify-center pb-12 items-center p-1 gap-3">
                         {
                             usuarios.map((usuarioRank, index) => {
                                 let porcentAcerto = ((usuarioRank.estatisticas_gerais.total_disputas_ganhas / usuarioRank.estatisticas_gerais.total_disputas) * 100);
@@ -75,15 +75,15 @@ export function RankingPage() {
                                     if (index === 0) {
                                         return (
                                             <UserCardRank id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} acertos={porcentAcerto} 
-                                            classe="w-full flex justify-center items-center gap-2.5 p-2.5 text-black rounded-lg bg-yellow-400 cursor-pointer"
-                                             classeStats="w-4/5 text-3xl flex justify-start gap-10 items-center" 
+                                            classe="w-full flex justify-center items-center gap-2 p-3 text-black rounded-lg bg-yellow-400 cursor-pointer"
+                                             classeStats="w-[80%] text-3xl flex justify-start gap-10 items-center" 
                                              classeImg='w-1/4' />
                                         );
                                     }
                                     return (
                                         <UserCardRank id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} acertos={porcentAcerto} 
-                                        classe="w-9/10  flex justify-center items-center gap-2.5 p-2.5 text-black rounded-lg bg-gray-400 cursor-pointer" 
-                                        classeStats="w-4/5 text-3xl flex justify-start gap-10 items-center" 
+                                        classe="w-[90%]  flex justify-center items-center gap-2 p-3 text-black rounded-lg bg-gray-400 cursor-pointer" 
+                                        classeStats="w-4/5 text-2xl flex justify-start gap-10 items-center" 
                                         classeImg='w-1/4' />
                                     );
                                 }

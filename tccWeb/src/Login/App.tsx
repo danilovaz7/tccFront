@@ -73,10 +73,10 @@ function App() {
 
       <form className='flex flex-col justify-center items-center rounded-2xl w-[90%] gap-4 p-1 ' onSubmit={(evento) => handleSubmit(evento)} >
 
-        <div className='w-[90%] flex flex-row justify-around items-center border-cyan-400 border-1 rounded-sm  p-2 '>
+        <div className='w-[90%] flex flex-row justify-around items-center border-2 border-cyan-500 rounded-md p-1 '>
 
           <input
-            className=' w-[80%] p-0.5 border-0 text-white focus:outline-0'
+            className=' w-[80%] p-1.5 border-0 bg-transparent text-white focus:outline-0'
             type="text"
             value={email}
             onChange={(e) => { setEmail(e.target.value) }}
@@ -88,9 +88,9 @@ function App() {
         </div>
 
 
-        <div className='w-[90%] flex flex-row justify-around items-center border-cyan-400 border-1 rounded-sm p-2 '>
+        <div className='w-[90%] flex flex-row justify-around items-center border-2 border-cyan-500 rounded-md p-1 '>
           <input
-           className=' w-[80%] p-0.5 border-0 text-white focus:outline-0'
+           className=' w-[80%] p-1.5 border-0 bg-transparent text-white focus:outline-0'
             type={hidePass ? "password" : "text"}
             value={senha}
             onChange={(e) => { setSenha(e.target.value) }}

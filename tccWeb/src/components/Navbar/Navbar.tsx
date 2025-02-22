@@ -10,13 +10,13 @@ interface NavbarProps {
 function Navbar({ id, nivel, avatar }: NavbarProps) {
     return (
         <div className="flex w-full items-center justify-center shadow-2xl">
-            <div className="w-8/10 flex items-center justify-center">
-                <NavLink className='w-[100%] pl-35 flex items-center justify-center' to='/home'>
-                    <img src="/src/assets/logo1Play2Learn.png" alt="Logo" className=" w-[25%] " />
+            <div className="w-[80%] flex items-center justify-center">
+                <NavLink className='w-[100%] pl-32 flex items-center justify-center' to='/home'>
+                    <img src="/src/assets/logo1Play2Learn.png" alt="Logo" className=" w-[30%] " />
                 </NavLink>
             </div>
             
-            <div className="w-1/10">
+            <div className="w-[15%]">
                 <NavLink to={`/perfil/${id}`}>
                     <div className="w-full h-1/2 flex justify-around items-center gap-2.5 p-1 border border-white rounded-md">
                         <p>Nível {nivel}</p>

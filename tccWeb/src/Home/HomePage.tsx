@@ -121,20 +121,20 @@ export function HomePage() {
 
     return (
 
-        <div className="w-full flex flex-col justify-between items-center h-screen gap-30">
+        <div className="w-full flex flex-col justify-between items-center h-screen gap-12">
             <Navbar id={usuario?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho} />
 
             <div className="w-11/12 flex flex-wrap justify-around">
                 <div className="w-1/5 h-auto p-5 flex flex-col justify-start items-center gap-3 rounded-md">
                     <h1 className="text-4xl">Que tal jogar com um amigo?</h1>
                     <p>É sempre melhor evoluir juntos!</p>
-                    <form onSubmit={(evento) => formSubmit(evento)} className="w-full flex p-2.5 flex-col justify-start items-center gap-5 rounded-md border border-black shadow-xl">
-                        <button className="bg-cyan-400 w-1/2 text-sm flex justify-center items-center gap-2.5 text-black border border-transparent cursor-pointer p-2.5 rounded-md">CRIAR SALA</button>
+                    <form onSubmit={(evento) => formSubmit(evento)} className="w-full flex p-2.5 flex-col justify-start items-center gap-5 rounded-md  shadow-xl">
+                        <button className="bg-cyan-400 w-2/3 text-sm flex justify-center items-center gap-2.5 text-black border border-transparent cursor-pointer p-2.5 rounded-md">CRIAR SALA</button>
                     </form>
                 </div>
 
-                <div className="w-9/20 h-full p-3 flex flex-col justify-center items-center">
-                    <img className="w-2/5 rounded-full shadow-xl" src="./src/assets/gifCentro.gif" alt="" />
+                <div className="w-[45%] h-full p-3 flex flex-col justify-center items-center">
+                    <img className="w-[50%] rounded-full shadow-xl" src="./src/assets/gifCentro.gif" alt="" />
                 </div>
 
                 <div className="w-1/4 border border-black shadow-xl p-2.5 flex flex-col justify-start items-center rounded-md">
@@ -170,7 +170,7 @@ export function HomePage() {
                 usuario?.tipo_usuario_id === 2
                     ?
 
-                    <div className="w-11/12 flex flex-col justify-center items-center gap-4 pb-12.5">
+                    <div className="w-11/12 flex flex-col justify-center items-center gap-4 pb-14">
                         <h1 className="text-cyan-400 text-5xl">Aperfeiçoe seus conhecimentos</h1>
                         <h3 className="text-3xl">Selecione a matéria que deseja treinar</h3>
 
