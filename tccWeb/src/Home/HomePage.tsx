@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar/Navbar';
 import UserCard from '../components/UserCard/UserCard';
 import CardMateria from '../components/CardMateria/CardMateria';
 import ConfirmationPopup from '../components/ConfirmationPopup/ConfirmationPopup';
+import { Button } from "@heroui/react";
 
 interface Usuario {
     id: number,
@@ -125,11 +126,11 @@ export function HomePage() {
             <Navbar id={usuario?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho} />
 
             <div className="w-11/12 flex flex-wrap justify-around">
-                <div className="w-1/5 h-auto p-5 flex flex-col justify-start items-center gap-3 rounded-md">
+                <div className="w-[25%] h-auto p-5 flex flex-col justify-start items-center gap-3 rounded-md">
                     <h1 className="text-4xl">Que tal jogar com um amigo?</h1>
                     <p>É sempre melhor evoluir juntos!</p>
                     <form onSubmit={(evento) => formSubmit(evento)} className="w-full flex p-2.5 flex-col justify-start items-center gap-5 rounded-md  shadow-xl">
-                        <button className="bg-cyan-400 w-2/3 text-sm flex justify-center items-center gap-2.5 text-black border border-transparent cursor-pointer p-2.5 rounded-md">CRIAR SALA</button>
+                    <Button color="primary">MEU DEUS</Button>
                     </form>
                 </div>
 
@@ -152,7 +153,7 @@ export function HomePage() {
                                     }
                                     return (
                                         <UserCard id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho}
-                                            classe="w-9/10 bg-gray-400 flex justify-around items-center text-black p-2.5 cursor-point rounded-md transition-transform ease-in-out hover:scale-102"
+                                            classe="w-[90%] bg-gray-400 flex justify-around items-center text-black p-2.5 cursor-point rounded-md transition-transform ease-in-out hover:scale-102"
                                             imgClasse='w-1/5 rounded-full' />
                                     );
                                 }
@@ -198,7 +199,7 @@ export function HomePage() {
                                             <CardMateria id={0} materiaLogo={eloMateria.materia.icone} nome={eloMateria.materia.nome} icon={eloIcon} onClick={() => {
                                                 handleMateriaClick(eloMateria)
                                                 handleShowPopup()
-                                                }
+                                            }
                                             } />
                                         </>
 

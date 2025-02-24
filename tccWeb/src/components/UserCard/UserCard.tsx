@@ -1,5 +1,6 @@
 
 import { NavLink, useNavigate } from 'react-router';
+import {Avatar} from "@heroui/react";
 
 interface UserCardProps {
     id: number;
@@ -20,7 +21,7 @@ function UserCard({ id, nivel, avatar, nome, classe,imgClasse }: UserCardProps) 
 
     return (
         <div className={classe} onClick={() => { carregaPerfil() }}>
-            <img className={imgClasse} src={avatar} alt="" />
+                  <Avatar className={imgClasse} src={avatar} />
             <p>{nome}</p>
             <p>Lvl {nivel}</p>
         </div>
