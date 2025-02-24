@@ -130,7 +130,7 @@ export function HomePage() {
                     <h1 className="text-4xl">Que tal jogar com um amigo?</h1>
                     <p>É sempre melhor evoluir juntos!</p>
                     <form onSubmit={(evento) => formSubmit(evento)} className="w-full flex p-2.5 flex-col justify-start items-center gap-5 rounded-md  shadow-xl">
-                    <Button color="primary">MEU DEUS</Button>
+                    <Button color="primary">CONVIDAR</Button>
                     </form>
                 </div>
 

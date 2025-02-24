@@ -203,6 +203,8 @@ export function AddAlunoPage() {
                 </div>
                 <button className="bg-cyan-400 text-black p-2 rounded cursor-pointer">Mandar</button>
             </form>
+
+           
         </div>
     );
 }
