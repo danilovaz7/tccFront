@@ -21,7 +21,7 @@ function Navbar({ id, nivel, avatar }: NavbarProps) {
                 <NavLink to={`/perfil/${id}`}>
                     <div className="w-full h-1/2 flex justify-around items-center gap-2 p-3 border border-white rounded-md">
                         <p className='text-2xl'>Nível {nivel}</p>
-                        <Avatar className='w-[30%]' src={avatar} />
+                        <Avatar size="lg" src={avatar} />
                     </div>
                 </NavLink>
             </div>
