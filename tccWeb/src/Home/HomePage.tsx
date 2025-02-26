@@ -130,7 +130,7 @@ export function HomePage() {
                     <h1 className="text-4xl">Que tal jogar com um amigo?</h1>
                     <p>É sempre melhor evoluir juntos!</p>
                     <form onSubmit={(evento) => formSubmit(evento)} className="w-full flex p-2.5 flex-col justify-start items-center gap-5 rounded-md  shadow-xl">
-                    <Button color="primary">CONVIDAR</Button>
+                    <Button color="danger">CONVIDAR</Button>
                     </form>
                 </div>
 
@@ -148,19 +148,19 @@ export function HomePage() {
                                         return (
                                             <UserCard id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho}
                                                 classe="w-full bg-yellow-400 flex justify-around items-center text-black p-2.5 cursor-point rounded-md transition-transform ease-in-out hover:scale-105"
-                                                imgClasse='w-1/5 rounded-full' />
+                                                />
                                         )
                                     }
                                     return (
                                         <UserCard id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho}
                                             classe="w-[90%] bg-gray-400 flex justify-around items-center text-black p-2.5 cursor-point rounded-md transition-transform ease-in-out hover:scale-102"
-                                            imgClasse='w-1/5 rounded-full' />
+                                             />
                                     );
                                 }
                                 return null;
                             })
                         }
-                        <button className="bg-cyan-400 w-1/2 text-sm flex justify-center items-center gap-2.5 text-black border border-transparent cursor-pointer p-2.5 rounded-md" onClick={() => { navigate('/ranking'); }}>Ver mais <span><MdKeyboardArrowRight size={16} /></span></button>
+                        <Button onClick={() => { navigate('/ranking'); }} color='primary'> Ver mais <span><MdKeyboardArrowRight size={16} /></span></Button>
                     </div>
                 </div>
             </div>

@@ -8,11 +8,11 @@ interface UserCardProps {
     nome: string;
     avatar: string;
     classe: string;
-    imgClasse: string;
+   
     } 
 
 
-function UserCard({ id, nivel, avatar, nome, classe,imgClasse }: UserCardProps) {
+function UserCard({ id, nivel, avatar, nome, classe }: UserCardProps) {
     const navigate = useNavigate();
 
     function carregaPerfil() {
@@ -21,7 +21,7 @@ function UserCard({ id, nivel, avatar, nome, classe,imgClasse }: UserCardProps) 
 
     return (
         <div className={classe} onClick={() => { carregaPerfil() }}>
-                  <Avatar className={imgClasse} src={avatar} />
+                  <Avatar size='lg' src={avatar} />
             <p>{nome}</p>
             <p>Lvl {nivel}</p>
         </div>
