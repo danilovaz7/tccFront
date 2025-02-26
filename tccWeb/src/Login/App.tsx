@@ -68,7 +68,7 @@ function App() {
 
 
   return (
-    <div className='flex flex-col h-full justify-center items-center pt-64 gap-4 '>
+    <div className='flex flex-col h-full justify-center items-center pt-32 gap-4 '>
       <img className='w-[40%] border-2 border-black rounded-[50%] ' src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
 
       <form className='flex flex-col justify-center items-center rounded-2xl w-[90%] gap-4 p-1 ' onSubmit={(evento) => handleSubmit(evento)} >
