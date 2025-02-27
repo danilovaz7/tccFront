@@ -1,12 +1,22 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { MdKeyboardArrowRight } from "react-icons/md";
+import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import { NavLink, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 import Navbar from '../components/Navbar/Navbar';
 import UserCard from '../components/UserCard/UserCard';
 import CardMateria from '../components/CardMateria/CardMateria';
 import ConfirmationPopup from '../components/ConfirmationPopup/ConfirmationPopup';
-import { Button } from "@heroui/react";
+import { Button, useDisclosure } from "@heroui/react";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.css';
+
+import {
+    Modal,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+} from "@heroui/react";
 
 interface Usuario {
     id: number,
@@ -119,7 +129,7 @@ export function HomePage() {
         }
         pegaUsuarios();
     }, [])
-
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
     return (
 
         <div className="w-full flex flex-col justify-between items-center h-screen gap-12">
@@ -130,7 +140,7 @@ export function HomePage() {
                     <h1 className="text-4xl">Que tal jogar com um amigo?</h1>
                     <p>É sempre melhor evoluir juntos!</p>
                     <form onSubmit={(evento) => formSubmit(evento)} className="w-full flex p-2.5 flex-col justify-start items-center gap-5 rounded-md  shadow-xl">
-                    <Button color="danger">CONVIDAR</Button>
+                        <Button color="danger">CRIAR SALA</Button>
                     </form>
                 </div>
 
@@ -148,13 +158,13 @@ export function HomePage() {
                                         return (
                                             <UserCard id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho}
                                                 classe="w-full bg-yellow-400 flex justify-around items-center text-black p-2.5 cursor-point rounded-md transition-transform ease-in-out hover:scale-105"
-                                                />
+                                            />
                                         )
                                     }
                                     return (
                                         <UserCard id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho}
                                             classe="w-[90%] bg-gray-400 flex justify-around items-center text-black p-2.5 cursor-point rounded-md transition-transform ease-in-out hover:scale-102"
-                                             />
+                                        />
                                     );
                                 }
                                 return null;
@@ -174,7 +184,82 @@ export function HomePage() {
                     <div className="w-11/12 flex flex-col justify-center items-center gap-4 pb-14">
                         <h1 className="text-cyan-400 text-5xl">Aperfeiçoe seus conhecimentos</h1>
                         <h3 className="text-3xl">Selecione a matéria que deseja treinar</h3>
-
+                        <Button onPress={onOpen}>Dúvida sobre elos</Button>
+                        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+                            <ModalContent>
+                                {(onClose) => (
+                                    <>
+                                        <ModalHeader className="flex flex-col gap-1">Dúvida sobre elos</ModalHeader>
+                                        <ModalBody className='text-black'>
+                                            <div>
+                                            <Swiper className='text-black' spaceBetween={50} slidesPerView={1}>
+                                                <SwiperSlide >
+                                                    <p>
+                                                        O sistema de elos funciona conforme a progressão em cada matéria, separadamente.
+                                                        No total existem 6 elos:
+                                                    </p>
+                                                    <div>
+                                                        <Swiper  className='text-black border-1 border-black p-5' spaceBetween={50} slidesPerView={1}>
+                                                            <SwiperSlide >
+                                                                <img src="/src/assets/logo1Play2Learn.png" alt="" />
+                                                                <p className='flex items-center justify-center gap-3'>Iniciante<span><MdKeyboardArrowRight size={16} /></span></p>
+                                                            </SwiperSlide>
+                                                            <SwiperSlide>
+                                                                <img src="/src/assets/logo1Play2Learn.png" alt="" />
+                                                                <p className='flex items-center justify-center gap-3'><span><MdKeyboardArrowLeft size={16} /></span>Regular <span><MdKeyboardArrowRight size={16} /></span></p>
+                                                            </SwiperSlide>
+                                                            <SwiperSlide>
+                                                                <img src="/src/assets/logo1Play2Learn.png" alt="" />
+                                                                <p className='flex items-center justify-center gap-3'><span><MdKeyboardArrowLeft size={16} /></span>Exemplar</p>
+                                                            </SwiperSlide>
+                                                        </Swiper>
+                                                    </div>
+                                                </SwiperSlide>
+                                                <SwiperSlide >
+                                                    <p>
+                                                        E cada elo é divido em 3 subelos:
+                                                    </p>
+                                                    <div>
+                                                        <Swiper  className='text-black border-1 border-black p-5' spaceBetween={50} slidesPerView={1}>
+                                                            <SwiperSlide>
+                                                                <img src="/src/assets/logo1Play2Learn.png" alt="" />
+                                                                <p className='flex items-center justify-center gap-3'> Iniciante 1 <span><MdKeyboardArrowRight size={16} /></span></p>
+                                                            </SwiperSlide>
+                                                            <SwiperSlide>
+                                                                <img src="/src/assets/logo1Play2Learn.png" alt="" />
+                                                                <p className='flex items-center justify-center gap-3'><span><MdKeyboardArrowLeft size={16} /></span>Iniciante 2 <span><MdKeyboardArrowRight size={16} /></span></p>
+                                                            </SwiperSlide>
+                                                            <SwiperSlide>
+                                                                <img src="/src/assets/logo1Play2Learn.png" alt="" />
+                                                                <p className='flex items-center justify-center gap-3'>  <span><MdKeyboardArrowLeft size={16} /></span>Iniciante 3</p>
+                                                            </SwiperSlide>
+                                                        </Swiper>
+                                                    </div>
+                                                </SwiperSlide>
+                                                <SwiperSlide >
+                                                    <p>
+                                                        Para passar de elo basta responder corretamente um número espefíco de pergutnas, acertando este minimo de perguntas
+                                                        você passa para o próximo elo, subindo de elo e subelo o jogador ganha uma quantidade de experiência, oque possibilita
+                                                        subir de nível
+                                                    </p>
+                                                </SwiperSlide>
+                                             
+                                            </Swiper>
+                                            </div>
+                                        </ModalBody>
+                                        <ModalBody>
+                                            <Button color="danger" variant="light" onPress={onClose}>
+                                                Close
+                                            </Button>
+                                            <Button color="primary" onPress={onClose}>
+                                                Action
+                                            </Button>
+                                        </ModalBody>
+                                    </>
+                                )}
+                            </ModalContent>
+                        </Modal >
+                        
                         <div className="w-11/12 p-2.5 shadow-2xl flex gap-5 flex-wrap rounded-lg justify-center items-center">
                             {
                                 eloMaterias.map((eloMateria) => {
