@@ -139,7 +139,6 @@ export function PerfilPage() {
         });
     };
 
-
     useEffect(() => {
         async function carregarDados() {
             const response = await fetch(`http://localhost:3000/estatisticas/${idUsuario}`, {
@@ -155,7 +154,6 @@ export function PerfilPage() {
         }
         carregarDados();
     }, [idUsuario])
-
 
     const dataGrafico = [
         {
