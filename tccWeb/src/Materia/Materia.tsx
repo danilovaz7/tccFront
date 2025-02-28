@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 import Navbar from '../components/Navbar/Navbar';
+import { Button } from "@heroui/react";
 
 interface Usuario {
     id: number;
@@ -86,11 +87,6 @@ function Materia() {
             setSubeloAtualizado(3);
         } else if (totalAcertosEloAtualizado > 10 && totalAcertosEloAtualizado <= 20) {
             setSubeloAtualizado(2);
-        }
-    
-        if (totalAcertosEloAtualizado >= 30) {
-            setEloAtualizado((eloMateria?.elo_id || 0) + 1);
-           
         }
     }, [contagemAcertos, eloMateria, user?.id]);
 
@@ -337,9 +333,9 @@ function Materia() {
                     ) : (
                         <>
                             <h1 className="text-4xl">Olá {usuario?.nome}, vamos treinar {nmMateria}?</h1>
-                            <button onClick={iniciarJogo} className="bg-cyan-400 text-black p-4 rounded-md">
+                            <Button onClick={iniciarJogo} size='lg' color='primary'>
                                 Iniciar jogo!
-                            </button>
+                            </Button>
                         </>
                     )}
                 </>

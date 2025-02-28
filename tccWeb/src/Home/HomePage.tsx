@@ -150,7 +150,7 @@ export function HomePage() {
 
                 <div className="w-1/4 border border-black shadow-xl p-2.5 flex flex-col justify-start items-center rounded-md">
                     <h1 className="text-4xl">Ranking da <span className="text-yellow-400">sala</span></h1>
-                    <div className="w-11/12 p-2.5 flex flex-col justify-center items-center gap-2.5">
+                    <div className="w-full p-2.5 flex flex-col justify-center items-center gap-2.5">
                         {
                             usuarios.map((usuarioRank, index) => {
                                 if (usuario?.id_turma === usuarioRank.id_turma && usuario?.id_escola === usuarioRank.id_escola) {
@@ -304,9 +304,9 @@ export function HomePage() {
                 usuario?.tipo_usuario_id === 1
                     ?
                     <div className="w-11/12 flex flex-col justify-center items-center pb-12.5">
-                        <div>
+                        <div className='flex justify-center items-center gap-10 pb-24'>
                             <NavLink to="/addAluno"><button className="bg-cyan-400 p-2.5 rounded-md">Adicionar aluno</button></NavLink>
-                            <button className="bg-cyan-400 p-2.5 rounded-md">Adicionar turma</button>
+                            <button className="bg-cyan-400 p-2.5 rounded-md">Adicionar escola</button>
                         </div>
                     </div>
                     :
