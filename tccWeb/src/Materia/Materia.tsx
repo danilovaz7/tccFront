@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 import Navbar from '../components/Navbar/Navbar';
@@ -16,11 +16,25 @@ interface Usuario {
     };
 }
 
-interface Estatisticas {
-    total_disputas: number;
-    total_disputas_ganhas: number;
-    total_perguntas: number;
-    total_perguntas_acertadas: number;
+interface EloMateria {
+    id: number,
+    usuario_id: number,
+    materia_id: number,
+    elo_id: number,
+    subelo_id: number,
+    respostas_corretas_elo: number,
+    respostas_corretas_total: number,
+    eloIcon: string,
+    elo: {
+        nome: string,
+        elo1: string,
+        elo2: string,
+        elo3: string
+    },
+    materia: {
+        nome: string,
+        icone: string
+    }
 }
 
 interface Pergunta {
@@ -54,25 +68,42 @@ function Materia() {
     const [contagem, setContagem] = useState(0);
     const [contagemAcertos, setContagemAcertos] = useState(0);
     const [fimDeJogo, setFimDeJogo] = useState(false);
+    const [eloMateria, setEloMateria] = useState<EloMateria>();
     const [perguntaAtual, setPerguntaAtual] = useState<Pergunta | null>(null);
     const [alternativasAtuais, setAlternativasAtuais] = useState<Alternativa[]>([]);
     const [perguntasExibidas, setPerguntasExibidas] = useState<Set<number>>(new Set());
     const [respostas, setRespostas] = useState<Resposta[]>([]);
-    const [carregando, setCarregando] = useState(true);
-    const [dados, setDados] = useState<Estatisticas | null>(null);
-    const [totalPerguntasAcertadas, setTotalPerguntasAcertadas] = useState(0);
+    const [totalAcertosEloAtualizado, setTotalAcertosEloAtualizado] = useState(0);
+    const [totalAcertosMateriaAtualizado, setTotalAcertosMateriaAtualizado] = useState(0);
 
-    // Função para obter uma pergunta aleatória
+
+
+    useEffect(() => {
+        setTotalAcertosEloAtualizado((eloMateria?.respostas_corretas_elo || 0) + contagemAcertos);
+        setTotalAcertosMateriaAtualizado((eloMateria?.respostas_corretas_total || 0) + contagemAcertos);
+    
+        if (totalAcertosEloAtualizado > 20) {
+            setSubeloAtualizado(3);
+        } else if (totalAcertosEloAtualizado > 10 && totalAcertosEloAtualizado <= 20) {
+            setSubeloAtualizado(2);
+        }
+    
+        if (totalAcertosEloAtualizado >= 30) {
+            setEloAtualizado((eloMateria?.elo_id || 0) + 1);
+           
+        }
+    }, [contagemAcertos, eloMateria, user?.id]);
+
+
     function obterPerguntaAleatoria(): Pergunta | null {
         const perguntasRestantes = perguntasMateria.filter((_, index) => !perguntasExibidas.has(index));
         if (perguntasRestantes.length === 0) {
-            return null; // Todas as perguntas já foram exibidas
+            return null;
         }
         const indiceAleatorio = Math.floor(Math.random() * perguntasRestantes.length);
         return perguntasRestantes[indiceAleatorio];
     }
 
-    // Função para iniciar o jogo
     function iniciarJogo() {
         setContagem(5);
         const intervalo = setInterval(() => {
@@ -98,9 +129,9 @@ function Materia() {
             const jaRespondida = prevRespostas.some(
                 (resposta) => resposta.pergunta.id === perguntaAtual?.id
             );
-    
+
             if (jaRespondida) return prevRespostas;
-    
+
             return [
                 ...prevRespostas,
                 {
@@ -110,9 +141,9 @@ function Materia() {
                 },
             ];
         });
-    
+
         alternativa.correta ? setContagemAcertos(contagemAcertos + 1) : null
-        
+
         const novaPergunta = obterPerguntaAleatoria();
         if (novaPergunta) {
             setPerguntaAtual(novaPergunta);
@@ -120,7 +151,6 @@ function Materia() {
                 new Set([...prevExibidas, perguntasMateria.indexOf(novaPergunta)])
             );
         } else {
-            
             setFimDeJogo(true);
             setInicioPerguntas(false);
         }
@@ -173,61 +203,101 @@ function Materia() {
     }, [perguntaAtual]);
 
     useEffect(() => {
-        async function carregarDados() {
-            const response = await fetch(`http://localhost:3000/estatisticas/${user?.id}`, {
+        async function pegaEloMaterias() {
+            const response = await fetch(`http://localhost:3000/eloMaterias/${usuario?.id}/materia/${nmMateria}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
             });
-            const estaticasUsuario = await response.json();
-            setDados(estaticasUsuario);
-            setCarregando(false);
+            const eloMateriaRsponde = await response.json();
+            setEloMateria(eloMateriaRsponde);
+            setEloAtualizado(eloMateriaRsponde.elo_id);
+            setSubeloAtualizado(eloMateriaRsponde.subelo_id);
         }
-        carregarDados();
-    }, [user?.id])
-
+        if (usuario?.id && nmMateria) {
+            pegaEloMaterias();
+        }
+    }, [usuario?.id, nmMateria, token]);
     
+    useEffect(() => {
+        if (eloMateria) {
+            setEloAtualizado(eloMateria.elo_id);
+            setSubeloAtualizado(eloMateria.subelo_id);
+        }
+    }, [eloMateria]);
+
+    const [eloAtualizado, setEloAtualizado] = useState<number | null>(null);
+    const [subeloAtualizado, setSubeloAtualizado] = useState<number | null>(null);
+
+   async function handleUpdate(evento: FormEvent<HTMLFormElement>) {
+    evento.preventDefault();
+    if(totalAcertosEloAtualizado >= 30){
+      setTotalAcertosEloAtualizado(0)
+    }
+    
+    const resposta = await fetch(`http://localhost:3000/eloMaterias/${usuario?.id}/materia/${nmMateria}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            elo_id: eloAtualizado,
+            subelo_id: subeloAtualizado,
+            respostas_corretas_elo: totalAcertosEloAtualizado,
+            respostas_corretas_total: totalAcertosMateriaAtualizado
+        })
+    });
+
+    if (resposta.ok) {
+        alert('Usuário atualizado com sucesso');
+        navigate('/home');
+    } else {
+        alert("Erro ao atualizar usuário");
+    }
+}
+
 
     return (
-        <div className="flex text-center flex-col h-full justify-start items-center gap-20">
+        <div className="flex w-screen text-center flex-col h-full justify-start items-center gap-20">
             <Navbar id={usuario?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho} />
             {fimDeJogo ? (
                 <div className="w-[90%] pb-20 p-10 flex flex-col justify-center items-center gap-4">
-                <h1 className="text-5xl text-cyan-400">Fim de Jogo!</h1>
-                <p className="text-2xl">Parabéns, você completou todas as perguntas!</p>
-                <h2 className="text-2xl text-cyan-400">Aqui estão suas estatísticas:</h2>
-                <div className="w-[90%] p-5 flex flex-col justify-center items-start gap-4 border-2 border-cyan-400">
-                    <p className='text-xl'>Acertos: {contagemAcertos}/{perguntasMateria.length}</p>
-                    <p className='text-xl'>Total de acertos no elo atualizados: {dados ? dados?.total_perguntas_acertadas + contagemAcertos : null}/30 </p> 
-                    <p className='text-xl'>Total de acertos na materia atualizados: 55</p>
+                    <h1 className="text-5xl text-cyan-400">Fim de Jogo!</h1>
+                    <p className="text-2xl">Parabéns, você completou todas as perguntas!</p>
+                    <h2 className="text-2xl text-cyan-400">Aqui estão suas estatísticas:</h2>
+                    <div className="w-[90%] p-5 flex flex-col justify-center items-start gap-4 border-2 border-cyan-400">
+                        <p className='text-xl'>Acertos: {contagemAcertos}/{perguntasMateria.length}</p>
+                        <p className='text-xl'>Total de acertos no elo atualizados: {totalAcertosEloAtualizado}/30 </p>
+                        <p className='text-xl'>Total de acertos na materia atualizados: {totalAcertosMateriaAtualizado} acertos</p>
+                    </div>
+                    <h2 className="text-2xl mt-6">Respostas:</h2>
+                    <div className="w-full max-w-4xl flex flex-col gap-4 mt-4">
+                        {respostas.map((resposta, index) => (
+                            <div key={index} className="p-4 border rounded-lg shadow-md">
+                                <p className="text-xl font-bold">Pergunta: {resposta.pergunta.pergunta}</p>
+                                <p className="text-green-500">Resposta Correta: {resposta.respostaCorreta}</p>
+                                <p
+                                    className={
+                                        resposta.respostaUsuario === resposta.respostaCorreta
+                                            ? 'text-blue-500'
+                                            : 'text-red-500'
+                                    }
+                                >
+                                    Sua Resposta: {resposta.respostaUsuario}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                    <form onSubmit={handleUpdate}>
+                        <button className="mt-6 bg-cyan-400 text-black p-4 rounded-md">
+                            Voltar ao Início
+                        </button>
+                    </form>
+
                 </div>
-                <h2 className="text-2xl mt-6">Respostas:</h2>
-                <div className="w-full max-w-4xl flex flex-col gap-4 mt-4">
-                    {respostas.map((resposta, index) => (
-                        <div key={index} className="p-4 border rounded-lg shadow-md">
-                            <p className="text-xl font-bold">Pergunta: {resposta.pergunta.pergunta}</p>
-                            <p className="text-green-500">Resposta Correta: {resposta.respostaCorreta}</p>
-                            <p
-                                className={
-                                    resposta.respostaUsuario === resposta.respostaCorreta
-                                        ? 'text-blue-500'
-                                        : 'text-red-500'
-                                }
-                            >
-                                Sua Resposta: {resposta.respostaUsuario}
-                            </p>
-                        </div>
-                    ))}
-                </div>
-                <button
-                    onClick={() => navigate('/home')}
-                    className="mt-6 bg-cyan-400 text-black p-4 rounded-md"
-                >
-                    Voltar ao Início
-                </button>
-            </div>
             ) : inicioPerguntas ? (
                 <div className="w-[90%] pb-20 p-10 flex flex-col justify-center items-center gap-10">
                     <h1 className="text-2xl">Pergunta</h1>
@@ -241,7 +311,7 @@ function Materia() {
                                 return (
                                     <div
                                         onClick={() => {
-                                            if(alternativa.correta == true){
+                                            if (alternativa.correta == true) {
                                                 setContagemAcertos(contagemAcertos + 1)
                                             }
 

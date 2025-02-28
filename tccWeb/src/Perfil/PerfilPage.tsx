@@ -31,8 +31,8 @@ interface EloMateria {
     materia_id: number,
     elo_id: number,
     subelo_id: number,
-    respostas_corretas_elo: string,
-    respostas_corretas_total: string,
+    respostas_corretas_elo: number,
+    respostas_corretas_total: number,
     eloIcon: string,
     elo: {
         nome: string,
@@ -188,7 +188,7 @@ export function PerfilPage() {
     if (!dados) return <p>Erro ao carregar estatísticas.</p>;
     return (
         <>
-            <div className="w-full flex flex-col justify-start items-center min-h-screen gap-12 mb-40">
+            <div className="w-screen flex flex-col justify-start items-center min-h-screen gap-12 mb-40">
                 <Navbar id={usuarioNavBar?.id} nivel={usuarioNavBar?.nivel} avatar={usuarioNavBar?.avatar.caminho || ''} />
 
                 <div className="w-4/5 flex flex-col justify-center items-center gap-10">
