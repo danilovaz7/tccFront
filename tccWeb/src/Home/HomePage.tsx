@@ -193,8 +193,8 @@ export function HomePage() {
                                         <ModalBody className='text-black'>
                                             <div>
                                             <Swiper className='text-black' spaceBetween={50} slidesPerView={1}>
-                                                <SwiperSlide >
-                                                    <p>
+                                                <SwiperSlide>
+                                                    <p className='h-[50%]'>
                                                         O sistema de elos funciona conforme a progressão em cada matéria, separadamente.
                                                         No total existem 6 elos:
                                                     </p>
@@ -216,7 +216,7 @@ export function HomePage() {
                                                     </div>
                                                 </SwiperSlide>
                                                 <SwiperSlide >
-                                                    <p>
+                                                    <p className='h-[50%]'>
                                                         E cada elo é divido em 3 subelos:
                                                     </p>
                                                     <div>
@@ -237,7 +237,7 @@ export function HomePage() {
                                                     </div>
                                                 </SwiperSlide>
                                                 <SwiperSlide >
-                                                    <p>
+                                                    <p className='h-[50%]'>
                                                         Para passar de elo basta responder corretamente um número espefíco de pergutnas, acertando este minimo de perguntas
                                                         você passa para o próximo elo, subindo de elo e subelo o jogador ganha uma quantidade de experiência, oque possibilita
                                                         subir de nível
@@ -250,9 +250,6 @@ export function HomePage() {
                                         <ModalBody>
                                             <Button color="danger" variant="light" onPress={onClose}>
                                                 Close
-                                            </Button>
-                                            <Button color="primary" onPress={onClose}>
-                                                Action
                                             </Button>
                                         </ModalBody>
                                     </>

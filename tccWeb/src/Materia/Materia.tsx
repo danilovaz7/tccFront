@@ -16,12 +16,18 @@ interface Usuario {
     }
 }
 
+interface Pergunta {
+    materia_id: number,
+    pergunta: string
+}
+
 function Materia() {
     const { token, user } = useTokenStore();
     let { nmMateria } = useParams();
     const navigate = useNavigate();
 
     const [usuario, setUsuario] = useState<Usuario>();
+    const [perguntasMateria, setPerguntasMateria] = useState<Pergunta[]>([])
     const [inicioPerguntas, setInicioPerguntas] = useState(false);
     const [contagem, setContagem] = useState(0);
     const [perguntaNum, setPerguntaNum] = useState(1);
@@ -40,6 +46,21 @@ function Materia() {
             setUsuario(userNav);
         }
         pegaUsuarioNav();
+    }, [user?.id]);
+
+    useEffect(() => {
+        async function pegaPerguntasMateria() {
+            const response = await fetch(`http://localhost:3000/materias/${nmMateria}/perguntas`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            const perguntas = await response.json();
+            setPerguntasMateria(perguntas);
+        }
+        pegaPerguntasMateria();
     }, [user?.id]);
 
     function iniciarJogo() {
@@ -79,27 +100,28 @@ function Materia() {
                             <p>Total de acertos no elo: 22/30 </p>
                             <p>Total de acertos na materia: 55</p>
                         </div>
-                        <button onClick={() => {alert('enviado'); navigate('/home') }} className="bg-cyan-400 text-black p-4 rounded-md">Enviar estatisticas</button>
+                        <button onClick={() => { alert('enviado'); navigate('/home') }} className="bg-cyan-400 text-black p-4 rounded-md">Enviar estatisticas</button>
                     </div>
                     :
                     inicioPerguntas
                         ?
                         <div className=' w-[90%] pb-20 p-10 flex flex-col justify-center items-center gap-10  '>
                             <h1 className='text-2xl'>Pergunta {perguntaNum}/12</h1>
-                            <div className=' w-[100%] h-fit p-10 flex flex-col  justify-center items-center gap-4 border-2 border-blue-500 '>
-                                <p className='text-2xl'>Easdas dasdadasdasd asdasdasdad adasdadasd asdasdasdad adasd asdasdasd adasdas?</p>
+                            <div className=' w-[90%] h-fit p-10 flex flex-col  justify-center items-center gap-4 border-2 rounded-md border-cyan-500 '>
+                            
+                                <p className='text-2xl'>oii</p>
                             </div>
-                            <div className='w-[90%] p-5 flex flex-wrap justify-center items-center gap-5  border-2 border-green-500 '>
-                                <div onClick={() => { setPerguntaNum(perguntaNum + 1); }} className='w-[45%] p-5 flex justify-start items-center gap-4 border-2 border-green-500 '>
+                            <div className='w-[90%] p-5 flex flex-wrap justify-center items-center gap-5  '>
+                                <div onClick={() => { setPerguntaNum(perguntaNum + 1); }} className='w-[45%] hover:bg-cyan-900 rounded-lg p-5 flex justify-start items-center gap-4 border-2 border-cyan-300 '>
                                     <p>Alameda do paraiso</p>
                                 </div>
-                                <div className='w-[45%] p-5 flex justify-start items-center gap-4 border-2 border-green-500 '>
+                                <div className='w-[45%] p-5 flex justify-start items-center gap-4 border-2 rounded-lg hover:bg-cyan-900 border-cyan-300 '>
                                     <p>Bootcamp na australia aaaaaaaaa aaaaaaaaa</p>
                                 </div>
-                                <div className='w-[45%] p-5 flex justify-start items-center gap-4 border-2 border-green-500 '>
+                                <div className='w-[45%] p-5 flex justify-start items-center gap-4 border-2 rounded-lg hover:bg-cyan-900 border-cyan-300 '>
                                     <p>Episodio perdido do bob esponja</p>
                                 </div>
-                                <div className='w-[45%] p-5 flex justify-start items-center gap-4 border-2 border-green-500 '>
+                                <div className='w-[45%] p-5 flex justify-start items-center gap-4 border-2 rounded-lg hover:bg-cyan-900 border-cyan-300 '>
                                     <p>Uma familia da Pesada</p>
                                 </div>
                             </div>
