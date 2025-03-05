@@ -132,7 +132,7 @@ export function HomePage() {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     return (
 
-        <div className="w-full flex flex-col justify-between items-center h-screen gap-12">
+        <div className="w-screen flex flex-col justify-between items-center h-screen gap-12">
             <Navbar id={usuario?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho} />
 
             <div className="w-11/12 flex flex-wrap justify-around">

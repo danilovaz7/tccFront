@@ -1,9 +1,11 @@
 import { FormEvent, useEffect, useState } from 'react';
-
-import { NavLink, useParams } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 import Navbar from '../components/Navbar/Navbar';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Legend, PieChart, Pie, Cell } from "recharts";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@heroui/react";
+import { Avatar } from "@heroui/react";
+
 
 interface Usuario {
     id: number,
@@ -46,9 +48,15 @@ interface EloMateria {
     }
 }
 
+interface Avatar {
+    id: number,
+    nome: string,
+    caminho: string
+}
 
 export function PerfilPage() {
     let { idUsuario } = useParams();
+    const navigate = useNavigate();
     const { token, user } = useTokenStore();
     const [usuario, setUsuario] = useState<Usuario>();
     const [usuarioNavBar, setUsuarioNavBar] = useState<Usuario>();
@@ -57,6 +65,9 @@ export function PerfilPage() {
     const [eloMaterias, setEloMaterias] = useState<EloMateria[]>([]);
     const [carregando, setCarregando] = useState(true);
     const [materiaSelecionada, setMateriaSelecionada] = useState<EloMateria | null>(null);
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const [avatares, setAvatares] = useState<Avatar[]>([]);
+    const [selectedAvatarId, setSelectedAvatarId] = useState<number | null>(null);
 
     const getEloIcon = (eloMateria: EloMateria) => {
         switch (eloMateria.subelo_id) {
@@ -67,7 +78,7 @@ export function PerfilPage() {
             case 3:
                 return eloMateria.elo.elo3;
             default:
-                return ''; // Valor padrão caso não haja subelo
+                return '';
         }
     };
 
@@ -118,6 +129,21 @@ export function PerfilPage() {
     }, [idUsuario]);
 
     useEffect(() => {
+        async function carregarAvatares() {
+            const response = await fetch(`http://localhost:3000/avatares`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            const estaticasUsuario = await response.json();
+            setAvatares(estaticasUsuario);
+        }
+        carregarAvatares();
+    }, [token]);
+
+    useEffect(() => {
         async function pegaEloMaterias() {
             const response = await fetch(`http://localhost:3000/eloMaterias/${usuario?.id}`, {
                 method: 'GET',
@@ -154,6 +180,28 @@ export function PerfilPage() {
         }
         carregarDados();
     }, [idUsuario])
+
+    async function trocaAvatar() {
+        try {
+            const response = await fetch(`http://localhost:3000/usuarios/${user?.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id_avatar: selectedAvatarId })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Erro ao atualizar usuário: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            navigate(0);
+            return data;
+        } catch (error) {
+            console.error("Erro ao atualizar o usuário:", error);
+        }
+    }
 
     const dataGrafico = [
         {
@@ -193,10 +241,53 @@ export function PerfilPage() {
 
                 <div className="w-4/5 flex flex-col justify-center items-center gap-10">
                     <div className="w-full flex p-2.5 justify-center items-center text-lg">
-                        <div className="w-1/5">
+                        <div className="w-1/5 flex flex-col gap-5">
                             {usuario?.avatar && <img className="w-full" src={usuario?.avatar.caminho} alt="Perfil" />}
+                            {
+                                usuario?.id === user?.id ?
+                                    <>
+                                        <Button onPress={onOpen}>Trocar avatar</Button>
+                                        <Modal className='text-black' size='2xl' isOpen={isOpen} onOpenChange={onOpenChange}>
+                                            <ModalContent>
+                                                {(onClose) => (
+                                                    <>
+                                                        <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
+                                                        <ModalBody>
+                                                            <div className='flex flex-wrap justify-start items-start gap-5'>
+                                                                {
+                                                                    avatares.map((avatar, index) => {
+                                                                        return (
+                                                                            <div className="w-[10%]">
+                                                                                <Avatar
+                                                                                    isBordered
+                                                                                    color={selectedAvatarId === avatar.id ? "success" : "default"}
+                                                                                    onClick={() => setSelectedAvatarId(avatar.id)}
+                                                                                    key={index}
+                                                                                    size="lg"
+                                                                                    src={avatar.caminho} />
+                                                                            </div>
+                                                                        );
+                                                                    })
+                                                                }
+                                                            </div>
+                                                        </ModalBody>
+                                                        <ModalFooter>
+                                                            <Button color="danger" variant="light" onPress={onClose}>
+                                                                Close
+                                                            </Button>
+                                                            <Button color="primary" onPress={trocaAvatar}>
+                                                                Action
+                                                            </Button>
+                                                        </ModalFooter>
+                                                    </>
+                                                )}
+                                            </ModalContent>
+                                        </Modal>
+                                    </>
+                                    : null
+                            }
                         </div>
-                        <div className="w-4/5 flex flex-row justify-center gap-10 items-center">
+                        <div className="w-[80%] flex flex-row justify-start gap-32 pl-20 items-center">
                             <p className="text-2xl font-bold">Nome: {usuario?.nome}</p>
                             <p className="text-2xl font-bold">Sala: {usuario?.id_turma}º ano</p>
                             {

@@ -1,11 +1,12 @@
 // src/RecuperaSenha/RecuperaSenhaPage.tsx
 import { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router';
-import { Button, useDisclosure } from "@heroui/react";
+import { Alert } from "@heroui/react";
 
 export function RecuperaSenhaPage() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [responseState, setResponseState] = useState<boolean | undefined>(undefined);
   const navigate = useNavigate();
 
   async function handleSubmit(evento: FormEvent<HTMLFormElement>) {
@@ -21,17 +22,20 @@ export function RecuperaSenhaPage() {
       });
 
       if (response.ok) {
+        setResponseState(true)
         setMessage('Link de recuperação enviado para o seu e-mail.');
         setTimeout(() => navigate('/'), 5000); // Redireciona para login após 5 segundos
       } else {
+        setResponseState(false)
         const errorText = await response.text();
-        setMessage(`Erro: ${errorText}`);
+        setMessage(errorText);
       }
     } catch (error) {
       console.error('Erro ao enviar e-mail:', error);
       setMessage('Erro inesperado, tente novamente.');
     }
   }
+
 
   return (
     <div className='flex w-screen flex-col h-full justify-center items-center pt-32 gap-4'>
@@ -50,7 +54,14 @@ export function RecuperaSenhaPage() {
         <button className='w-[15%] bg-cyan-400 flex justify-center items-center p-1.5 rounded-md text-black hover:bg-cyan-700'>
           Enviar Link
         </button>
-        {message && <p className='mt-4 text-white'>{message}</p>}
+        {
+          responseState !== undefined && (
+            <div className="w-[45%] flex items-center my-3">
+            <Alert color={responseState ? "success" : "danger"} title={message} />
+            </div>
+          )
+        }
+
       </form>
     </div>
   );

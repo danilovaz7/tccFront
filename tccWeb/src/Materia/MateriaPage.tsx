@@ -77,8 +77,6 @@ function Materia() {
     const [totalAcertosEloAtualizado, setTotalAcertosEloAtualizado] = useState(0);
     const [totalAcertosMateriaAtualizado, setTotalAcertosMateriaAtualizado] = useState(0);
 
-
-
     useEffect(() => {
         setTotalAcertosEloAtualizado((eloMateria?.respostas_corretas_elo || 0) + contagemAcertos);
         setTotalAcertosMateriaAtualizado((eloMateria?.respostas_corretas_total || 0) + contagemAcertos);
@@ -227,12 +225,41 @@ function Materia() {
     const [eloAtualizado, setEloAtualizado] = useState<number | null>(null);
     const [subeloAtualizado, setSubeloAtualizado] = useState<number | null>(null);
 
-   async function handleUpdate(evento: FormEvent<HTMLFormElement>) {
-    evento.preventDefault();
-    if(totalAcertosEloAtualizado >= 30){
-      setTotalAcertosEloAtualizado(0)
+    async function atualizeXP(xp :number) {
+        try {
+            const response = await fetch(`http://localhost:3000/usuarios/${user?.id}/atualizaexperiencia`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ xpGanho: xp })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Erro ao atualizar usuário: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error("Erro ao atualizar o usuário:", error);
+        }
     }
     
+   async function handleUpdate(evento: FormEvent<HTMLFormElement>) {
+    evento.preventDefault();
+
+    if((eloAtualizado || 0) >= 7){
+      setEloAtualizado(6)
+    }
+
+    if(totalAcertosEloAtualizado >= 30){
+      atualizeXP(1000 * (eloMateria?.elo_id || 0) )
+    }else {
+        atualizeXP(10 * contagemAcertos)
+    }
+  
+  
     const resposta = await fetch(`http://localhost:3000/eloMaterias/${usuario?.id}/materia/${nmMateria}`, {
         method: 'PUT',
         headers: {
@@ -254,7 +281,6 @@ function Materia() {
         alert("Erro ao atualizar usuário");
     }
 }
-
 
     return (
         <div className="flex w-screen text-center flex-col h-full justify-start items-center gap-20">

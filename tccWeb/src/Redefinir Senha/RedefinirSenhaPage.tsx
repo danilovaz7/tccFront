@@ -1,13 +1,14 @@
 // src/RecuperaSenha/RedefinirSenhaPage.tsx
 import { useState, FormEvent, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { Button, useDisclosure } from "@heroui/react";
+import { Alert } from "@heroui/react";
 
 export function RedefinirSenhaPage() {
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [message, setMessage] = useState('');
   const [isTokenValid, setIsTokenValid] = useState(true);
+  const [responseState, setResponseState] = useState<boolean | undefined>(undefined);
   const { token } = useParams<{ token: string }>();
   const navigate = useNavigate();
 
@@ -23,6 +24,7 @@ export function RedefinirSenhaPage() {
     evento.preventDefault();
   
     if (senha !== confirmarSenha) {
+      setResponseState(false)
       setMessage('As senhas não coincidem.');
       return;
     }
@@ -37,9 +39,11 @@ export function RedefinirSenhaPage() {
       });
   
       if (response.ok) {
+        setResponseState(true)
         setMessage('Senha redefinida com sucesso!');
-        setTimeout(() => navigate('/'), 5000); // Redireciona para login após 5 segundos
+        setTimeout(() => navigate('/'), 5000); 
       } else {
+        setResponseState(false)
         const errorText = await response.text();
         setMessage(`Erro: ${errorText}`);
       }
@@ -79,7 +83,13 @@ export function RedefinirSenhaPage() {
             <button className='w-[35%] bg-cyan-400 flex justify-center items-center p-1.5 rounded-md text-black hover:bg-cyan-700'>
               Redefinir Senha
             </button>
-            {message && <p className='mt-4 text-white'>{message}</p>}
+            {
+          responseState !== undefined && (
+            <div className="w-[30%] flex items-center my-3">
+            <Alert color={responseState ? "success" : "danger"} title={message} />
+            </div>
+          )
+        }
           </>
         ) : (
           <p className='text-white'>Link de recuperação inválido ou expirado.</p>
