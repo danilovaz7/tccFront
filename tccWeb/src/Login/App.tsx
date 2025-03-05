@@ -90,7 +90,7 @@ function App() {
 
         <div className='w-[90%] flex flex-row justify-around items-center border-2 border-cyan-500 rounded-md p-1 '>
           <input
-           className=' w-[80%] p-1.5 border-0 bg-transparent text-white focus:outline-0'
+            className=' w-[80%] p-1.5 border-0 bg-transparent text-white focus:outline-0'
             type={hidePass ? "password" : "text"}
             value={senha}
             onChange={(e) => { setSenha(e.target.value) }}
@@ -109,7 +109,9 @@ function App() {
         </div>
 
         <button className='w-[35%] bg-cyan-400 flex justify-center items-center p-1.5 rounded-md text-black hover:bg-cyan-700  '>Entrar</button>
-        <NavLink to="/recupera-senha" ><button>Esqueci minha senha</button></NavLink>
+        <NavLink to="/recupera-senha">
+          <button>Esqueci minha senha</button>
+        </NavLink>
       </form>
     </div>
 
