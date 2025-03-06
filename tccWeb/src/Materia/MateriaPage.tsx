@@ -165,20 +165,24 @@ function Materia() {
         pegaUsuarioNav();
     }, [user?.id]);
 
+
     useEffect(() => {
-        async function pegaPerguntasMateria() {
-            const response = await fetch(`http://localhost:3000/materias/${nmMateria}/perguntas`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-            const perguntas = await response.json();
-            setPerguntasMateria(perguntas);
+        // Só faz a requisição se 'eloMateria' estiver carregado
+        if (eloMateria?.elo_id) {
+            async function pegaPerguntasMateria() {
+                const response = await fetch(`http://localhost:3000/materias/${nmMateria}/perguntas/${eloMateria.elo_id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+                const perguntas = await response.json();
+                setPerguntasMateria(perguntas);
+            }
+            pegaPerguntasMateria();
         }
-        pegaPerguntasMateria();
-    }, [nmMateria, token]);
+    }, [nmMateria, token, eloMateria]); // Dependências atualizadas para 'eloMateria'
 
 
     useEffect(() => {
@@ -253,10 +257,10 @@ function Materia() {
       setEloAtualizado(6)
     }
 
-    if(totalAcertosEloAtualizado >= 30){
+    if(totalAcertosEloAtualizado >= 30 && eloAtualizado != 6){
       atualizeXP(1000 * (eloMateria?.elo_id || 0) )
     }else {
-        atualizeXP(10 * contagemAcertos)
+        atualizeXP(20 * contagemAcertos)
     }
   
   
