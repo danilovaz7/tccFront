@@ -21,7 +21,6 @@ interface Aluno {
 
     nome: string,
     email: string,
-    senha: string,
     matricula: string,
     id_turma: number | undefined,
     id_escola: number | undefined,
@@ -41,7 +40,6 @@ export function AddAlunoPage() {
     const [aluno, setAluno] = useState<Aluno>({
         nome: '',
         email: '',
-        senha: '',
         matricula: '',
         id_turma: undefined,
         id_escola: undefined,
@@ -115,10 +113,9 @@ export function AddAlunoPage() {
             <h1 className="text-2xl font-bold">Adicione aqui um aluno novo</h1>
             <Form
                 className="w-[80%] flex flex-col justify-center  gap-4 border-2 p-10 border-white"
-                onReset={() => setAction("reset")}
+                onReset={()=>{}}
                 onSubmit={(e) => {
                     e.preventDefault();
-                    let data = Object.fromEntries(new FormData(e.currentTarget));
                     handleSubmit(e)
                 }}
             >
@@ -152,21 +149,7 @@ export function AddAlunoPage() {
                     }}
                 />
 
-                <Input
-                    isRequired
-                    errorMessage="Insira uma senha válida"
-                    label="Senha"
-                    labelPlacement="outside"
-                    onChange={(e) => { setAluno({ ...aluno, senha: e.target.value }) }}
-                    value={aluno.senha}
-                    name="senha"
-                    placeholder="Senha temporária..."
-                    type="text"
-                    classNames={{
-                        label: '!text-white'
-                    }}
 
-                />
 
                 <Select onChange={(e) => { setAluno({ ...aluno, genero: e.target.value }) }} value={aluno.genero} className="max-w-xs " label="Selecione o gênero">
                     <SelectItem key={'M'} className='text-black' >Masculino</SelectItem>
@@ -191,13 +174,13 @@ export function AddAlunoPage() {
                     }}
                 />
 
-                <Select onChange={(e) => { setAluno({ ...aluno, id_turma: parseInt(e.target.value) }) }} value={aluno.turma} className="max-w-xs " label="Selecione o gênero">
+                <Select onChange={(e) => { setAluno({ ...aluno, id_turma: parseInt(e.target.value) }) }} value={aluno.id_turma} className="max-w-xs " label="Selecione a turma">
                     <SelectItem key={1} className='text-black' >1° ano</SelectItem>
                     <SelectItem key={2} className='text-black' >2° ano</SelectItem>
                     <SelectItem key={3} className='text-black' >3° ano</SelectItem>
                 </Select>
 
-                <Select onChange={(e) => { setAluno({ ...aluno, id_escola: parseInt(e.target.value) }) }} value={aluno.escola} className="max-w-xs " label="Selecione a escola">
+                <Select onChange={(e) => { setAluno({ ...aluno, id_escola: parseInt(e.target.value) }) }} value={aluno.id_escola} className="max-w-xs " label="Selecione a escola">
                     {escolas.map((escola) => (
                         <SelectItem className='text-black' key={escola.id}>{escola.nome}</SelectItem>
                     ))}
@@ -238,11 +221,11 @@ export function AddAlunoPage() {
 
 
                 <div className="flex gap-2">
-                    <Button color="primary" type="submit">
-                        Submit
+                    <Button size='lg' color="primary" type="submit">
+                        Enviar
                     </Button>
-                    <Button type="reset" variant="flat">
-                        Reset
+                    <Button size='lg' type="reset" variant="flat">
+                        Limpar
                     </Button>
                 </div>
 

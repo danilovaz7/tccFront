@@ -117,7 +117,7 @@ export function HomePage() {
 
     useEffect(() => {
         async function pegaUsuarios() {
-            const response = await fetch(`http://localhost:3000/usuarios?limit=5`, {
+            const response = await fetch(`http://localhost:3000/usuarios?limit=5&order=nivel&orderDirection=DESC`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -307,6 +307,7 @@ export function HomePage() {
                         <div className='flex justify-center items-center gap-10 pb-24'>
                             <NavLink to="/addAluno"><button className="bg-cyan-400 p-2.5 rounded-md">Adicionar aluno</button></NavLink>
                             <button className="bg-cyan-400 p-2.5 rounded-md">Adicionar escola</button>
+                            <NavLink to="/listagem-alunos"><button className="bg-cyan-400 p-2.5 rounded-md">Ver turma</button></NavLink>
                         </div>
                     </div>
                     :
