@@ -8,6 +8,7 @@ import CardAlunoLista from '../components/CardAlunoLista/CardAlunoLista';
 
 
 
+
 interface Usuario {
     id: number,
     nome: string,
@@ -108,10 +109,10 @@ export function ListagemPage() {
 
     async function handleSubmit(evento: FormEvent<HTMLFormElement>) {
         evento.preventDefault();
-        console.log(pesquisa)
+
         async function pegaUsuarios() {
 
-            const response = await fetch(`http://localhost:3000/usuarios?id_turma=${pesquisa.id_turma}&order=${pesquisa.order}&orderDirection=DESC`, {
+            const response = await fetch(`http://localhost:3000/usuarios?id_turma=${pesquisa.id_turma}&order=${pesquisa.order}&orderDirection=DESC&materiaId=${pesquisa.materia_id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -152,22 +153,23 @@ export function ListagemPage() {
                         handleSubmit(e)
                     }}
                 >
-                    <Select onChange={(e) => { setPesquisa({ ...pesquisa, id_turma: parseInt(e.target.value) }) }} value={pesquisa.id_turma} className="max-w-xs " label="Selecione a turma">
+                    <Select isRequired onChange={(e) => { setPesquisa({ ...pesquisa, id_turma: parseInt(e.target.value) }) }} value={pesquisa.id_turma} className="max-w-xs " label="Selecione a turma">
                         <SelectItem key={1} className='text-black' >1° ano</SelectItem>
                         <SelectItem key={2} className='text-black' >2° ano</SelectItem>
                         <SelectItem key={3} className='text-black' >3° ano</SelectItem>
                     </Select>
 
-                    <Select onChange={(e) => { setPesquisa({ ...pesquisa, materia_id: parseInt(e.target.value) }) }} value={pesquisa.materia_id} className="max-w-xs " label="Selecione a matéria">
+                    <Select isRequired onChange={(e) => { setPesquisa({ ...pesquisa, materia_id: parseInt(e.target.value) }) }} value={pesquisa.materia_id} className="max-w-xs " label="Selecione a matéria">
                         {materias.map((materia) => (
                             <SelectItem className='text-black' key={materia.id}>{materia.nome}</SelectItem>
                         ))}
                     </Select>
 
-                    <Select onChange={(e) => { setPesquisa({ ...pesquisa, order: e.target.value }) }} value={pesquisa.order} className="max-w-xs " label="Ordenação">
+                    <Select isRequired onChange={(e) => { setPesquisa({ ...pesquisa, order: e.target.value }) }} value={pesquisa.order} className="max-w-xs " label="Ordenação">
                         <SelectItem key={'nome'} className='text-black' >Nome</SelectItem>
                         <SelectItem key={'experiencia'} className='text-black' >Experiência</SelectItem>
                         <SelectItem key={'nivel'} className='text-black' >Nível</SelectItem>
+                        <SelectItem key={'elo'} className='text-black' >Elo</SelectItem>
                     </Select>
 
                     <div className="flex gap-2">
