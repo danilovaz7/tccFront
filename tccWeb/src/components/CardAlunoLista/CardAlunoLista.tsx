@@ -20,7 +20,7 @@ function CardAlunoLista({ avatar, icon, nome, nivel }: CardAlunoListaProps) {
 
         <div className=' w-[70%] p-5 gap-2 flex flex-col justify-s items-start'>
             <div className='flex w-[100%] justify-between items-center'>
-                <p className='text-xl'>{nome}</p>
+                <p className='text-medium'>{nome}</p>
                 <p className='text-xl'>Lvl {nivel}</p>
             </div>
 

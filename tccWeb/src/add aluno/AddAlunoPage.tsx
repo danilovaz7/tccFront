@@ -1,10 +1,9 @@
-import { FormEvent, useEffect, useState } from 'react';
-import { NavLink, useNavigate } from 'react-router';
+import {  useEffect, useState } from 'react';
+import {  useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { Form, Input, Button } from "@heroui/react";
 import { Select, SelectItem } from "@heroui/react";
-import React from 'react';
 import { useFormik } from 'formik';
 
 interface Avatar {
@@ -18,20 +17,9 @@ interface Escola {
     nome: string,
 }
 
-interface Aluno {
-    nome: string,
-    email: string,
-    matricula: string,
-    id_turma: number | undefined,
-    id_escola: number | undefined,
-    genero: string,
-    tipo_usuario_id: number,
-    id_avatar: number | undefined
-}
-
 export function AddAlunoPage() {
     const navigate = useNavigate();
-    const { token, user } = useTokenStore();
+    const { token } = useTokenStore();
     const [avatares, setAvatares] = useState<Avatar[]>([]);
     const [escolas, setEscolas] = useState<Escola[]>([]);
     const [contador, setContador] = useState(0);

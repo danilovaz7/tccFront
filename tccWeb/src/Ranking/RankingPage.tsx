@@ -30,7 +30,7 @@ export function RankingPage() {
 
     useEffect(() => {
         async function pegaUsuarios() {
-            const response = await fetch(`http://localhost:3000/usuarios`, {
+            const response = await fetch(`http://localhost:3000/usuarios?order=nivel&orderDirection=DESC`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -76,14 +76,14 @@ export function RankingPage() {
                                         return (
                                             <UserCardRank id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} acertos={porcentAcerto} 
                                             classe="w-full flex justify-center items-center gap-2 p-3 text-black rounded-lg bg-yellow-400 cursor-pointer"
-                                             classeStats="w-[80%] text-3xl flex justify-start gap-10 items-center" 
+                                             classeStats="w-[80%] text-3xl flex justify-between p-5 items-center" 
                                              classeImg='w-1/4' />
                                         );
                                     }
                                     return (
                                         <UserCardRank id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} acertos={porcentAcerto} 
-                                        classe="w-[90%]  flex justify-center items-center gap-2 p-3 text-black rounded-lg bg-gray-400 cursor-pointer" 
-                                        classeStats="w-4/5 text-2xl flex justify-start gap-10 items-center" 
+                                        classe="w-[90%] flex justify-center items-center gap-2 p-3 text-black rounded-lg bg-gray-400 cursor-pointer" 
+                                        classeStats="w-[80%] text-2xl flex justify-between p-5 items-center" 
                                         classeImg='w-1/4' />
                                     );
                                 }
