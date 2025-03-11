@@ -5,7 +5,6 @@ import { Form, Input } from "@heroui/react";
 import { useFormik } from 'formik';
 
 export function RedefinirSenhaPage() {
-  const [confirmarSenha, setConfirmarSenha] = useState('');
   const [message, setMessage] = useState('');
   const [isTokenValid, setIsTokenValid] = useState(true);
   const [responseState, setResponseState] = useState<boolean | undefined>(undefined);
@@ -14,16 +13,26 @@ export function RedefinirSenhaPage() {
 
   const validatePassword = (values: { senha: string; confirmarSenha: string }) => {
     const errors: { senha?: string; confirmarSenha?: string } = {};
-    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-
+    console.log('entrrei no validate')
+    // Regex para validar a senha
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    console.log('values.senha',values.senha)
+    console.log('values.confirmarSenha',values.confirmarSenha)
     if (!passwordRegex.test(values.senha)) {
-      errors.senha = 'A senha deve ter no mínimo 8 caracteres, incluindo pelo menos um número e um caractere especial.';
+
+      errors.senha = 'A senha deve ter no mínimo 8 caracteres, incluindo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.';
     }
 
     if (values.senha !== values.confirmarSenha) {
       errors.confirmarSenha = 'As senhas não coincidem.';
-    }
+    } 
+    console.log(errors)
 
+    if(errors){
+      setResponseState(false);
+      setMessage(`Erro: ${ errors.senha ? errors.senha : ''} e ${errors.confirmarSenha ? errors.confirmarSenha : ''}`)
+    }
+    
     return errors;
   };
 
@@ -32,7 +41,7 @@ export function RedefinirSenhaPage() {
       senha: '',
       confirmarSenha: ''
     },
-
+    validate: validatePassword,
     onSubmit: async (values) => {
       try {
         const response = await fetch(`http://localhost:3000/reset-password/${token}`, {
@@ -40,7 +49,7 @@ export function RedefinirSenhaPage() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ password: formik.values.senha }),
+          body: JSON.stringify({ password: values.senha }),
         });
 
         if (response.ok) {
@@ -71,7 +80,6 @@ export function RedefinirSenhaPage() {
       <Form
         className="w-[80%] flex flex-col justify-center gap-4 border-2 p-10 border-white"
         onSubmit={formik.handleSubmit}
-        onReset={formik.handleReset}
       >
         <h2 className='text-white mb-4'>Redefinir Senha</h2>
         {isTokenValid ? (
@@ -86,7 +94,7 @@ export function RedefinirSenhaPage() {
                 value={formik.values.senha}
                 name="senha"
                 placeholder="Senha..."
-                type="password" // Alterado para ocultar a senha
+                type="password"
                 classNames={{ label: '!text-white' }}
               />
             </div>
@@ -96,16 +104,16 @@ export function RedefinirSenhaPage() {
                 errorMessage={formik.errors.confirmarSenha}
                 label="Confirmação de senha"
                 labelPlacement="outside"
-                onChange={(e) => setConfirmarSenha(e.target.value)}
-                value={confirmarSenha}
-                name="confirmarSenha" // Nome diferente para evitar conflito
+                onChange={formik.handleChange}
+                value={formik.values.confirmarSenha}
+                name="confirmarSenha"
                 placeholder="Confirme sua senha..."
-                type="password" // Alterado para ocultar a senha
+                type="password"
                 classNames={{ label: '!text-white' }}
               />
             </div>
             <button
-              type="submit" // Adicionado para indicar que é um botão de submit
+              type="submit"
               className='w-[35%] bg-cyan-400 flex justify-center items-center p-1.5 rounded-md text-black hover:bg-cyan-700'
             >
               Redefinir Senha
