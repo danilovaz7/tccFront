@@ -8,34 +8,34 @@ export function RedefinirSenhaPage() {
   const [message, setMessage] = useState('');
   const [isTokenValid, setIsTokenValid] = useState(true);
   const [responseState, setResponseState] = useState<boolean | undefined>(undefined);
+  const [erroSenha, setErroSenha] = useState('');
+  const [erroConfirmSenha, setErroConfirmSenha] = useState('');
   const { token } = useParams<{ token: string }>();
   const navigate = useNavigate();
 
   const validatePassword = (values: { senha: string; confirmarSenha: string }) => {
     const errors: { senha?: string; confirmarSenha?: string } = {};
-    console.log('entrrei no validate')
-    // Regex para validar a senha
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-    console.log('values.senha',values.senha)
-    console.log('values.confirmarSenha',values.confirmarSenha)
+
     if (!passwordRegex.test(values.senha)) {
-
-      errors.senha = 'A senha deve ter no mínimo 8 caracteres, incluindo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.';
+      errors.senha = 'A senha deve ter no mínimo 8 caracteres,\n incluindo pelo menos uma letra maiúscula,\n uma letra minúscula, um número e um caractere especial.';
+      setErroSenha(errors.senha);
     }
-
     if (values.senha !== values.confirmarSenha) {
-      errors.confirmarSenha = 'As senhas não coincidem.';
-    } 
-    console.log(errors)
-
-    if(errors){
-      setResponseState(false);
-      setMessage(`Erro: ${ errors.senha ? errors.senha : ''} e ${errors.confirmarSenha ? errors.confirmarSenha : ''}`)
+      errors.confirmarSenha = 'As senhas devem coincidir.';
+      setErroConfirmSenha(errors.confirmarSenha);
     }
-    
+
+    if (Object.keys(errors).length > 0) {
+      setResponseState(false);
+      setMessage(`Erro: ${errors.senha ? errors.senha : ''} ${errors.confirmarSenha ? errors.confirmarSenha : ''}`);
+    } else {
+      setResponseState(undefined);
+    }
+  
     return errors;
   };
-
+  
   const formik = useFormik({
     initialValues: {
       senha: '',
@@ -87,7 +87,7 @@ export function RedefinirSenhaPage() {
             <div className='w-[50%] flex flex-row justify-around items-center border-2 border-cyan-500 rounded-md p-1'>
               <Input
                 isRequired
-                errorMessage={formik.errors.senha}
+                errorMessage={erroSenha}
                 label="Senha"
                 labelPlacement="outside"
                 onChange={formik.handleChange}
@@ -101,7 +101,7 @@ export function RedefinirSenhaPage() {
             <div className='w-[50%] flex flex-row justify-around items-center border-2 border-cyan-500 rounded-md p-1'>
               <Input
                 isRequired
-                errorMessage={formik.errors.confirmarSenha}
+                errorMessage={erroConfirmSenha}
                 label="Confirmação de senha"
                 labelPlacement="outside"
                 onChange={formik.handleChange}
@@ -119,7 +119,7 @@ export function RedefinirSenhaPage() {
               Redefinir Senha
             </button>
             {responseState !== undefined && (
-              <div className="w-[30%] flex items-center my-3">
+              <div className="w-[40%] flex items-center my-3">
                 <Alert color={responseState ? "success" : "danger"} title={message} />
               </div>
             )}

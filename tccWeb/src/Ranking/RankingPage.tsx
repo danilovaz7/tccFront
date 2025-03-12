@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 import Navbar from '../components/Navbar/Navbar';
 import UserCardRank from '../components/UserCardRank/UserCardRank';
@@ -25,12 +25,13 @@ interface Usuario {
 
 export function RankingPage() {
     const { token, user } = useTokenStore();
+    let { id_turma, id_escola } = useParams();
     const [usuarios, setUsers] = useState<Usuario[]>([])
     const [usuario, setUsuario] = useState<Usuario>();
 
     useEffect(() => {
         async function pegaUsuarios() {
-            const response = await fetch(`http://localhost:3000/usuarios?order=nivel&orderDirection=DESC`, {
+            const response = await fetch(`http://localhost:3000/usuarios?order=nivel&orderDirection=DESC&id_turma=${id_turma}&id_escola=${id_escola}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -71,7 +72,7 @@ export function RankingPage() {
                                 if (isNaN(porcentAcerto)) {
                                     porcentAcerto = 0;
                                 }
-                                if (usuario?.id_turma === usuarioRank.id_turma && usuario?.id_escola === usuarioRank.id_escola) {
+                          
                                     if (index === 0) {
                                         return (
                                             <UserCardRank id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} acertos={porcentAcerto} 
@@ -86,7 +87,7 @@ export function RankingPage() {
                                         classeStats="w-[80%] text-2xl flex justify-between p-5 items-center" 
                                         classeImg='w-1/4' />
                                     );
-                                }
+                                
                                 return null;
                             })
                         }

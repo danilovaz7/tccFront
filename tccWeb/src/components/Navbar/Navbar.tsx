@@ -3,9 +3,9 @@ import React from 'react';
 import {Avatar} from "@heroui/react";
 
 interface NavbarProps {
-    id: number;
-    nivel: number;
-    avatar: string;
+    id: number | undefined;
+    nivel: string | undefined;
+    avatar: string | undefined
 }
 
 function Navbar({ id, nivel, avatar }: NavbarProps) {

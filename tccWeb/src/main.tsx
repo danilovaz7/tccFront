@@ -22,7 +22,7 @@ const HeroUIWithRouter = () => {
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/home" element={<HomePage />} />
-        <Route path="/ranking" element={<RankingPage />} />
+        <Route path="/ranking/:id_turma/:id_escola" element={<RankingPage />} />
         <Route path="/perfil/:idUsuario" element={<PerfilPage />} />
         <Route path="/addAluno" element={<AddAlunoPage />} />
         <Route path="/listagem-alunos" element={<ListagemPage />} />
