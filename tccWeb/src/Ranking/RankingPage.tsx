@@ -64,7 +64,7 @@ export function RankingPage() {
             <div className="w-screen flex flex-col justify-start items-center h-screen gap-10 mb-15">
                 <Navbar id={usuario?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho} />
                 <div className="flex flex-col justify-center items-center w-7/10 gap-10 ">
-                    <h1>Rank de sala do {usuario?.id_turma}º ano</h1>
+                    <h1 className='text-5xl'>Rank de sala do {id_turma}º ano</h1>
                     <div className="w-[80%] flex flex-col justify-center pb-12 items-center p-1 gap-3">
                         {
                             usuarios.map((usuarioRank, index) => {

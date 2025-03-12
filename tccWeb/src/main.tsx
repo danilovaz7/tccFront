@@ -8,7 +8,7 @@ import { AddAlunoPage } from './add aluno/AddAlunoPage.tsx';
 import { RankingPage } from './Ranking/RankingPage.tsx';
 import { RecuperaSenhaPage } from './Recupera Senha/RecuperaSenhaPage.tsx';
 import { RedefinirSenhaPage } from './Redefinir Senha/RedefinirSenhaPage.tsx';
-import { ListagemPage } from './Listagem Alunos/listagemPage.tsx';
+import { ListagemPage } from './Listagem Alunos/ListagemPage.tsx';
 import Materia from './Materia/MateriaPage.tsx';
 import './index.css'
 import App from './Login/App.tsx'

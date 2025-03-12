@@ -178,8 +178,8 @@ export function HomePage() {
                                     {
                                         turmas.map((turma, index) => {
                                             return (
-                                                <div className='w-[90%] flex justify-center items-center p-3 rounded-md bg-cyan-500 text-black '>
-                                                    <h1 className='text-3xl w-[100%] flex justify-around items-center gap-3'>{turma.nome} <span><MdKeyboardArrowRight size={25} /></span></h1>
+                                                <div onClick={() => { navigate(`/ranking/${index+1}/${usuario?.id_escola}`); }} className='w-[90%] flex justify-center items-center p-3 rounded-md bg-cyan-500 text-black hover:bg-cyan-700 cursor-pointer '>
+                                                    <h1 className='text-2xl w-[100%] flex justify-around items-center gap-3'>{turma.nome} <span><MdKeyboardArrowRight size={20} /></span></h1>
                                                 </div>
                                             );
                                         })

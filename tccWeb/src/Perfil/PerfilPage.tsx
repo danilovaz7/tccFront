@@ -85,7 +85,7 @@ export function PerfilPage() {
     useEffect(() => {
         async function pegaUsuarios() {
 
-            const response = await fetch(`http://localhost:3000/usuarios`, {
+            const response = await fetch(`http://localhost:3000/usuarios?order=nivel&orderDirection=DESC`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -234,6 +234,7 @@ export function PerfilPage() {
     const COLORS = ['#82ca9d', '#ff6347', '#FFD700'];
     if (carregando) return <p>Carregando estatísticas...</p>;
     if (!dados) return <p>Erro ao carregar estatísticas.</p>;
+
     return (
         <>
             <div className="w-screen flex flex-col justify-start items-center min-h-screen gap-12 mb-40">
