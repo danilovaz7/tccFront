@@ -83,7 +83,7 @@ export function ListagemPerguntasPage() {
 
     async function handleSubmit(evento: FormEvent<HTMLFormElement>) {
         evento.preventDefault();
-        console.log(`http://localhost:3000/materias/${pesquisa.materia_id}/perguntas/turma/${pesquisa.id_turma}`)
+       
         async function pegaPerguntas() {
            console.log(pesquisa)
             const response = await fetch(`http://localhost:3000/materias/${pesquisa.materia_id}/perguntas/turma/${pesquisa.id_turma}`, {
@@ -99,6 +99,8 @@ export function ListagemPerguntasPage() {
         
         pegaPerguntas();
     }
+
+    console.log(perguntasMaterias)
     return (
         <>
             <div className="w-screen flex flex-col justify-start items-center min-h-screen gap-12 mb-40">
