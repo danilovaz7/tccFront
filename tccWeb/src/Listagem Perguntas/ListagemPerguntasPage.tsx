@@ -3,11 +3,7 @@ import { useParams, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 import Navbar from '../components/Navbar/Navbar';
 import { Form, Input, Button, Select, SelectItem } from "@heroui/react";
-import CardAlunoLista from '../components/CardAlunoLista/CardAlunoLista';
-
-
-
-
+import { Accordion, AccordionItem, Avatar } from "@heroui/react";
 
 interface Usuario {
     id: number,
@@ -26,6 +22,8 @@ interface Pergunta {
     id: number;
     materia_id: number;
     pergunta: string;
+    elo_id: number;
+    turma_id: number
 }
 
 interface Alternativa {
@@ -83,9 +81,9 @@ export function ListagemPerguntasPage() {
 
     async function handleSubmit(evento: FormEvent<HTMLFormElement>) {
         evento.preventDefault();
-       
+
         async function pegaPerguntas() {
-           console.log(pesquisa)
+            console.log(pesquisa)
             const response = await fetch(`http://localhost:3000/materias/${pesquisa.materia_id}/perguntas/turma/${pesquisa.id_turma}`, {
                 method: 'GET',
                 headers: {
@@ -96,7 +94,7 @@ export function ListagemPerguntasPage() {
             const perguntasMateria = await response.json()
             setPerguntasMateria(perguntasMateria)
         }
-        
+
         pegaPerguntas();
     }
 
@@ -144,9 +142,23 @@ export function ListagemPerguntasPage() {
                                 <div className="w-[100%]  flex-wrap  p-5 gap-4 flex flex-row justify-start items-center">
                                     {
                                         perguntasMaterias.map((perguntaMateria, index) => {
-                                            
+
                                             return (
-                                                <p>{perguntaMateria.pergunta}</p>
+
+                                                <Accordion selectionMode="multiple">
+                                                    <AccordionItem
+                                                        key={index}
+                                                        className='bg-cyan-400 p-4 flex items-center justify-between'
+                                                        startContent={
+                                                            "Dificuldade: " + perguntaMateria.elo_id
+                                                        }
+                                                        title={perguntaMateria.pergunta}
+                                                    >
+                                                        { }
+                                                    </AccordionItem>
+
+                                                </Accordion>
+
                                             );
 
                                         })
