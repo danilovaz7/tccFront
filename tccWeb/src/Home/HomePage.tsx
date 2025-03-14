@@ -6,7 +6,7 @@ import Navbar from '../components/Navbar/Navbar';
 import UserCard from '../components/UserCard/UserCard';
 import CardMateria from '../components/CardMateria/CardMateria';
 import ConfirmationPopup from '../components/ConfirmationPopup/ConfirmationPopup';
-import { Button, useDisclosure } from "@heroui/react";
+import { Button, Input, useDisclosure } from "@heroui/react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
 
@@ -58,20 +58,16 @@ interface EloMateria {
 export function HomePage() {
     const navigate = useNavigate();
 
-    const [matricula, setMatricula] = useState('')
     const { token, user } = useTokenStore();
     const [usuario, setUsuario] = useState<Usuario>();
     const [eloMaterias, setEloMaterias] = useState<EloMateria[]>([]);
     const [usuarios, setUsers] = useState<Usuario[]>([])
     const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
     const [turmas, setTurmas] = useState<Turmas[]>([])
-    const [turmaId, setTurmaId] = useState(0)
+    const [codigoSala, setCodigoSala ] = useState('')
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [materiaSelecionada, setMateriaSelecionada] = useState<EloMateria | null>(null);
 
-    function formSubmit(evento: FormEvent<HTMLFormElement>) {
-        evento.preventDefault()
-        alert(matricula)
-    }
 
     const handleShowPopup = () => setIsPopupOpen(true);
     const handleConfirm = () => {
@@ -87,8 +83,6 @@ export function HomePage() {
             ...materia,
         });
     };
-
-
 
     useEffect(() => {
         async function pegaUsuarios() {
@@ -149,7 +143,7 @@ export function HomePage() {
         }
         pegaUsuarios();
     }, [])
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
     return (
 
         <div className="w-screen flex flex-col justify-between items-center h-screen gap-12">
@@ -157,10 +151,23 @@ export function HomePage() {
 
             <div className="w-11/12 flex flex-wrap justify-around">
                 <div className="w-[25%] h-auto p-5 flex flex-col justify-start items-center gap-3 rounded-md">
-                    <h1 className="text-4xl">Que tal jogar com um amigo?</h1>
+                    <h1 className="text-4xl">Que tal jogar com amigos?</h1>
                     <p>É sempre melhor evoluir juntos!</p>
-                    <form onSubmit={(evento) => formSubmit(evento)} className="w-full flex p-2.5 flex-col justify-start items-center gap-5 rounded-md  shadow-xl">
+                    <form  className="w-full flex p-2.5 flex-col justify-start items-center gap-5 rounded-md  shadow-xl">
                         <Button color="danger">CRIAR SALA</Button>
+                        <div className='w-[90%] flex flex-col gap-3'>
+                            <Input
+                                isRequired
+                                errorMessage="Coloque um codigo valido"
+                                variant="bordered"
+                                onChange={(e) => { setCodigoSala(e.target.value) }}
+                                value={codigoSala}
+                                name="nome"
+                                placeholder="Código de sala..."
+                                type="text"
+                            />
+                            <Button color="danger">ENTRAR EM SALA</Button>
+                        </div>
                     </form>
                 </div>
 
@@ -178,7 +185,7 @@ export function HomePage() {
                                     {
                                         turmas.map((turma, index) => {
                                             return (
-                                                <div onClick={() => { navigate(`/ranking/${index+1}/${usuario?.id_escola}`); }} className='w-[90%] flex justify-center items-center p-3 rounded-md bg-cyan-500 text-black hover:bg-cyan-700 cursor-pointer '>
+                                                <div onClick={() => { navigate(`/ranking/${index + 1}/${usuario?.id_escola}`); }} className='w-[90%] flex justify-center items-center p-3 rounded-md bg-cyan-500 text-black hover:bg-cyan-700 cursor-pointer '>
                                                     <h1 className='text-2xl w-[100%] flex justify-around items-center gap-3'>{turma.nome} <span><MdKeyboardArrowRight size={20} /></span></h1>
                                                 </div>
                                             );

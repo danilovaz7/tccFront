@@ -18,7 +18,7 @@ export function RedefinirSenhaPage() {
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 
     if (!passwordRegex.test(values.senha)) {
-      errors.senha = 'A senha deve ter no mínimo 8 caracteres,\n incluindo pelo menos uma letra maiúscula,\n uma letra minúscula, um número e um caractere especial.';
+      errors.senha = 'A senha deve ter no mínimo 8 caracteres, incluindo pelo menos uma letra maiúscula,\n uma letra minúscula, um número e um caractere especial.';
       setErroSenha(errors.senha);
     }
     if (values.senha !== values.confirmarSenha) {
@@ -28,7 +28,7 @@ export function RedefinirSenhaPage() {
 
     if (Object.keys(errors).length > 0) {
       setResponseState(false);
-      setMessage(`Erro: ${errors.senha ? errors.senha : ''} ${errors.confirmarSenha ? errors.confirmarSenha : ''}`);
+      setMessage(` ${errors.senha ? errors.senha : ''} ${errors.confirmarSenha ? errors.confirmarSenha : ''}`);
     } else {
       setResponseState(undefined);
     }
@@ -119,7 +119,7 @@ export function RedefinirSenhaPage() {
               Redefinir Senha
             </button>
             {responseState !== undefined && (
-              <div className="w-[40%] flex items-center my-3">
+              <div className="w-[50%] flex items-center my-3">
                 <Alert color={responseState ? "success" : "danger"} title={message} />
               </div>
             )}
