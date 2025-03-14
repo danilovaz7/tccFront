@@ -72,7 +72,7 @@ export function HomePage() {
     const handleShowPopup = () => setIsPopupOpen(true);
     const handleConfirm = () => {
         setIsPopupOpen(false);
-        navigate(`/materias/${materiaSelecionada?.materia.nome}`)
+        navigate(`/materias/${materiaSelecionada?.materia.nome}/${usuario?.id_turma}`)
     };
     const handleCancel = () => {
         setIsPopupOpen(false);
@@ -355,6 +355,7 @@ export function HomePage() {
                             <NavLink to="/addAluno"><button className="bg-cyan-400 p-2.5 rounded-md">Adicionar aluno</button></NavLink>
                             <button className="bg-cyan-400 p-2.5 rounded-md">Adicionar escola</button>
                             <NavLink to="/listagem-alunos"><button className="bg-cyan-400 p-2.5 rounded-md">Ver turma</button></NavLink>
+                            <NavLink to="/listagem-perguntas"><button className="bg-cyan-400 p-2.5 rounded-md">Ver perguntas</button></NavLink>
                         </div>
                     </div>
                     :

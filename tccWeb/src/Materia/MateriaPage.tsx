@@ -60,7 +60,7 @@ interface Resposta {
 
 function Materia() {
     const { token, user } = useTokenStore();
-    let { nmMateria } = useParams();
+    let { nmMateria, turmaId } = useParams();
     const navigate = useNavigate();
 
     const [usuario, setUsuario] = useState<Usuario>();
@@ -170,7 +170,7 @@ function Materia() {
         // Só faz a requisição se 'eloMateria' estiver carregado
         if (eloMateria?.elo_id) {
             async function pegaPerguntasMateria() {
-                const response = await fetch(`http://localhost:3000/materias/${nmMateria}/perguntas/${eloMateria.elo_id}`, {
+                const response = await fetch(`http://localhost:3000/materias/${nmMateria}/perguntas/${eloMateria.elo_id}/${turmaId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

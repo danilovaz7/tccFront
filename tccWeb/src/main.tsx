@@ -9,6 +9,7 @@ import { RankingPage } from './Ranking/RankingPage.tsx';
 import { RecuperaSenhaPage } from './Recupera Senha/RecuperaSenhaPage.tsx';
 import { RedefinirSenhaPage } from './Redefinir Senha/RedefinirSenhaPage.tsx';
 import { ListagemPage } from './Listagem Alunos/ListagemPage.tsx';
+import { ListagemPerguntasPage } from './Listagem Perguntas/ListagemPerguntasPage.tsx';
 import Materia from './Materia/MateriaPage.tsx';
 import './index.css'
 import App from './Login/App.tsx'
@@ -26,7 +27,8 @@ const HeroUIWithRouter = () => {
         <Route path="/perfil/:idUsuario" element={<PerfilPage />} />
         <Route path="/addAluno" element={<AddAlunoPage />} />
         <Route path="/listagem-alunos" element={<ListagemPage />} />
-        <Route path="/materias/:nmMateria" element={<Materia />} />
+        <Route path="/listagem-perguntas" element={<ListagemPerguntasPage />} />
+        <Route path="/materias/:nmMateria/:turmaId" element={<Materia />} />
         <Route path="/recupera-senha" element={<RecuperaSenhaPage />} />
         <Route path="/redefinir-senha/:token" element={<RedefinirSenhaPage />} />
       </Routes>
