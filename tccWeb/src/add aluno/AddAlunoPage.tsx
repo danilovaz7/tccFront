@@ -5,6 +5,20 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { Form, Input, Button } from "@heroui/react";
 import { Select, SelectItem } from "@heroui/react";
 import { useFormik } from 'formik';
+import Navbar from '../components/Navbar/Navbar';
+
+interface Usuario {
+    id: number,
+    nome: string,
+    nivel: string,
+    tipo_usuario_id: number,
+    id_turma: number,
+    id_escola: number
+    avatar: {
+        nome: string,
+        caminho: string
+    }
+}
 
 interface Avatar {
     id: number,
@@ -19,10 +33,26 @@ interface Escola {
 
 export function AddAlunoPage() {
     const navigate = useNavigate();
-    const { token } = useTokenStore();
+    const { token, user } = useTokenStore();
     const [avatares, setAvatares] = useState<Avatar[]>([]);
     const [escolas, setEscolas] = useState<Escola[]>([]);
     const [contador, setContador] = useState(0);
+    const [usuario, setUsuario] = useState<Usuario>();
+
+    useEffect(() => {
+        async function pegaUsuarios() {
+            const response = await fetch(`http://localhost:3000/usuarios/${user?.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            const usuarioAtual = await response.json();
+            setUsuario(usuarioAtual);
+        }
+        pegaUsuarios();
+    }, []);
 
     const formik = useFormik({
         initialValues: {
@@ -34,8 +64,10 @@ export function AddAlunoPage() {
             genero: '',
             id_avatar: undefined,
             tipo_usuario_id: undefined,
+            id_materia: undefined
         },
         onSubmit: async (values) => {
+            console.log(values)
             const resposta = await fetch(`http://localhost:3000/usuarios`, {
                 method: 'POST',
                 headers: {
@@ -48,10 +80,7 @@ export function AddAlunoPage() {
             });
 
             if (resposta.ok) {
-                alert('Usuario salvo com sucesso');
                 navigate('/home');
-            } else {
-                alert("Erro ao salvar usuario");
             }
         }
     });
@@ -92,7 +121,8 @@ export function AddAlunoPage() {
     }
 
     return (
-        <div className="size-[90vw] flex flex-col justify-start items-center gap-8">
+        <div className="size-[90vw] w-screen flex flex-col justify-start items-center gap-8">
+            <Navbar id={usuario?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho} />
             <h1 className="text-2xl font-bold">Adicione aqui um aluno novo</h1>
             <Form
                 className="w-[80%] flex flex-col justify-center gap-4 border-2 p-10 border-white"
@@ -123,6 +153,21 @@ export function AddAlunoPage() {
                     <SelectItem key={2} className='text-black'>Aluno</SelectItem>
                     <SelectItem key={3} className='text-black'>Professor</SelectItem>
                 </Select>
+                
+                {
+                    formik.values.tipo_usuario_id == 3 ?
+                        <Select
+                            onChange={(e) => formik.setFieldValue('id_materia', parseInt(e.target.value))}
+                            value={formik.values.id_materia}
+                            className="max-w-xs"
+                            label="Selecione o a materia"
+                        >
+                            <SelectItem key={1} className='text-black'>Mat</SelectItem>
+                            <SelectItem key={2} className='text-black'>Port</SelectItem>
+                        </Select>
+                        :
+                        null
+                }
 
                 <Input
                     isRequired
