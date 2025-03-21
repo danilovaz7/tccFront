@@ -1,5 +1,5 @@
-import {  useEffect, useState } from 'react';
-import {  useNavigate } from 'react-router';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { Form, Input, Button } from "@heroui/react";
@@ -33,7 +33,7 @@ export function AddAlunoPage() {
             id_escola: undefined,
             genero: '',
             id_avatar: undefined,
-            tipo_usuario_id: 2,
+            tipo_usuario_id: undefined,
         },
         onSubmit: async (values) => {
             const resposta = await fetch(`http://localhost:3000/usuarios`, {
@@ -113,6 +113,16 @@ export function AddAlunoPage() {
                         label: '!text-white'
                     }}
                 />
+                <Select
+                    isRequired
+                    onChange={(e) => formik.setFieldValue('tipo_usuario_id', parseInt(e.target.value))}
+                    value={formik.values.tipo_usuario_id}
+                    className="max-w-xs"
+                    label="Selecione o tipo do usuário"
+                >
+                    <SelectItem key={2} className='text-black'>Aluno</SelectItem>
+                    <SelectItem key={3} className='text-black'>Professor</SelectItem>
+                </Select>
 
                 <Input
                     isRequired
@@ -159,7 +169,7 @@ export function AddAlunoPage() {
                 />
 
                 <Select
-                    isRequired  
+                    isRequired
                     onChange={(e) => formik.setFieldValue('id_turma', parseInt(e.target.value))}
                     value={formik.values.id_turma}
                     className="max-w-xs"

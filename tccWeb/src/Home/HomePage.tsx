@@ -1,21 +1,14 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
+import { MdKeyboardArrowRight,  } from "react-icons/md";
 import { NavLink, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 import Navbar from '../components/Navbar/Navbar';
 import UserCard from '../components/UserCard/UserCard';
 import CardMateria from '../components/CardMateria/CardMateria';
 import ConfirmationPopup from '../components/ConfirmationPopup/ConfirmationPopup';
-import { Button, Input, useDisclosure } from "@heroui/react";
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Button, Input,  } from "@heroui/react";
 import 'swiper/swiper-bundle.css';
 
-import {
-    Modal,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-} from "@heroui/react";
 
 interface Usuario {
     id: number,
@@ -65,7 +58,6 @@ export function HomePage() {
     const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
     const [turmas, setTurmas] = useState<Turmas[]>([])
     const [codigoSala, setCodigoSala ] = useState('')
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [materiaSelecionada, setMateriaSelecionada] = useState<EloMateria | null>(null);
 
 
@@ -231,78 +223,7 @@ export function HomePage() {
                     <div className="w-11/12 flex flex-col justify-center items-center gap-4 pb-14">
                         <h1 className="text-cyan-400 text-5xl">Aperfeiçoe seus conhecimentos</h1>
                         <h3 className="text-3xl">Selecione a matéria que deseja treinar</h3>
-                        <Button onPress={onOpen}>Dúvida sobre elos</Button>
-                        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-                            <ModalContent>
-                                {(onClose) => (
-                                    <>
-                                        <ModalHeader className="flex flex-col gap-1">Dúvida sobre elos</ModalHeader>
-                                        <ModalBody className='text-black'>
-                                            <div>
-                                                <Swiper className='text-black' spaceBetween={50} slidesPerView={1}>
-                                                    <SwiperSlide>
-                                                        <p className='h-[50%]'>
-                                                            O sistema de elos funciona conforme a progressão em cada matéria, separadamente.
-                                                            No total existem 6 elos:
-                                                        </p>
-                                                        <div>
-                                                            <Swiper className='text-black border-1 border-black p-5' spaceBetween={50} slidesPerView={1}>
-                                                                <SwiperSlide >
-                                                                    <img src="/src/assets/logo1Play2Learn.png" alt="" />
-                                                                    <p className='flex items-center justify-center gap-3'>Iniciante<span><MdKeyboardArrowRight size={16} /></span></p>
-                                                                </SwiperSlide>
-                                                                <SwiperSlide>
-                                                                    <img src="/src/assets/logo1Play2Learn.png" alt="" />
-                                                                    <p className='flex items-center justify-center gap-3'><span><MdKeyboardArrowLeft size={16} /></span>Regular <span><MdKeyboardArrowRight size={16} /></span></p>
-                                                                </SwiperSlide>
-                                                                <SwiperSlide>
-                                                                    <img src="/src/assets/logo1Play2Learn.png" alt="" />
-                                                                    <p className='flex items-center justify-center gap-3'><span><MdKeyboardArrowLeft size={16} /></span>Exemplar</p>
-                                                                </SwiperSlide>
-                                                            </Swiper>
-                                                        </div>
-                                                    </SwiperSlide>
-                                                    <SwiperSlide >
-                                                        <p className='h-[50%]'>
-                                                            E cada elo é divido em 3 subelos:
-                                                        </p>
-                                                        <div>
-                                                            <Swiper className='text-black border-1 border-black p-5' spaceBetween={50} slidesPerView={1}>
-                                                                <SwiperSlide>
-                                                                    <img src="/src/assets/logo1Play2Learn.png" alt="" />
-                                                                    <p className='flex items-center justify-center gap-3'> Iniciante 1 <span><MdKeyboardArrowRight size={16} /></span></p>
-                                                                </SwiperSlide>
-                                                                <SwiperSlide>
-                                                                    <img src="/src/assets/logo1Play2Learn.png" alt="" />
-                                                                    <p className='flex items-center justify-center gap-3'><span><MdKeyboardArrowLeft size={16} /></span>Iniciante 2 <span><MdKeyboardArrowRight size={16} /></span></p>
-                                                                </SwiperSlide>
-                                                                <SwiperSlide>
-                                                                    <img src="/src/assets/logo1Play2Learn.png" alt="" />
-                                                                    <p className='flex items-center justify-center gap-3'>  <span><MdKeyboardArrowLeft size={16} /></span>Iniciante 3</p>
-                                                                </SwiperSlide>
-                                                            </Swiper>
-                                                        </div>
-                                                    </SwiperSlide>
-                                                    <SwiperSlide >
-                                                        <p className='h-[50%]'>
-                                                            Para passar de elo basta responder corretamente um número espefíco de pergutnas, acertando este minimo de perguntas
-                                                            você passa para o próximo elo, subindo de elo e subelo o jogador ganha uma quantidade de experiência, oque possibilita
-                                                            subir de nível
-                                                        </p>
-                                                    </SwiperSlide>
-
-                                                </Swiper>
-                                            </div>
-                                        </ModalBody>
-                                        <ModalBody>
-                                            <Button color="danger" variant="light" onPress={onClose}>
-                                                Close
-                                            </Button>
-                                        </ModalBody>
-                                    </>
-                                )}
-                            </ModalContent>
-                        </Modal >
+                        
 
                         <div className="w-11/12 p-2.5 shadow-2xl flex gap-5 flex-wrap rounded-lg justify-center items-center">
                             {

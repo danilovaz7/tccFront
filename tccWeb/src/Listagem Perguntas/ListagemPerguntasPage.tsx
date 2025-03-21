@@ -24,14 +24,10 @@ interface Pergunta {
     pergunta: string;
     elo_id: number;
     turma_id: number
+    alternativas: []
 }
 
-interface Alternativa {
-    id: number;
-    pergunta_id: number;
-    alternativa: string;
-    correta: boolean
-}
+
 
 interface Pesquisa {
     id_turma: number | null,
@@ -98,7 +94,6 @@ export function ListagemPerguntasPage() {
         pegaPerguntas();
     }
 
-    console.log(perguntasMaterias)
     return (
         <>
             <div className="w-screen flex flex-col justify-start items-center min-h-screen gap-12 mb-40">
@@ -145,16 +140,28 @@ export function ListagemPerguntasPage() {
 
                                             return (
 
-                                                <Accordion selectionMode="multiple">
+                                                <Accordion className=' text-white'  selectionMode="multiple">
                                                     <AccordionItem
                                                         key={index}
-                                                        className='bg-cyan-400 p-4 flex items-center justify-between'
+                                                        className='bg-gray-700 p-5 text-white'
                                                         startContent={
                                                             "Dificuldade: " + perguntaMateria.elo_id
                                                         }
                                                         title={perguntaMateria.pergunta}
                                                     >
-                                                        { }
+                                                        {
+                                                            perguntaMateria.alternativas.map((alternativa) => (
+                                                                <div className=' flex justify-between gap-5 p-5'>
+
+                                                                    {
+                                                                        alternativa.correta ?
+                                                                            <p className='text-green-600 text-left'>Alternativa: {alternativa.alternativa}</p>
+                                                                            :
+                                                                            <p className='text-red-400 text-left'>Alternativa: {alternativa.alternativa}</p>
+                                                                    }
+                                                                </div>
+                                                            ))
+                                                        }
                                                     </AccordionItem>
 
                                                 </Accordion>
