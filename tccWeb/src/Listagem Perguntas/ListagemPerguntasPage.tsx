@@ -11,7 +11,8 @@ interface Usuario {
     nivel: string,
     tipo_usuario_id: number,
     id_turma: number,
-    id_escola: number
+    id_escola: number,
+    id_materia: number
     avatar: {
         nome: string,
         caminho: string
@@ -27,7 +28,10 @@ interface Pergunta {
     alternativas: []
 }
 
-
+interface Materia {
+    id: number;
+    nome: string
+}
 
 interface Pesquisa {
     id_turma: number | null,
@@ -38,7 +42,7 @@ interface Pesquisa {
 export function ListagemPerguntasPage() {
     const [usuarioNavBar, setUsuarioNavBar] = useState<Usuario>();
     const [perguntasMaterias, setPerguntasMateria] = useState<Pergunta[]>([]);
-    const [materias, setMaterias] = useState<[]>([]);
+    const [materias, setMaterias] = useState<Materia[]>([]);
     const { token, user } = useTokenStore();
 
     const [pesquisa, setPesquisa] = useState<Pesquisa>({
@@ -63,6 +67,17 @@ export function ListagemPerguntasPage() {
     }, []);
 
     useEffect(() => {
+        if (usuarioNavBar) {
+            setPesquisa((prevPesquisa) => ({
+                ...prevPesquisa,
+                escola_id: usuarioNavBar.id_escola,
+                ...(usuarioNavBar.tipo_usuario_id !== 1 && { materia_id: usuarioNavBar.id_materia })
+            }));
+        }
+    }, [usuarioNavBar]);
+
+
+    useEffect(() => {
         async function getMaterias() {
             const response = await fetch(`http://localhost:3000/materias`, {
                 method: 'GET',
@@ -81,7 +96,7 @@ export function ListagemPerguntasPage() {
         evento.preventDefault();
 
         async function pegaPerguntas() {
-            console.log(pesquisa)
+
             const response = await fetch(`http://localhost:3000/materias/${pesquisa.materia_id}/perguntas/escola/${pesquisa.escola_id}/turma/${pesquisa.id_turma}`, {
                 method: 'GET',
                 headers: {
@@ -96,12 +111,30 @@ export function ListagemPerguntasPage() {
         pegaPerguntas();
     }
 
+    function deixarPrimeiraLetraMaiuscula(text: string) {
+        return text.charAt(0).toUpperCase() + text.slice(1);
+    }
+
+    if (!usuarioNavBar) {
+        return <p>Carregando...</p>;
+    }
+
     return (
         <>
             <div className="w-screen flex flex-col justify-start items-center min-h-screen gap-12 mb-40">
                 <Navbar id={usuarioNavBar?.id} nivel={usuarioNavBar?.nivel} avatar={usuarioNavBar?.avatar.caminho || ''} />
-                <h1 className='text-white'>OLA PROFESSOR Lista pergunaaatas</h1>
-
+                {usuarioNavBar.tipo_usuario_id === 1 ? <h1 className='text-white'>Ola diretor {usuarioNavBar.nome} </h1> : null}
+                {usuarioNavBar.tipo_usuario_id === 3 ? <h1 className='text-white'>Ola professor {usuarioNavBar.nome} </h1> : null}
+                {
+                    usuarioNavBar.tipo_usuario_id === 3 ?
+                    materias.map((materia,index) => {
+                        if (materia.id === usuarioNavBar.tipo_usuario_id) {
+                            return <h1 key={index} className='text-2xl'>Materia: {deixarPrimeiraLetraMaiuscula(materia.nome)}</h1>
+                        }
+                        return null;
+                    })
+                    : null
+                }
                 <Form
                     className="w-[80%]  flex flex-row gap-4 p-5 justify-center items-center border-white border-2"
                     onReset={() => { }}
@@ -116,11 +149,16 @@ export function ListagemPerguntasPage() {
                         <SelectItem key={3} className='text-black' >3° ano</SelectItem>
                     </Select>
 
-                    <Select isRequired onChange={(e) => { setPesquisa({ ...pesquisa, materia_id: parseInt(e.target.value) }) }} value={pesquisa.materia_id} className="max-w-xs " label="Selecione a matéria">
-                        {materias.map((materia) => (
-                            <SelectItem className='text-black' key={materia.id}>{materia.nome}</SelectItem>
-                        ))}
-                    </Select>
+                    {
+                        usuarioNavBar.tipo_usuario_id === 1 ?
+                            <Select isRequired onChange={(e) => { setPesquisa({ ...pesquisa, materia_id: parseInt(e.target.value) }) }} value={pesquisa.materia_id} className="max-w-xs " label="Selecione a matéria">
+                                {materias.map((materia,index) => (
+                                    <SelectItem  className='text-black' key={index}>{materia.nome}</SelectItem>
+                                ))}
+                            </Select>
+                            :
+                            null
+                    }
 
                     <div className="flex gap-2">
                         <Button color="primary" type="submit">
@@ -132,17 +170,17 @@ export function ListagemPerguntasPage() {
                     </div>
                 </Form>
 
-                <div className='w-[90%] border rounded-md border-white p-5 flex flex-row justify-center items-center flex-wrap gap-10'>
+                <div className='w-[90%]  p-5 flex flex-row justify-center items-center flex-wrap gap-10'>
                     {
                         perguntasMaterias
                             ? (
-                                <div className="w-[100%]  flex-wrap  p-5 gap-4 flex flex-row justify-start items-center">
+                                <div className="w-[100%] flex-wrap  p-5 gap-4 flex flex-row justify-start items-center">
                                     {
                                         perguntasMaterias.map((perguntaMateria, index) => {
 
                                             return (
 
-                                                <Accordion className=' text-white'  selectionMode="multiple">
+                                                <Accordion key={index} className=' text-white' selectionMode="multiple">
                                                     <AccordionItem
                                                         key={index}
                                                         className='bg-gray-700 p-5 text-white'
@@ -152,14 +190,14 @@ export function ListagemPerguntasPage() {
                                                         title={perguntaMateria.pergunta}
                                                     >
                                                         {
-                                                            perguntaMateria.alternativas.map((alternativa) => (
+                                                            perguntaMateria.alternativas.map((alternativa,indexx) => (
                                                                 <div className=' flex justify-between gap-5 p-5'>
 
                                                                     {
                                                                         alternativa.correta ?
-                                                                            <p className='text-green-600 text-left'>Alternativa: {alternativa.alternativa}</p>
+                                                                            <p key={indexx} className='text-green-600 text-left'>Alternativa: {alternativa.alternativa}</p>
                                                                             :
-                                                                            <p className='text-red-400 text-left'>Alternativa: {alternativa.alternativa}</p>
+                                                                            <p key={indexx} className='text-red-400 text-left'>Alternativa: {alternativa.alternativa}</p>
                                                                     }
                                                                 </div>
                                                             ))

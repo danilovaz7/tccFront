@@ -90,6 +90,14 @@ export function AddPerguntaPage() {
                 onSubmit={formik.handleSubmit}
                 onReset={formik.handleReset}
             >
+                
+                <div className='w-full flex gap-5 '>
+                    <p>Tornar pergunta pública</p>
+                    <Checkbox
+                        onChange={(e) => { setIsChecked(!isCheked) }}
+                        className='text-white' ></Checkbox>
+                </div>
+                
                 <Input
                     isRequired
                     errorMessage="Coloque um pergunta valido"
@@ -132,12 +140,6 @@ export function AddPerguntaPage() {
                     <SelectItem key={6} className='text-black'>Brilhante</SelectItem>
                 </Select>
 
-                <div className='w-full flex gap-5 '>
-                    <p>Tornar pergunta pública</p>
-                    <Checkbox
-                        onChange={(e) => { setIsChecked(!isCheked) }}
-                        className='text-white' ></Checkbox>
-                </div>
 
                 <Input
                     isRequired

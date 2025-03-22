@@ -177,7 +177,7 @@ export function HomePage() {
                                     {
                                         turmas.map((turma, index) => {
                                             return (
-                                                <div onClick={() => { navigate(`/ranking/${index + 1}/${usuario?.id_escola}`); }} className='w-[90%] flex justify-center items-center p-3 rounded-md bg-cyan-500 text-black hover:bg-cyan-700 cursor-pointer '>
+                                                <div key={index} onClick={() => { navigate(`/ranking/${index + 1}/${usuario?.id_escola}`); }} className='w-[90%] flex justify-center items-center p-3 rounded-md bg-cyan-500 text-black hover:bg-cyan-700 cursor-pointer '>
                                                     <h1 className='text-2xl w-[100%] flex justify-around items-center gap-3'>{turma.nome} <span><MdKeyboardArrowRight size={20} /></span></h1>
                                                 </div>
                                             );
@@ -194,13 +194,13 @@ export function HomePage() {
                                         usuarios.map((usuarioRank, index) => {
                                             if (index === 0) {
                                                 return (
-                                                    <UserCard id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho}
+                                                    <UserCard key={index} id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho}
                                                         classe="w-full bg-yellow-400 flex justify-around items-center text-black p-2.5 cursor-point rounded-md transition-transform ease-in-out hover:scale-105"
                                                     />
                                                 )
                                             }
                                             return (
-                                                <UserCard id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho}
+                                                <UserCard  key={index} id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho}
                                                     classe="w-[90%] bg-gray-400 flex justify-around items-center text-black p-2.5 cursor-point rounded-md transition-transform ease-in-out hover:scale-102"
                                                 />
                                             );
@@ -227,7 +227,7 @@ export function HomePage() {
 
                         <div className="w-11/12 p-2.5 shadow-2xl flex gap-5 flex-wrap rounded-lg justify-center items-center">
                             {
-                                eloMaterias.map((eloMateria) => {
+                                eloMaterias.map((eloMateria, index) => {
                                     let eloIcon = '';
 
                                     switch (eloMateria.subelo_id) {
@@ -246,7 +246,7 @@ export function HomePage() {
 
                                     return (
                                         <>
-                                            <CardMateria id={0} materiaLogo={eloMateria.materia.icone} nome={eloMateria.materia.nome} icon={eloIcon} onClick={() => {
+                                            <CardMateria  key={index} id={0} materiaLogo={eloMateria.materia.icone} nome={eloMateria.materia.nome} icon={eloIcon} onClick={() => {
                                                 handleMateriaClick(eloMateria)
                                                 handleShowPopup()
                                             }
@@ -269,13 +269,14 @@ export function HomePage() {
                     null
             }
             {
-                usuario?.tipo_usuario_id === 1 ||usuario?.tipo_usuario_id === 3 
+                usuario?.tipo_usuario_id != 2
                     ?
                     <div className="w-11/12 flex flex-col justify-center items-center pb-12.5">
                         <div className='flex justify-center items-center gap-10 pb-24'>
-                            <NavLink to="/addAluno"><button className="bg-cyan-400 p-2.5 rounded-md">Adicionar aluno</button></NavLink>
-                            <NavLink to="/addPergunta"><button className="bg-cyan-400 p-2.5 rounded-md">Adicionar pergunta</button></NavLink>
+                            <NavLink to="/addAluno"><button className="bg-cyan-400 p-2.5 rounded-md">Adicionar usuario</button></NavLink>
                             <NavLink to="/addEscola"><button className="bg-cyan-400 p-2.5 rounded-md">Adicionar escola</button></NavLink>
+                            <NavLink to="/addPergunta"><button className="bg-cyan-400 p-2.5 rounded-md">Adicionar pergunta</button></NavLink>
+                      
                             <NavLink to="/listagem-alunos"><button className="bg-cyan-400 p-2.5 rounded-md">Ver turma</button></NavLink>
                             <NavLink to="/listagem-perguntas"><button className="bg-cyan-400 p-2.5 rounded-md">Ver perguntas</button></NavLink>
                         </div>
