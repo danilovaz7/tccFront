@@ -36,8 +36,24 @@ export function AddAlunoPage() {
     const { token, user } = useTokenStore();
     const [avatares, setAvatares] = useState<Avatar[]>([]);
     const [escolas, setEscolas] = useState<Escola[]>([]);
+    const [materias, setMaterias] = useState<[]>([]);
     const [contador, setContador] = useState(0);
     const [usuario, setUsuario] = useState<Usuario>();
+
+    useEffect(() => {
+        async function getMaterias() {
+            const response = await fetch(`http://localhost:3000/materias`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            const materias = await response.json();
+            setMaterias(materias);
+        }
+        getMaterias();
+    }, []);
 
     useEffect(() => {
         async function pegaUsuarios() {
@@ -162,8 +178,9 @@ export function AddAlunoPage() {
                             className="max-w-xs"
                             label="Selecione o a materia"
                         >
-                            <SelectItem key={1} className='text-black'>Mat</SelectItem>
-                            <SelectItem key={2} className='text-black'>Port</SelectItem>
+                            {materias.map((materia) => (
+                            <SelectItem className='text-black' key={materia.id}>{materia.nome}</SelectItem>
+                        ))}
                         </Select>
                         :
                         null

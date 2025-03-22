@@ -31,7 +31,8 @@ interface Pergunta {
 
 interface Pesquisa {
     id_turma: number | null,
-    materia_id: number | null
+    materia_id: number | null,
+    escola_id: number | undefined
 }
 
 export function ListagemPerguntasPage() {
@@ -42,7 +43,8 @@ export function ListagemPerguntasPage() {
 
     const [pesquisa, setPesquisa] = useState<Pesquisa>({
         id_turma: null,
-        materia_id: null
+        materia_id: null,
+        escola_id: usuarioNavBar?.id_escola
     })
 
     useEffect(() => {
@@ -80,7 +82,7 @@ export function ListagemPerguntasPage() {
 
         async function pegaPerguntas() {
             console.log(pesquisa)
-            const response = await fetch(`http://localhost:3000/materias/${pesquisa.materia_id}/perguntas/turma/${pesquisa.id_turma}`, {
+            const response = await fetch(`http://localhost:3000/materias/${pesquisa.materia_id}/perguntas/escola/${pesquisa.escola_id}/turma/${pesquisa.id_turma}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

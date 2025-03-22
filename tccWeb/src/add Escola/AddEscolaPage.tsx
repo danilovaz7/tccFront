@@ -1,0 +1,100 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { useTokenStore } from '../hooks/useTokenStore';
+import { Form, Input, Button } from "@heroui/react";
+import { useFormik } from 'formik';
+import Navbar from '../components/Navbar/Navbar';
+
+interface Usuario {
+    id: number,
+    nome: string,
+    nivel: string,
+    tipo_usuario_id: number,
+    id_turma: number,
+    id_escola: number
+    avatar: {
+        nome: string,
+        caminho: string
+    }
+}
+
+export function AddEscolaPage() {
+    const navigate = useNavigate();
+    const { token, user } = useTokenStore();
+    const [usuario, setUsuario] = useState<Usuario>();
+
+
+
+    useEffect(() => {
+        async function pegaUsuarios() {
+            const response = await fetch(`http://localhost:3000/usuarios/${user?.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            const usuarioAtual = await response.json();
+            setUsuario(usuarioAtual);
+        }
+        pegaUsuarios();
+    }, []);
+
+    const formik = useFormik({
+        initialValues: {
+            nome: ''
+        },
+        onSubmit: async (values) => {
+            console.log(values)
+            const resposta = await fetch(`http://localhost:3000/criar-escola`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    nome: values.nome
+                })
+            });
+
+            if (resposta.ok) {
+                navigate('/home');
+            }
+        }
+    });
+
+    return (
+        <div className="size-[90vw] w-screen flex flex-col justify-start items-center gap-8">
+            <Navbar id={usuario?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho} />
+            <h1 className="text-2xl font-bold">Adicione aqui uma escola nova</h1>
+            <Form
+                className="w-[80%] flex flex-col justify-center gap-4 border-2 p-10 border-white"
+                onSubmit={formik.handleSubmit}
+                onReset={formik.handleReset}
+            >
+                <Input
+                    isRequired
+                    errorMessage="Coloque um nome valido"
+                    label="Nome"
+                    labelPlacement="outside"
+                    onChange={formik.handleChange}
+                    value={formik.values.nome}
+                    name="nome"
+                    placeholder="Nome..."
+                    type="text"
+                    classNames={{
+                        label: '!text-white'
+                    }}
+                />
+                <div className="flex gap-2">
+                    <Button size='lg' color="primary" type="submit">
+                        Enviar
+                    </Button>
+                    <Button size='lg' type="reset" variant="flat">
+                        Limpar
+                    </Button>
+                </div>
+            </Form>
+        </div>
+    );
+}

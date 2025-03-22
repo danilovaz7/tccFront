@@ -6,7 +6,7 @@ import { useTokenStore } from '../hooks/useTokenStore';
 function App() {
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
-  const [isCheked, setIsChecked] = useState(false)
+
   const [hidePass, setHidePass] = useState(true)
   const navigate = useNavigate();
   const { setToken, setUser } = useTokenStore();

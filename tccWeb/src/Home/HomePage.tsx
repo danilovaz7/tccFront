@@ -269,12 +269,13 @@ export function HomePage() {
                     null
             }
             {
-                usuario?.tipo_usuario_id === 1
+                usuario?.tipo_usuario_id === 1 ||usuario?.tipo_usuario_id === 3 
                     ?
                     <div className="w-11/12 flex flex-col justify-center items-center pb-12.5">
                         <div className='flex justify-center items-center gap-10 pb-24'>
                             <NavLink to="/addAluno"><button className="bg-cyan-400 p-2.5 rounded-md">Adicionar aluno</button></NavLink>
-                            <button className="bg-cyan-400 p-2.5 rounded-md">Adicionar escola</button>
+                            <NavLink to="/addPergunta"><button className="bg-cyan-400 p-2.5 rounded-md">Adicionar pergunta</button></NavLink>
+                            <NavLink to="/addEscola"><button className="bg-cyan-400 p-2.5 rounded-md">Adicionar escola</button></NavLink>
                             <NavLink to="/listagem-alunos"><button className="bg-cyan-400 p-2.5 rounded-md">Ver turma</button></NavLink>
                             <NavLink to="/listagem-perguntas"><button className="bg-cyan-400 p-2.5 rounded-md">Ver perguntas</button></NavLink>
                         </div>
