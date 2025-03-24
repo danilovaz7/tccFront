@@ -72,23 +72,21 @@ export function RankingPage() {
                                 if (isNaN(porcentAcerto)) {
                                     porcentAcerto = 0;
                                 }
-                          
-                                    if (index === 0) {
-                                        return (
-                                            <UserCardRank id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} acertos={porcentAcerto} 
-                                            classe="w-full flex justify-center items-center gap-2 p-3 text-black rounded-lg bg-yellow-400 cursor-pointer"
-                                             classeStats="w-[80%] text-3xl flex justify-between p-5 items-center" 
-                                             classeImg='w-1/4' />
-                                        );
-                                    }
+
+                                if (index === 0) {
                                     return (
-                                        <UserCardRank id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} acertos={porcentAcerto} 
-                                        classe="w-[90%] flex justify-center items-center gap-2 p-3 text-black rounded-lg bg-gray-400 cursor-pointer" 
-                                        classeStats="w-[80%] text-2xl flex justify-between p-5 items-center" 
-                                        classeImg='w-1/4' />
+                                        <UserCardRank id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} acertos={porcentAcerto}
+                                            classe="w-full flex justify-center items-center gap-2 p-3 text-black rounded-lg bg-yellow-400 cursor-pointer"
+                                            classeStats="w-[80%] text-3xl flex justify-between p-5 items-center"
+                                            classeImg='w-1/4' />
                                     );
-                                
-                                return null;
+                                }
+                                return (
+                                    <UserCardRank id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} acertos={porcentAcerto}
+                                        classe="w-[90%] flex justify-center items-center gap-2 p-3 text-black rounded-lg bg-gray-400 cursor-pointer"
+                                        classeStats="w-[80%] text-2xl flex justify-between p-5 items-center"
+                                        classeImg='w-1/4' />
+                                );
                             })
                         }
                     </div>

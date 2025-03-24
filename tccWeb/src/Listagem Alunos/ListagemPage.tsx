@@ -5,28 +5,18 @@ import Navbar from '../components/Navbar/Navbar';
 import { Form, Input, Button, Select, SelectItem } from "@heroui/react";
 import CardAlunoLista from '../components/CardAlunoLista/CardAlunoLista';
 
-
-
-
-
 interface Usuario {
     id: number,
     nome: string,
     nivel: string,
     tipo_usuario_id: number,
     id_turma: number,
-    id_escola: number
+    id_escola: number,
+    id_materia: number
     avatar: {
         nome: string,
         caminho: string
     }
-}
-
-interface Estatisticas {
-    total_disputas: number;
-    total_disputas_ganhas: number;
-    total_perguntas: number;
-    total_perguntas_acertadas: number;
 }
 
 interface EloMateria {
@@ -105,11 +95,18 @@ export function ListagemPage() {
         getMaterias();
     }, []);
 
-
+    useEffect(() => {
+        if (usuarioNavBar) {
+            setPesquisa((prevPesquisa) => ({
+                ...prevPesquisa,
+                ...(usuarioNavBar.tipo_usuario_id !== 1 && usuarioNavBar.tipo_usuario_id !== 4 && { materia_id: usuarioNavBar.id_materia })
+            }));
+        }
+    }, [usuarioNavBar]);
 
     async function handleSubmit(evento: FormEvent<HTMLFormElement>) {
         evento.preventDefault();
-
+        console.log(pesquisa)
         async function pegaUsuarios() {
 
             const response = await fetch(`http://localhost:3000/usuarios?id_turma=${pesquisa.id_turma}&order=${pesquisa.order}&orderDirection=DESC&materiaId=${pesquisa.materia_id}`, {
@@ -139,6 +136,12 @@ export function ListagemPage() {
         pegaEloMaterais();
         pegaUsuarios();
     }
+
+    if (!usuarioNavBar) {
+        return <p>Carregando...</p>;
+    }
+
+
     return (
         <>
             <div className="w-screen flex flex-col justify-start items-center min-h-screen gap-12 mb-40">
@@ -158,12 +161,14 @@ export function ListagemPage() {
                         <SelectItem key={2} className='text-black' >2° ano</SelectItem>
                         <SelectItem key={3} className='text-black' >3° ano</SelectItem>
                     </Select>
+                    {(usuarioNavBar?.tipo_usuario_id === 4 || usuarioNavBar?.tipo_usuario_id === 1) && (
+                        <Select isRequired onChange={(e) => { setPesquisa({ ...pesquisa, materia_id: parseInt(e.target.value) }) }} value={pesquisa.materia_id} className="max-w-xs " label="Selecione a matéria">
+                            {materias.map((materia) => (
+                                <SelectItem className='text-black' key={materia.id}>{materia.nome}</SelectItem>
+                            ))}
+                        </Select>
 
-                    <Select isRequired onChange={(e) => { setPesquisa({ ...pesquisa, materia_id: parseInt(e.target.value) }) }} value={pesquisa.materia_id} className="max-w-xs " label="Selecione a matéria">
-                        {materias.map((materia) => (
-                            <SelectItem className='text-black' key={materia.id}>{materia.nome}</SelectItem>
-                        ))}
-                    </Select>
+                    )}
 
                     <Select isRequired onChange={(e) => { setPesquisa({ ...pesquisa, order: e.target.value }) }} value={pesquisa.order} className="max-w-xs " label="Ordenação">
                         <SelectItem key={'nome'} className='text-black' >Nome</SelectItem>
@@ -205,7 +210,7 @@ export function ListagemPage() {
                                                         default:
                                                             icone = '';
                                                     }
-                                                
+
                                                 }
 
                                             })

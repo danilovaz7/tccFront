@@ -13,7 +13,8 @@ interface Usuario {
     nivel: string,
     tipo_usuario_id: number,
     id_turma: number,
-    id_escola: number
+    id_escola: number,
+    id_materia: number,
     avatar: {
         nome: string,
         caminho: string
@@ -62,10 +63,11 @@ export function PerfilPage() {
     const [usuarioNavBar, setUsuarioNavBar] = useState<Usuario>();
     const [usuarios, setUsers] = useState<Usuario[]>([]);
     const [dados, setDados] = useState<Estatisticas | null>(null);
+    const [cargos, setCargos] = useState<[]>([])
     const [eloMaterias, setEloMaterias] = useState<EloMateria[]>([]);
     const [carregando, setCarregando] = useState(true);
     const [materiaSelecionada, setMateriaSelecionada] = useState<EloMateria | null>(null);
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const {isOpen, onOpen, onOpenChange } = useDisclosure();
     const [avatares, setAvatares] = useState<Avatar[]>([]);
     const [selectedAvatarId, setSelectedAvatarId] = useState<number | null>(null);
 
@@ -81,6 +83,20 @@ export function PerfilPage() {
                 return '';
         }
     };
+    useEffect(() => {
+        async function pegaUsuario() {
+            const response = await fetch(`http://localhost:3000/usuarios/${idUsuario}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            const usuarioAtual = await response.json();
+            setUsuario(usuarioAtual);
+        }
+        pegaUsuario();
+    }, [idUsuario]);
 
     useEffect(() => {
         async function pegaUsuarios() {
@@ -98,19 +114,21 @@ export function PerfilPage() {
         pegaUsuarios();
     }, [idUsuario])
 
+   
+
     useEffect(() => {
-        async function pegaUsuario() {
-            const response = await fetch(`http://localhost:3000/usuarios/${idUsuario}`, {
+        async function pegaCargos() {
+            const response = await fetch(`http://localhost:3000/cargos`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
             });
-            const usuarioAtual = await response.json();
-            setUsuario(usuarioAtual);
+            const cargos = await response.json();
+            setCargos(cargos);
         }
-        pegaUsuario();
+        pegaCargos();
     }, [idUsuario]);
 
     useEffect(() => {
@@ -232,8 +250,8 @@ export function PerfilPage() {
     }
 
     const COLORS = ['#82ca9d', '#ff6347', '#FFD700'];
-    if (carregando) return <p>Carregando estatísticas...</p>;
-    if (!dados) return <p>Erro ao carregar estatísticas.</p>;
+    if (carregando && usuario?.tipo_usuario_id === 2) return <p>Carregando estatísticas...</p>;
+    if (!dados && usuario?.tipo_usuario_id === 2) return <p>Erro ao carregar estatísticas.</p>;
 
     return (
         <>
@@ -290,7 +308,34 @@ export function PerfilPage() {
                         </div>
                         <div className="w-[80%] flex flex-row justify-start gap-32 pl-20 items-center">
                             <p className="text-2xl font-bold">Nome: {usuario?.nome}</p>
-                            <p className="text-2xl font-bold">Sala: {usuario?.id_turma}º ano</p>
+                            {
+                                usuario?.tipo_usuario_id == 2 ?
+                                    <p className="text-2xl font-bold">Sala: {usuario?.id_turma}º ano</p>
+                                    :
+                                    cargos.map((cargo, index) => {
+                                        if (usuario?.tipo_usuario_id === cargo.id) {
+                                            return (
+                                                <p key={index} className="text-2xl font-bold">Cargo: {cargo.nome} </p>
+                                            );
+                                        }
+                                        return null;
+                                    })
+                            }
+                            
+                            {
+                                usuario?.tipo_usuario_id === 3 ?
+                                eloMaterias.map((eloMateria, index) => {
+                                    if (usuario?.tipo_usuario_id === eloMateria.materia.id) {
+                                        return (
+                                            <p className="text-2xl font-bold">Materia: {eloMateria.materia.nome}</p>
+                                        );
+                                    }
+                                    return null;
+                                })
+                                    
+                                    : null
+                            }
+                            
                             {
                                 usuarios.map((usuarioRank, index) => {
                                     if (usuario?.id === usuarioRank.id) {
@@ -304,91 +349,98 @@ export function PerfilPage() {
                         </div>
                     </div>
 
-                    <div className="w-9/10 border border-white rounded p-5 gap-6 flex flex-row justify-around items-start flex-wrap">
-                        <div className="w-1/4 flex flex-col justify-center items-center">
-                            <p className='text-2xl'>Perguntas totais</p>
-                            <p className='text-xl'>{dados.total_perguntas}</p>
-                        </div>
-                        <div className="w-1/4 flex flex-col justify-center items-center">
-                            <p className='text-2xl'>Perguntas acertadas</p>
-                            <p className='text-xl'>{dados.total_perguntas_acertadas}</p>
-                        </div>
-                        <div className="w-1/4 flex flex-col justify-center items-center">
-                            <p className='text-2xl'>Disputas</p>
-                            <p className='text-xl'>{dados.total_disputas}</p>
-                        </div>
-
-                        <BarChart width={500} height={300} data={dataGrafico}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="categoria" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Bar dataKey="Total" fill="#8884d8" name="Total de Perguntas" />
-                            <Bar dataKey="Corretas" fill="#82ca9d" name="Perguntas Corretas" />
-                        </BarChart>
-
-                        <PieChart width={300} height={300}>
-                            <Pie
-                                data={dataGraficoPizza}
-                                dataKey="value"
-                                nameKey="name"
-                                cx="50%"
-                                cy="50%"
-                                outerRadius={100}
-                                fill="#8884d8"
-                                label
-                            >
-                                {dataGraficoPizza.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                ))}
-                            </Pie>
-                            <Tooltip />
-                        </PieChart>
-                    </div>
-
-                    <div className="w-full flex flex-row justify-start items-center mb-10">
-                        <div className="w-1/6 p-1 gap-2 flex flex-col justify-center items-start">
-                            {eloMaterias.map((eloMateria, index) => (
-                                <p className="text-2xl" key={index} onClick={() => handleMateriaClick(eloMateria)}>
-                                    {eloMateria.materia.nome}
-                                </p>
-                            ))}
-                        </div>
-
-                        {
-                            materiaSelecionada
-                                ? (
-                                    <div className="w-4/5 h-9/10 border border-white rounded p-5 gap-48 flex flex-row justify-center items-center">
-                                        <div className="flex flex-col justify-center items-start gap-10">
-                                            <div className="flex justify-center items-center gap-4">
-                                                <h2 className="text-3xl">Nome:</h2>
-                                                <p className="text-2xl">{materiaSelecionada.materia.nome}</p>
-                                            </div>
-                                            <div className="flex justify-center items-center gap-4">
-                                                <h2 className="text-3xl">Elo:</h2>
-                                                <p className="text-2xl">{materiaSelecionada.elo.nome} {materiaSelecionada.subelo_id}</p>
-                                            </div>
-                                            <div className="flex justify-center items-center gap-4">
-                                                <h2 className="text-2xl">Respostas corretas no elo:</h2>
-                                                <p className="text-3xl">{materiaSelecionada.respostas_corretas_elo}</p>
-                                            </div>
-                                            <div className="flex justify-center items-center gap-4">
-                                                <h2 className="text-2xl">Respostas corretas na matéria:</h2>
-                                                <p className="text-3xl">{materiaSelecionada.respostas_corretas_total}</p>
-                                            </div>
-                                        </div>
-
-                                        <img src={materiaSelecionada.eloIcon} alt="" className="w-1/4" />
+                    {
+                        usuario?.tipo_usuario_id === 2 ?
+                            <>
+                                <div className="w-9/10 border border-white rounded p-5 gap-6 flex flex-row justify-around items-start flex-wrap">
+                                    <div className="w-1/4 flex flex-col justify-center items-center">
+                                        <p className='text-2xl'>Perguntas totais</p>
+                                        <p className='text-xl'>{dados.total_perguntas}</p>
                                     </div>
-                                ) :
-                                (
-                                    <div className="w-4/5 h-9/10 border border-white rounded p-5 gap-48 flex flex-row justify-center items-center">
-                                        <p>Selecione uma matéria para ver mais detalhes.</p>
+                                    <div className="w-1/4 flex flex-col justify-center items-center">
+                                        <p className='text-2xl'>Perguntas acertadas</p>
+                                        <p className='text-xl'>{dados.total_perguntas_acertadas}</p>
                                     </div>
-                                )
-                        }
-                    </div>
+                                    <div className="w-1/4 flex flex-col justify-center items-center">
+                                        <p className='text-2xl'>Disputas</p>
+                                        <p className='text-xl'>{dados.total_disputas}</p>
+                                    </div>
+
+                                    <BarChart width={500} height={300} data={dataGrafico}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="categoria" />
+                                        <YAxis />
+                                        <Tooltip />
+                                        <Legend />
+                                        <Bar dataKey="Total" fill="#8884d8" name="Total de Perguntas" />
+                                        <Bar dataKey="Corretas" fill="#82ca9d" name="Perguntas Corretas" />
+                                    </BarChart>
+
+                                    <PieChart width={300} height={300}>
+                                        <Pie
+                                            data={dataGraficoPizza}
+                                            dataKey="value"
+                                            nameKey="name"
+                                            cx="50%"
+                                            cy="50%"
+                                            outerRadius={100}
+                                            fill="#8884d8"
+                                            label
+                                        >
+                                            {dataGraficoPizza.map((entry, index) => (
+                                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                            ))}
+                                        </Pie>
+                                        <Tooltip />
+                                    </PieChart>
+                                </div>
+
+                                <div className="w-full flex flex-row justify-start items-center mb-10">
+                                    <div className="w-1/6 p-1 gap-2 flex flex-col justify-center items-start">
+                                        {eloMaterias.map((eloMateria, index) => (
+                                            <p className="text-2xl" key={index} onClick={() => handleMateriaClick(eloMateria)}>
+                                                {eloMateria.materia.nome}
+                                            </p>
+                                        ))}
+                                    </div>
+
+                                    {
+                                        materiaSelecionada
+                                            ? (
+                                                <div className="w-4/5 h-9/10 border border-white rounded p-5 gap-48 flex flex-row justify-center items-center">
+                                                    <div className="flex flex-col justify-center items-start gap-10">
+                                                        <div className="flex justify-center items-center gap-4">
+                                                            <h2 className="text-3xl">Nome:</h2>
+                                                            <p className="text-2xl">{materiaSelecionada.materia.nome}</p>
+                                                        </div>
+                                                        <div className="flex justify-center items-center gap-4">
+                                                            <h2 className="text-3xl">Elo:</h2>
+                                                            <p className="text-2xl">{materiaSelecionada.elo.nome} {materiaSelecionada.subelo_id}</p>
+                                                        </div>
+                                                        <div className="flex justify-center items-center gap-4">
+                                                            <h2 className="text-2xl">Respostas corretas no elo:</h2>
+                                                            <p className="text-3xl">{materiaSelecionada.respostas_corretas_elo}</p>
+                                                        </div>
+                                                        <div className="flex justify-center items-center gap-4">
+                                                            <h2 className="text-2xl">Respostas corretas na matéria:</h2>
+                                                            <p className="text-3xl">{materiaSelecionada.respostas_corretas_total}</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <img src={materiaSelecionada.eloIcon} alt="" className="w-1/4" />
+                                                </div>
+                                            ) :
+                                            (
+                                                <div className="w-4/5 h-9/10 border border-white rounded p-5 gap-48 flex flex-row justify-center items-center">
+                                                    <p>Selecione uma matéria para ver mais detalhes.</p>
+                                                </div>
+                                            )
+                                    }
+                                </div>
+                            </>
+                            : null
+                    }
+
                 </div>
             </div>
         </>

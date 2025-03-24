@@ -12,6 +12,7 @@ import { ListagemPage } from './Listagem Alunos/ListagemPage.tsx';
 import { ListagemPerguntasPage } from './Listagem Perguntas/ListagemPerguntasPage.tsx';
 import { AddEscolaPage } from './add Escola/AddEscolaPage.tsx';
 import { AddPerguntaPage } from './add Pergunta/addPerguntaPage.tsx';
+import { Sala } from './Sala/Sala.tsx';
 import Materia from './Materia/MateriaPage.tsx';
 import './index.css'
 import App from './Login/App.tsx'
@@ -34,6 +35,7 @@ const HeroUIWithRouter = () => {
         <Route path="/listagem-perguntas" element={<ListagemPerguntasPage />} />
         <Route path="/materias/:nmMateria/:turmaId" element={<Materia />} />
         <Route path="/recupera-senha" element={<RecuperaSenhaPage />} />
+        <Route path="/sala/:codigo" element={<Sala />} />
         <Route path="/redefinir-senha/:token" element={<RedefinirSenhaPage />} />
       </Routes>
     </HeroUIProvider>

@@ -53,7 +53,10 @@ export function AddPerguntaPage() {
             alternativaCorreta: undefined
         },
         onSubmit: async (values) => {
-            console.log(values)
+            if(usuario?.tipo_usuario_id === 1){
+                alert('somente professores podem adicionar perguntas')
+                return;
+            }
             const resposta = await fetch(`http://localhost:3000/criar-pergunta`, {
                 method: 'POST',
                 headers: {
@@ -85,6 +88,7 @@ export function AddPerguntaPage() {
         <div className="size-[90vw] w-screen flex flex-col justify-start items-center gap-8">
             <Navbar id={usuario?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho} />
             <h1 className="text-2xl font-bold">Adicione aqui uma pergunta nova</h1>
+            { usuario.tipo_usuario_id === 1 ? <p>Somente professores são autorizados a criar perguntas !</p> : null}
             <Form
                 className="w-[80%] flex flex-col justify-center gap-4 border-2 p-10 border-white"
                 onSubmit={formik.handleSubmit}

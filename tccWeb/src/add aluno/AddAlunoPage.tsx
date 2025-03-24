@@ -83,7 +83,6 @@ export function AddAlunoPage() {
             id_materia: undefined
         },
         onSubmit: async (values) => {
-            console.log(values)
             const resposta = await fetch(`http://localhost:3000/usuarios`, {
                 method: 'POST',
                 headers: {

@@ -1,12 +1,12 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { MdKeyboardArrowRight,  } from "react-icons/md";
+import { MdKeyboardArrowRight, } from "react-icons/md";
 import { NavLink, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 import Navbar from '../components/Navbar/Navbar';
 import UserCard from '../components/UserCard/UserCard';
 import CardMateria from '../components/CardMateria/CardMateria';
 import ConfirmationPopup from '../components/ConfirmationPopup/ConfirmationPopup';
-import { Button, Input,  } from "@heroui/react";
+import { Button, Input, } from "@heroui/react";
 import 'swiper/swiper-bundle.css';
 
 
@@ -57,7 +57,7 @@ export function HomePage() {
     const [usuarios, setUsers] = useState<Usuario[]>([])
     const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
     const [turmas, setTurmas] = useState<Turmas[]>([])
-    const [codigoSala, setCodigoSala ] = useState('')
+    const [codigoSala, setCodigoSala] = useState('')
     const [materiaSelecionada, setMateriaSelecionada] = useState<EloMateria | null>(null);
 
 
@@ -89,7 +89,7 @@ export function HomePage() {
             setUsuario(usuarioAtual);
         }
         pegaUsuarios();
-    }, []);
+    }, [usuario]);
 
     useEffect(() => {
         async function pegaTurmas() {
@@ -104,7 +104,7 @@ export function HomePage() {
             setTurmas(arrayTurmas);
         }
         pegaTurmas();
-    }, []);
+    }, [usuario]);
 
     useEffect(() => {
         async function pegaEloMaterias() {
@@ -119,7 +119,7 @@ export function HomePage() {
             setEloMaterias(eloMaterias);
         }
         pegaEloMaterias();
-    }, []);
+    }, [usuario]);
 
     useEffect(() => {
         async function pegaUsuarios() {
@@ -134,34 +134,62 @@ export function HomePage() {
             setUsers(usuarios)
         }
         pegaUsuarios();
-    }, [])
+    }, [usuario])
 
     return (
 
-        <div className="w-screen flex flex-col justify-between items-center h-screen gap-12">
+        <div className="w-screen flex flex-col justify-start items-center h-screen gap-12">
             <Navbar id={usuario?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho} />
 
             <div className="w-11/12 flex flex-wrap justify-around">
-                <div className="w-[25%] h-auto p-5 flex flex-col justify-start items-center gap-3 rounded-md">
-                    <h1 className="text-4xl">Que tal jogar com amigos?</h1>
-                    <p>É sempre melhor evoluir juntos!</p>
-                    <form  className="w-full flex p-2.5 flex-col justify-start items-center gap-5 rounded-md  shadow-xl">
-                        <Button color="danger">CRIAR SALA</Button>
-                        <div className='w-[90%] flex flex-col gap-3'>
-                            <Input
-                                isRequired
-                                errorMessage="Coloque um codigo valido"
-                                variant="bordered"
-                                onChange={(e) => { setCodigoSala(e.target.value) }}
-                                value={codigoSala}
-                                name="nome"
-                                placeholder="Código de sala..."
-                                type="text"
-                            />
-                            <Button color="danger">ENTRAR EM SALA</Button>
+                {
+                    usuario?.tipo_usuario_id === 2 ?
+                        <div className="w-[25%] h-auto p-5 flex flex-col justify-start items-center gap-3 rounded-md">
+                            <h1 className="text-4xl">Que tal jogar com amigos?</h1>
+                            <p>É sempre melhor evoluir juntos!</p>
+                            <form className="w-full flex p-2.5 flex-col justify-start items-center gap-5 rounded-md  shadow-xl">
+                                <NavLink className="w-full"to={`/sala/2`}>
+                                    <Button color="danger">CRIAR SALA</Button>
+                                </NavLink>
+                                <div className='w-[90%] flex flex-col gap-3'>
+                                    <Input
+                                        isRequired
+                                        errorMessage="Coloque um codigo valido"
+                                        variant="bordered"
+                                        onChange={(e) => { setCodigoSala(e.target.value) }}
+                                        value={codigoSala}
+                                        name="nome"
+                                        placeholder="Código de sala..."
+                                        type="text"
+                                    />
+                                    <Button color="danger">ENTRAR EM SALA</Button>
+                                </div>
+                            </form>
                         </div>
-                    </form>
-                </div>
+                        :
+                        <div className="w-[25%] border border-black h-auto p-5 flex flex-col justify-start items-center gap-3 rounded-md">
+                            <div className='flex justify-start  flex-col items-center gap-10'>
+                                <h1 className='text-3xl'>Oque deseja fazer?</h1>
+                                <div className='w-[100%] flex flex-col justify-center items-start  gap-5'>
+                                    {(usuario?.tipo_usuario_id === 4 || usuario?.tipo_usuario_id === 1) && (
+                                        <>
+                                            <NavLink className="w-full" to="/addAluno"><button className="bg-cyan-400 p-2.5 w-full rounded-md">Adicionar usuario</button></NavLink>
+                                            <NavLink className="w-full" to="/addEscola"><button className="bg-cyan-400 p-2.5 w-full  rounded-md">Adicionar escola</button></NavLink>
+                                        </>
+                                    )}
+                                    {(usuario?.tipo_usuario_id === 3 || usuario?.tipo_usuario_id === 1) && (
+                                        <NavLink className="w-full" to="/addPergunta"><button className="bg-cyan-400 p-2.5 w-full  rounded-md">Adicionar pergunta</button></NavLink>
+                                    )}
+
+                                    <NavLink className="w-full" to="/listagem-alunos"><button className="bg-cyan-400  p-2.5 w-full  rounded-md">Ver turma</button></NavLink>
+                                    <NavLink className="w-full" to="/listagem-perguntas"><button className="bg-cyan-400  p-2.5 w-full  rounded-md">Ver perguntas</button></NavLink>
+                                </div>
+
+                            </div>
+                        </div>
+
+                }
+
 
                 <div className="w-[45%] h-full p-3 flex flex-col justify-center items-center">
                     <img className="w-[50%] rounded-full shadow-xl" src="./src/assets/gifCentro.gif" alt="" />
@@ -200,7 +228,7 @@ export function HomePage() {
                                                 )
                                             }
                                             return (
-                                                <UserCard  key={index} id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho}
+                                                <UserCard key={index} id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho}
                                                     classe="w-[90%] bg-gray-400 flex justify-around items-center text-black p-2.5 cursor-point rounded-md transition-transform ease-in-out hover:scale-102"
                                                 />
                                             );
@@ -223,7 +251,7 @@ export function HomePage() {
                     <div className="w-11/12 flex flex-col justify-center items-center gap-4 pb-14">
                         <h1 className="text-cyan-400 text-5xl">Aperfeiçoe seus conhecimentos</h1>
                         <h3 className="text-3xl">Selecione a matéria que deseja treinar</h3>
-                        
+
 
                         <div className="w-11/12 p-2.5 shadow-2xl flex gap-5 flex-wrap rounded-lg justify-center items-center">
                             {
@@ -246,7 +274,7 @@ export function HomePage() {
 
                                     return (
                                         <>
-                                            <CardMateria  key={index} id={0} materiaLogo={eloMateria.materia.icone} nome={eloMateria.materia.nome} icon={eloIcon} onClick={() => {
+                                            <CardMateria key={index} id={0} materiaLogo={eloMateria.materia.icone} nome={eloMateria.materia.nome} icon={eloIcon} onClick={() => {
                                                 handleMateriaClick(eloMateria)
                                                 handleShowPopup()
                                             }
@@ -268,22 +296,7 @@ export function HomePage() {
                     :
                     null
             }
-            {
-                usuario?.tipo_usuario_id != 2
-                    ?
-                    <div className="w-11/12 flex flex-col justify-center items-center pb-12.5">
-                        <div className='flex justify-center items-center gap-10 pb-24'>
-                            <NavLink to="/addAluno"><button className="bg-cyan-400 p-2.5 rounded-md">Adicionar usuario</button></NavLink>
-                            <NavLink to="/addEscola"><button className="bg-cyan-400 p-2.5 rounded-md">Adicionar escola</button></NavLink>
-                            <NavLink to="/addPergunta"><button className="bg-cyan-400 p-2.5 rounded-md">Adicionar pergunta</button></NavLink>
-                      
-                            <NavLink to="/listagem-alunos"><button className="bg-cyan-400 p-2.5 rounded-md">Ver turma</button></NavLink>
-                            <NavLink to="/listagem-perguntas"><button className="bg-cyan-400 p-2.5 rounded-md">Ver perguntas</button></NavLink>
-                        </div>
-                    </div>
-                    :
-                    null
-            }
+
 
         </div>
     )
