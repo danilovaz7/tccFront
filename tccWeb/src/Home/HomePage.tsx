@@ -6,7 +6,8 @@ import Navbar from '../components/Navbar/Navbar';
 import UserCard from '../components/UserCard/UserCard';
 import CardMateria from '../components/CardMateria/CardMateria';
 import ConfirmationPopup from '../components/ConfirmationPopup/ConfirmationPopup';
-import { Button, Input, } from "@heroui/react";
+import { Form, Input, Button } from "@heroui/react";
+import { useFormik } from 'formik';
 import 'swiper/swiper-bundle.css';
 
 
@@ -57,7 +58,6 @@ export function HomePage() {
     const [usuarios, setUsers] = useState<Usuario[]>([])
     const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
     const [turmas, setTurmas] = useState<Turmas[]>([])
-    const [codigoSala, setCodigoSala] = useState('')
     const [materiaSelecionada, setMateriaSelecionada] = useState<EloMateria | null>(null);
 
 
@@ -136,6 +136,60 @@ export function HomePage() {
         pegaUsuarios();
     }, [user, token])
 
+    async function postSala() {
+
+        const code = Math.random().toString(36).substring(2, 8).toUpperCase();
+
+        const resposta = await fetch(`http://localhost:3000/sala`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                codigo: code,
+                id_host: user?.id
+            })
+        });
+
+        if (resposta.ok) {
+            alert('sala criada');
+            navigate(`/sala/${code}`);
+        } else {
+            alert("Erro ao criar sala");
+        }
+    }
+
+    const formik = useFormik({
+        initialValues: {
+            codigo: '',
+            id_aluno: user?.id
+        },
+        onSubmit: async (values) => {
+            console.log(values)
+            const resposta = await fetch(`http://localhost:3000/entrar/sala`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    codigo: values.codigo,
+                    id_aluno: values.id_aluno
+                })
+            });
+            console.log(resposta.ok)
+
+            if (resposta.ok) {
+                navigate(`/sala/${values.codigo}`);
+            } else {
+                alert('erro ao tentar entrar na saal')
+            }
+        }
+    });
+
+
+
     return (
 
         <div className="w-screen flex flex-col justify-start items-center h-screen gap-12">
@@ -147,24 +201,22 @@ export function HomePage() {
                         <div className="w-[25%] h-auto p-5 flex flex-col justify-start items-center gap-3 rounded-md">
                             <h1 className="text-4xl">Que tal jogar com amigos?</h1>
                             <p>É sempre melhor evoluir juntos!</p>
-                            <form className="w-full flex p-2.5 flex-col justify-start items-center gap-5 rounded-md  shadow-xl">
-                                <NavLink className="w-full"to={`/sala/2`}>
-                                    <Button color="danger">CRIAR SALA</Button>
-                                </NavLink>
-                                <div className='w-[90%] flex flex-col gap-3'>
+                            <div className="w-full flex p-2.5 flex-col justify-start items-center gap-5 rounded-md  shadow-xl">
+                                <Button onClick={postSala} color="danger">CRIAR SALA</Button>
+                                <Form onSubmit={formik.handleSubmit} className='w-[90%] flex flex-col justify-center items-center gap-3'>
                                     <Input
                                         isRequired
                                         errorMessage="Coloque um codigo valido"
                                         variant="bordered"
-                                        onChange={(e) => { setCodigoSala(e.target.value) }}
-                                        value={codigoSala}
-                                        name="nome"
+                                        onChange={formik.handleChange}
+                                        value={formik.values.codigo}
+                                        name="codigo"
                                         placeholder="Código de sala..."
                                         type="text"
                                     />
-                                    <Button color="danger">ENTRAR EM SALA</Button>
-                                </div>
-                            </form>
+                                    <Button className='w-full' color="danger" type="submit">ENTRAR EM SALA</Button>
+                                </Form>
+                            </div>
                         </div>
                         :
                         <div className="w-[25%] border border-black h-auto p-5 flex flex-col justify-start items-center gap-3 rounded-md">

@@ -1,16 +1,13 @@
-
 import { NavLink, useNavigate } from 'react-router';
-import {Avatar} from "@heroui/react";
+import { Avatar } from "@heroui/react";
 
 interface UserCardProps {
     id: number;
     nivel: string;
     nome: string;
-    avatar: string;
+    avatar?: string; // torna opcional
     classe: string;
-   
-    } 
-
+}
 
 function UserCard({ id, nivel, avatar, nome, classe }: UserCardProps) {
     const navigate = useNavigate();
@@ -20,8 +17,8 @@ function UserCard({ id, nivel, avatar, nome, classe }: UserCardProps) {
     }
 
     return (
-        <div className={classe} onClick={() => { carregaPerfil() }}>
-                  <Avatar size='lg' src={avatar} />
+        <div className={classe} onClick={carregaPerfil}>
+            {avatar && <Avatar size='lg' src={avatar} />}
             <p>{nome}</p>
             <p>Lvl {nivel}</p>
         </div>

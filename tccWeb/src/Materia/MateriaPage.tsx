@@ -167,7 +167,6 @@ function Materia() {
 
 
     useEffect(() => {
-        // Só faz a requisição se 'eloMateria' estiver carregado
         if (eloMateria?.elo_id) {
             async function pegaPerguntasMateria() {
                 const response = await fetch(`http://localhost:3000/materias/${nmMateria}/perguntas/${eloMateria.elo_id}/${turmaId}`, {
@@ -182,7 +181,7 @@ function Materia() {
             }
             pegaPerguntasMateria();
         }
-    }, [nmMateria, token, eloMateria]); // Dependências atualizadas para 'eloMateria'
+    }, [nmMateria, token, eloMateria]); 
 
 
     useEffect(() => {
