@@ -89,7 +89,7 @@ export function HomePage() {
             setUsuario(usuarioAtual);
         }
         pegaUsuarios();
-    }, [usuario]);
+    }, [user, token]);
 
     useEffect(() => {
         async function pegaTurmas() {
@@ -104,7 +104,7 @@ export function HomePage() {
             setTurmas(arrayTurmas);
         }
         pegaTurmas();
-    }, [usuario]);
+    }, [user, token]);
 
     useEffect(() => {
         async function pegaEloMaterias() {
@@ -119,7 +119,7 @@ export function HomePage() {
             setEloMaterias(eloMaterias);
         }
         pegaEloMaterias();
-    }, [usuario]);
+    }, [user, token]);
 
     useEffect(() => {
         async function pegaUsuarios() {
@@ -134,7 +134,7 @@ export function HomePage() {
             setUsers(usuarios)
         }
         pegaUsuarios();
-    }, [usuario])
+    }, [user, token])
 
     return (
 
@@ -195,7 +195,7 @@ export function HomePage() {
                     <img className="w-[50%] rounded-full shadow-xl" src="./src/assets/gifCentro.gif" alt="" />
                 </div>
 
-                <div className="w-1/4 border border-black shadow-xl p-2.5 flex flex-col justify-start items-center rounded-md">
+                <div className="w-1/4 border h-fit border-black shadow-xl p-2.5 flex flex-col justify-start items-center rounded-md">
                     {
                         usuario?.tipo_usuario_id != 2
                             ?

@@ -42,7 +42,7 @@ export function RankingPage() {
             setUsers(usuarios)
         }
         pegaUsuarios();
-    }, [])
+    }, [usuario])
 
     useEffect(() => {
         async function pegaUsuarios() {
