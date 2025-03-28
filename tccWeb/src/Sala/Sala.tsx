@@ -43,12 +43,26 @@ interface Sala {
     id: number;
     codigo: string;
     status: string;
+    host_id: number;
     vencedor_id: number;
 }
 
 interface ChatMessage {
     sender: string;
     message: string;
+}
+
+interface Pergunta {
+    id: number;
+    materia_id: number;
+    pergunta: string;
+}
+
+interface Alternativa {
+    id: number;
+    pergunta_id: number;
+    alternativa: string;
+    correta: boolean
 }
 
 export function Sala() {
@@ -62,7 +76,8 @@ export function Sala() {
     const [alunos, setAlunos] = useState<Aluno[]>([]);
     const [materias, setMaterias] = useState<any[]>([]);
     const [selectedMaterias, setSelectedMaterias] = useState<number[]>([]);
-    
+     const [perguntasMaterias, setPerguntasMaterias] = useState<Pergunta[]>([]);
+
     // Estados para o chat
     const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
     const [chatText, setChatText] = useState<string>("");
@@ -87,24 +102,21 @@ export function Sala() {
             materias: []
         },
         onSubmit: async (values) => {
-            console.log(values);
-            /*
-            const resposta = await fetch(`http://localhost:3000/criar-escola`, {
-                method: 'POST',
+            const response = await fetch(`http://localhost:3000/sala/perguntas/1/3/${values.materias[0]}/${values.materias[1]}/${values.materias[2]}`, {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify({
-                    materias: selectedMaterias,
-                })
+                }
             });
-
-            if (resposta.ok) {
-                navigate('/home');
-            } */
+                const perguntas = await response.json();
+                setPerguntasMaterias(perguntas);
+        
         }
+                
     });
+
+    console.log(perguntasMaterias)
 
     useEffect(() => {
         async function pegaUsuarioNav() {
@@ -153,21 +165,16 @@ export function Sala() {
         }
     }, [sala, token]);
 
-    // Entrar na room
+    // Entrar na sala
     useEffect(() => {
-        console.log('user', user)
         if (socket && user && sala?.id) {
-            console.log(user)
-            console.log("Joining room:", sala.id);
-            socket.emit("joinRoom", { roomId:sala.id, userName: usuarioNavBar?.nome });
+            socket.emit("joinRoom", { roomId: sala.id, userName: usuarioNavBar?.nome });
         }
-    }, [socket, user, sala?.id]);
-
+    }, [socket, user, sala?.id, usuarioNavBar?.nome]);
 
     useEffect(() => {
         if (!socket) return;
         const handleAtualizarSala = ({ alunosAtualizados }: { alunosAtualizados: Aluno[] }) => {
-            console.log("Atualização recebida:", alunosAtualizados);
             setAlunos(alunosAtualizados);
         };
         socket.on("atualizar_sala", handleAtualizarSala);
@@ -188,65 +195,103 @@ export function Sala() {
         };
     }, [socket]);
 
-    // Função para enviar mensagem
+    // Listener para atualizar matérias selecionadas via socket
+    useEffect(() => {
+        if (!socket) return;
+        const handleMateriasSelecionadas = (materiasSelecionadas: number[]) => {
+            setSelectedMaterias(materiasSelecionadas);
+        };
+        socket.on("materiasSelecionadas", handleMateriasSelecionadas);
+        return () => {
+            socket.off("materiasSelecionadas", handleMateriasSelecionadas);
+        };
+    }, [socket]);
+
+    // Função para enviar mensagem no chat
     const handleSendMessage = (e: FormEvent) => {
         e.preventDefault();
         if (socket && sala?.id && chatText.trim() !== "") {
-            // Emite a mensagem para a sala
             socket.emit("message", { roomId: sala.id, message: chatText, userName: usuarioNavBar?.nome });
-          
         }
-        setChatText('')
+        setChatText('');
+    };
+
+    // Função para atualizar seleção de matérias (só para o host)
+    const handleSelectMateria = (e: React.ChangeEvent<HTMLSelectElement>, index: number) => {
+        const value = parseInt(e.target.value);
+        const updatedMaterias = [...selectedMaterias];
+        updatedMaterias[index] = value;
+        setSelectedMaterias(updatedMaterias);
+    
+        formik.setFieldValue("materias", updatedMaterias);
+    
+        if (socket && sala?.id) {
+            socket.emit("materiasSelecionadas", { roomId: sala.id, selectedMaterias: updatedMaterias });
+        }
     };
 
     if (!usuarioNavBar) {
         return <p>Carregando...</p>;
     }
 
-    console.log("Materias selecionadas:", selectedMaterias);
-
     return (
         <>
             <div className="w-screen flex flex-col justify-start items-center min-h-screen gap-12 mb-40">
                 <Navbar id={usuarioNavBar.id} nivel={usuarioNavBar.nivel} avatar={usuarioNavBar.avatar.caminho || ''} />
                 <div className='w-[95%] border flex justify-center items-start gap-10 p-5'>
-                    <div className='w-[25%] border flex flex-col gap-5 p-5'>
+                    <div className='w-[25%] border flex flex-col gap-10 p-5'>
                         <h1>Selecione 3 disciplinas</h1>
-                        <Form
-                            className="w-[100%] flex flex-col justify-center items-center gap-4"
-                            onSubmit={formik.handleSubmit}
-                            onReset={formik.handleReset}
-                        >
-                            {['materia1', 'materia2', 'materia3'].map((materiaKey, index) => (
-                                <Select
-                                    key={materiaKey}
-                                    onChange={(e) => {
-                                        const value = parseInt(e.target.value);
-                                        const updatedMaterias = [...selectedMaterias];
-                                        updatedMaterias[index] = value;
-                                        setSelectedMaterias(updatedMaterias);
-                                    }}
-                                    value={selectedMaterias[index] || ''}
-                                    className="max-w-[70%]"
-                                    label={`Selecione a matéria ${index + 1}`}
-                                >
-                                    {materias.map((materia) => (
-                                        <SelectItem className='text-black' key={`${materia.id}-${index}`} value={materia.id}>
-                                            {materia.nome}
-                                        </SelectItem>
-                                    ))}
-                                </Select>
-                            ))}
-
-                            <div className="flex gap-2">
-                                <Button size='sm' color="primary" type="submit">
-                                    Enviar
-                                </Button>
-                                <Button size='sm' type="reset" variant="flat">
-                                    Limpar
-                                </Button>
+                        {user?.id === sala?.host_id ? (
+                            <Form
+                                className="w-[100%] flex flex-col justify-center items-center gap-4"
+                                onSubmit={formik.handleSubmit}
+                                onReset={formik.handleReset}
+                            >
+                                {['materia1', 'materia2', 'materia3'].map((materiaKey, index) => (
+                                    <Select
+                                        key={materiaKey}
+                                        onChange={(e) => handleSelectMateria(e, index)}
+                                        value={selectedMaterias[index] || ''}
+                                        className="max-w-[70%]"
+                                        label={`Selecione a matéria ${index + 1}`}
+                                    >
+                                        {materias.map((materia) => (
+                                            <SelectItem className='text-black' key={`${materia.id}-${index}`} value={materia.id}>
+                                                {materia.nome}
+                                            </SelectItem>
+                                        ))}
+                                    </Select>
+                                ))}
+                                <div className="flex gap-2">
+                                    <Button size='sm' color="primary" type="submit">
+                                        Enviar
+                                    </Button>
+                                    <Button size='sm' type="reset" variant="flat">
+                                        Limpar
+                                    </Button>
+                                </div>
+                            </Form>
+                        ) : (
+                            <div className='w-[100%] flex flex-col justify-center items-center gap-4'>
+                                <h2>Matérias Selecionadas:</h2>
+                                {selectedMaterias && selectedMaterias.length > 0 ? (
+                                    selectedMaterias.map((materiaId, index) => {
+                                        const materia = materias.find(m => m.id === materiaId);
+                                        return (
+                                            <p key={index} className="text-lg font-semibold">
+                                                {materia ? materia.nome : 'Matéria não encontrada'}
+                                            </p>
+                                        );
+                                    })
+                                ) : (
+                                    <p>Nenhuma matéria selecionada</p>
+                                )}
                             </div>
-                        </Form>
+                        )}
+
+                        <div className='w-[100%] border flex flex-col gap-5 p-5'>
+                            <p>Código de sala {codigo}</p>
+                        </div>
                     </div>
 
                     <div className='w-[40%] border p-5 flex flex-col items-center justify-center gap-5'>
@@ -264,7 +309,6 @@ export function Sala() {
                         </div>
                     </div>
 
-      
                     <div className='w-[25%] border p-5 flex flex-col gap-5'>
                         <h1>Chat</h1>
                         <div className="flex flex-col gap-2 border p-2 h-80 overflow-y-auto">
@@ -276,13 +320,13 @@ export function Sala() {
                             ))}
                         </div>
                         <form onSubmit={handleSendMessage} className="flex gap-2">
-                            <Input 
+                            <Input
                                 value={chatText}
                                 onChange={(e) => setChatText(e.target.value)}
                                 placeholder="Digite sua mensagem..."
                                 className="flex-1"
                             />
-                            <Button  type="submit" color="primary">Enviar</Button>
+                            <Button type="submit" color="primary">Enviar</Button>
                         </form>
                     </div>
                 </div>
