@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { useEffect, useState, FormEvent } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 import { useSocket } from '../hooks/useSocket';
@@ -46,6 +46,11 @@ interface Sala {
     vencedor_id: number;
 }
 
+interface ChatMessage {
+    sender: string;
+    message: string;
+}
+
 export function Sala() {
     let { codigo } = useParams();
     const navigate = useNavigate();
@@ -55,9 +60,12 @@ export function Sala() {
     const [usuarioNavBar, setUsuarioNavBar] = useState<Usuario>();
     const [sala, setSala] = useState<Sala>();
     const [alunos, setAlunos] = useState<Aluno[]>([]);
-    const [materias, setMaterias] = useState<any[]>([]);  // Modificar para qualquer tipo (recomendo refinar o tipo mais tarde)
-
-    const [selectedMaterias, setSelectedMaterias] = useState<number[]>([]);  // Armazenar as matérias selecionadas
+    const [materias, setMaterias] = useState<any[]>([]);
+    const [selectedMaterias, setSelectedMaterias] = useState<number[]>([]);
+    
+    // Estados para o chat
+    const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+    const [chatText, setChatText] = useState<string>("");
 
     useEffect(() => {
         async function getMaterias() {
@@ -76,11 +84,11 @@ export function Sala() {
 
     const formik = useFormik({
         initialValues: {
-            nome: '',
-            materias: []  // Materias selecionadas inicialmente vazias
+            materias: []
         },
         onSubmit: async (values) => {
             console.log(values);
+            /*
             const resposta = await fetch(`http://localhost:3000/criar-escola`, {
                 method: 'POST',
                 headers: {
@@ -88,14 +96,13 @@ export function Sala() {
                     'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify({
-                    nome: values.nome,
-                    materias: selectedMaterias, // Enviar as matérias selecionadas
+                    materias: selectedMaterias,
                 })
             });
 
             if (resposta.ok) {
                 navigate('/home');
-            }
+            } */
         }
     });
 
@@ -112,7 +119,7 @@ export function Sala() {
             setUsuarioNavBar(userNav);
         }
         pegaUsuarioNav();
-    }, [user]);
+    }, [user, token]);
 
     useEffect(() => {
         async function pegaSala() {
@@ -123,8 +130,8 @@ export function Sala() {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-            const sala = await response.json();
-            setSala(sala);
+            const salaData = await response.json();
+            setSala(salaData);
         }
         pegaSala();
     }, [codigo, token]);
@@ -146,35 +153,62 @@ export function Sala() {
         }
     }, [sala, token]);
 
+    // Entrar na room
     useEffect(() => {
-        if (!socket || !user || !sala?.id) return;
+        console.log('user', user)
+        if (socket && user && sala?.id) {
+            console.log(user)
+            console.log("Joining room:", sala.id);
+            socket.emit("joinRoom", { roomId:sala.id, userName: usuarioNavBar?.nome });
+        }
+    }, [socket, user, sala?.id]);
 
-        socket.emit("entrar_sala", { codigo, usuario: user });
 
-        socket.on("atualizar_sala", ({ usuario }) => {
-            setAlunos(prev => [
-                ...prev,
-                {
-                    usuario_id: usuario.id,
-                    sala_id: sala.id,
-                    usuario: usuario
-                }
-            ]);
-        });
-
-        return () => {
-            socket.off("atualizar_sala");
+    useEffect(() => {
+        if (!socket) return;
+        const handleAtualizarSala = ({ alunosAtualizados }: { alunosAtualizados: Aluno[] }) => {
+            console.log("Atualização recebida:", alunosAtualizados);
+            setAlunos(alunosAtualizados);
         };
-    }, [socket, user, sala]);
+        socket.on("atualizar_sala", handleAtualizarSala);
+        return () => {
+            socket.off("atualizar_sala", handleAtualizarSala);
+        };
+    }, [socket]);
+
+    // Escutar mensagens do chat
+    useEffect(() => {
+        if (!socket) return;
+        const handleNewMessage = ({ message, sender }: { message: string; sender: string }) => {
+            setChatMessages(prev => [...prev, { message, sender }]);
+        };
+        socket.on("newMessage", handleNewMessage);
+        return () => {
+            socket.off("newMessage", handleNewMessage);
+        };
+    }, [socket]);
+
+    // Função para enviar mensagem
+    const handleSendMessage = (e: FormEvent) => {
+        e.preventDefault();
+        if (socket && sala?.id && chatText.trim() !== "") {
+            // Emite a mensagem para a sala
+            socket.emit("message", { roomId: sala.id, message: chatText, userName: usuarioNavBar?.nome });
+          
+        }
+        setChatText('')
+    };
 
     if (!usuarioNavBar) {
         return <p>Carregando...</p>;
     }
 
+    console.log("Materias selecionadas:", selectedMaterias);
+
     return (
         <>
             <div className="w-screen flex flex-col justify-start items-center min-h-screen gap-12 mb-40">
-                <Navbar id={usuarioNavBar?.id} nivel={usuarioNavBar?.nivel} avatar={usuarioNavBar?.avatar.caminho || ''} />
+                <Navbar id={usuarioNavBar.id} nivel={usuarioNavBar.nivel} avatar={usuarioNavBar.avatar.caminho || ''} />
                 <div className='w-[95%] border flex justify-center items-start gap-10 p-5'>
                     <div className='w-[25%] border flex flex-col gap-5 p-5'>
                         <h1>Selecione 3 disciplinas</h1>
@@ -197,12 +231,13 @@ export function Sala() {
                                     label={`Selecione a matéria ${index + 1}`}
                                 >
                                     {materias.map((materia) => (
-                                        <SelectItem className='text-black' key={materia.id} value={materia.id}>
+                                        <SelectItem className='text-black' key={`${materia.id}-${index}`} value={materia.id}>
                                             {materia.nome}
                                         </SelectItem>
                                     ))}
                                 </Select>
                             ))}
+
                             <div className="flex gap-2">
                                 <Button size='sm' color="primary" type="submit">
                                     Enviar
@@ -213,6 +248,7 @@ export function Sala() {
                             </div>
                         </Form>
                     </div>
+
                     <div className='w-[40%] border p-5 flex flex-col items-center justify-center gap-5'>
                         <h1>Lista de jogadores</h1>
                         <div className='flex w-[100%] flex-col items-center justify-center gap-5'>
@@ -227,7 +263,28 @@ export function Sala() {
                             ))}
                         </div>
                     </div>
-                    <div className='w-[25%] border p-5'></div>
+
+      
+                    <div className='w-[25%] border p-5 flex flex-col gap-5'>
+                        <h1>Chat</h1>
+                        <div className="flex flex-col gap-2 border p-2 h-80 overflow-y-auto">
+                            {chatMessages.map((msg, index) => (
+                                <div key={index} className="p-1 border-b">
+                                    <strong>{msg.sender}: </strong>
+                                    <span>{msg.message}</span>
+                                </div>
+                            ))}
+                        </div>
+                        <form onSubmit={handleSendMessage} className="flex gap-2">
+                            <Input 
+                                value={chatText}
+                                onChange={(e) => setChatText(e.target.value)}
+                                placeholder="Digite sua mensagem..."
+                                className="flex-1"
+                            />
+                            <Button  type="submit" color="primary">Enviar</Button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </>
