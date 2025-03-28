@@ -188,7 +188,7 @@ export function HomePage() {
         }
     });
 
-
+    
 
     return (
 
@@ -276,12 +276,18 @@ export function HomePage() {
                                                 return (
                                                     <UserCard key={index} id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho}
                                                         classe="w-full bg-yellow-400 flex justify-around items-center text-black p-2.5 cursor-point rounded-md transition-transform ease-in-out hover:scale-105"
+                                                        onClick={() => {
+                                                            navigate(`/perfil/${usuarioRank.id}`);
+                                                        }}
                                                     />
                                                 )
                                             }
                                             return (
                                                 <UserCard key={index} id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho}
                                                     classe="w-[90%] bg-gray-400 flex justify-around items-center text-black p-2.5 cursor-point rounded-md transition-transform ease-in-out hover:scale-102"
+                                                    onClick={() => {
+                                                        navigate(`/perfil/${usuarioRank.id}`);
+                                                    }}
                                                 />
                                             );
                                         })

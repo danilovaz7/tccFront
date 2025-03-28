@@ -76,7 +76,7 @@ export function Sala() {
     const [alunos, setAlunos] = useState<Aluno[]>([]);
     const [materias, setMaterias] = useState<any[]>([]);
     const [selectedMaterias, setSelectedMaterias] = useState<number[]>([]);
-     const [perguntasMaterias, setPerguntasMaterias] = useState<Pergunta[]>([]);
+    const [perguntasMaterias, setPerguntasMaterias] = useState<Pergunta[]>([]);
 
     // Estados para o chat
     const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
@@ -109,11 +109,11 @@ export function Sala() {
                     'Authorization': `Bearer ${token}`,
                 }
             });
-                const perguntas = await response.json();
-                setPerguntasMaterias(perguntas);
-        
+            const perguntas = await response.json();
+            setPerguntasMaterias(perguntas);
+
         }
-                
+
     });
 
     console.log(perguntasMaterias)
@@ -222,9 +222,9 @@ export function Sala() {
         const updatedMaterias = [...selectedMaterias];
         updatedMaterias[index] = value;
         setSelectedMaterias(updatedMaterias);
-    
+
         formik.setFieldValue("materias", updatedMaterias);
-    
+
         if (socket && sala?.id) {
             socket.emit("materiasSelecionadas", { roomId: sala.id, selectedMaterias: updatedMaterias });
         }
@@ -236,41 +236,49 @@ export function Sala() {
 
     return (
         <>
-            <div className="w-screen flex flex-col justify-start items-center min-h-screen gap-12 mb-40">
+            <div className="w-screen flex pb-10  flex-col justify-start items-center min-h-screen gap-12 mb-40">
                 <Navbar id={usuarioNavBar.id} nivel={usuarioNavBar.nivel} avatar={usuarioNavBar.avatar.caminho || ''} />
-                <div className='w-[95%] border flex justify-center items-start gap-10 p-5'>
+                <div className='w-[95%]  border flex justify-center items-start gap-10 p-5'>
                     <div className='w-[25%] border flex flex-col gap-10 p-5'>
-                        <h1>Selecione 3 disciplinas</h1>
+
+                        <div className='w-[100%] border flex flex-col gap-5 p-5'>
+                            <p>Código de sala {codigo}</p>
+                        </div>
+
                         {user?.id === sala?.host_id ? (
-                            <Form
-                                className="w-[100%] flex flex-col justify-center items-center gap-4"
-                                onSubmit={formik.handleSubmit}
-                                onReset={formik.handleReset}
-                            >
-                                {['materia1', 'materia2', 'materia3'].map((materiaKey, index) => (
-                                    <Select
-                                        key={materiaKey}
-                                        onChange={(e) => handleSelectMateria(e, index)}
-                                        value={selectedMaterias[index] || ''}
-                                        className="max-w-[70%]"
-                                        label={`Selecione a matéria ${index + 1}`}
-                                    >
-                                        {materias.map((materia) => (
-                                            <SelectItem className='text-black' key={`${materia.id}-${index}`} value={materia.id}>
-                                                {materia.nome}
-                                            </SelectItem>
-                                        ))}
-                                    </Select>
-                                ))}
-                                <div className="flex gap-2">
-                                    <Button size='sm' color="primary" type="submit">
-                                        Enviar
-                                    </Button>
-                                    <Button size='sm' type="reset" variant="flat">
-                                        Limpar
-                                    </Button>
-                                </div>
-                            </Form>
+                            <>
+                                <h1>Selecione 3 disciplinas</h1>
+                                <Form
+                                    className="w-[100%] flex flex-col justify-center items-center gap-4"
+                                    onSubmit={formik.handleSubmit}
+                                    onReset={formik.handleReset}
+                                >
+                                    {['materia1', 'materia2', 'materia3'].map((materiaKey, index) => (
+                                        <Select
+                                            key={materiaKey}
+                                            onChange={(e) => handleSelectMateria(e, index)}
+                                            value={selectedMaterias[index] || ''}
+                                            className="max-w-[70%]"
+                                            label={`Selecione a matéria ${index + 1}`}
+                                        >
+                                            {materias.map((materia) => (
+                                                <SelectItem className='text-black' key={`${materia.id}-${index}`} value={materia.id}>
+                                                    {materia.nome}
+                                                </SelectItem>
+                                            ))}
+                                        </Select>
+                                    ))}
+                                    <div className="flex gap-2">
+                                        <Button size='sm' color="primary" type="submit">
+                                            Enviar
+                                        </Button>
+                                        <Button size='sm' type="reset" variant="flat">
+                                            Limpar
+                                        </Button>
+                                    </div>
+                                </Form>
+                            </>
+
                         ) : (
                             <div className='w-[100%] flex flex-col justify-center items-center gap-4'>
                                 <h2>Matérias Selecionadas:</h2>
@@ -289,24 +297,26 @@ export function Sala() {
                             </div>
                         )}
 
-                        <div className='w-[100%] border flex flex-col gap-5 p-5'>
-                            <p>Código de sala {codigo}</p>
-                        </div>
+
                     </div>
 
-                    <div className='w-[40%] border p-5 flex flex-col items-center justify-center gap-5'>
-                        <h1>Lista de jogadores</h1>
-                        <div className='flex w-[100%] flex-col items-center justify-center gap-5'>
-                            {alunos.map((aluno) => (
-                                <UserCard
-                                    key={aluno.usuario.id}
-                                    id={aluno.usuario.id}
-                                    nivel={aluno.usuario.nivel}
-                                    nome={aluno.usuario.nome}
-                                    classe="w-[60%] bg-gray-400 flex justify-around items-center text-black p-2.5 cursor-pointer rounded-md"
-                                />
-                            ))}
-                        </div>
+                    <div className='w-[40%] border p-5 flex flex-col items-center justify-around gap-5'>
+                        <>
+                            <h1>Lista de jogadores</h1>
+                            <div className='flex w-[100%] pb-10 flex-col items-center justify-center gap-5'>
+                                {alunos.map((aluno) => (
+                                    <UserCard
+                                        key={aluno.usuario.id}
+                                        id={aluno.usuario.id}
+                                        nivel={aluno.usuario.nivel}
+                                        nome={aluno.usuario.nome}
+                                        classe="w-[60%] bg-gray-400 flex justify-around items-center text-black p-2.5 cursor-pointer rounded-md"
+                                    />
+                                ))}
+                            </div>
+                        </>
+                        <Button size='lg' type="submit" color="primary">Pronto</Button>
+
                     </div>
 
                     <div className='w-[25%] border p-5 flex flex-col gap-5'>

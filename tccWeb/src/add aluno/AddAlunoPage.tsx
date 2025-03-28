@@ -5,6 +5,7 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { Form, Input, Button } from "@heroui/react";
 import { Select, SelectItem } from "@heroui/react";
 import { useFormik } from 'formik';
+import { useMaterias } from '../hooks/useMaterias.js';
 import Navbar from '../components/Navbar/Navbar';
 
 interface Usuario {
@@ -33,27 +34,12 @@ interface Escola {
 
 export function AddAlunoPage() {
     const navigate = useNavigate();
+    const materias = useMaterias();
     const { token, user } = useTokenStore();
     const [avatares, setAvatares] = useState<Avatar[]>([]);
     const [escolas, setEscolas] = useState<Escola[]>([]);
-    const [materias, setMaterias] = useState<[]>([]);
     const [contador, setContador] = useState(0);
     const [usuario, setUsuario] = useState<Usuario>();
-
-    useEffect(() => {
-        async function getMaterias() {
-            const response = await fetch(`http://localhost:3000/materias`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-            const materias = await response.json();
-            setMaterias(materias);
-        }
-        getMaterias();
-    }, []);
 
     useEffect(() => {
         async function pegaUsuarios() {
