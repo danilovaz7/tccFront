@@ -179,14 +179,15 @@ export function HomePage() {
                 })
             });
             console.log(resposta.ok)
-
+    
             if (resposta.ok) {
                 navigate(`/sala/${values.codigo}`);
             } else {
-                alert('erro ao tentar entrar na saal')
+                alert('Erro ao tentar entrar na sala')
             }
         }
     });
+    
 
     
 
