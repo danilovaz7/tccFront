@@ -14,10 +14,7 @@ interface Usuario {
   tipo_usuario_id: number;
   id_turma: number;
   id_escola: number;
-  avatar: {
-    nome: string;
-    caminho: string;
-  };
+  avatar: { nome: string; caminho: string; };
 }
 
 interface EloMateria { /* ... */ }
@@ -40,6 +37,12 @@ interface Alternativa {
 interface Sala { /* ... */ }
 interface ChatMessage { /* ... */ }
 
+interface Score {
+  userId: number;
+  userName: string;
+  pontos: number;
+}
+
 export function Sala() {
   let { codigo } = useParams();
   const navigate = useNavigate();
@@ -59,11 +62,12 @@ export function Sala() {
 
   const [quizStarted, setQuizStarted] = useState(false);
   const [readyPlayers, setReadyPlayers] = useState<number[]>([]);
-  // Estados para o timer, feedback e controle de resposta única
   const [tempoRestante, setTempoRestante] = useState(0);
   const [vencedor, setVencedor] = useState<string | null>(null);
   const [jaRespondeu, setJaRespondeu] = useState(false);
-  const [scoreboard, setScoreboard] = useState<Array<{ userId: number; userName: string; pontos: number }>>([]);
+  const [scoreboard, setScoreboard] = useState<Score[]>([]);
+  const [quizFinalizado, setQuizFinalizado] = useState(false);
+  const [countdown, setCountdown] = useState<number | null>(null);
 
   // BUSCA DAS MATÉRIAS
   useEffect(() => {
@@ -82,9 +86,7 @@ export function Sala() {
   }, [token]);
 
   const formik = useFormik({
-    initialValues: {
-      materias: []
-    },
+    initialValues: { materias: [] },
     onSubmit: async (values) => {
       const response = await fetch(
         `http://localhost:3000/sala/perguntas/1/3/${values.materias[0]}/${values.materias[1]}/${values.materias[2]}`,
@@ -93,13 +95,13 @@ export function Sala() {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
-          }
+          },
         }
       );
       const perguntas = await response.json();
       setPerguntasMaterias(perguntas);
       socket?.emit("enviarPerguntas", { roomId: sala?.id, perguntas });
-    }
+    },
   });
  
   // BUSCA INFORMAÇÕES DO USUÁRIO
@@ -120,11 +122,21 @@ export function Sala() {
     }
   }, [user, token]);
 
+  // RECEBE EVENTO "countdown" (3 segundos antes do quiz)
+  useEffect(() => {
+    if (!socket) return;
+    const handleCountdown = ({ countdown }: { countdown: number }) => {
+      setCountdown(countdown);
+    };
+    socket.on("countdown", handleCountdown);
+    return () => socket.off("countdown", handleCountdown);
+  }, [socket]);
+
   // RECEBE EVENTO "startQuestion" DO SERVIDOR
   useEffect(() => {
     if (!socket) return;
     const handleStartQuestion = ({ pergunta, tempo }: { pergunta: Pergunta, tempo: number }) => {
-      console.log("Iniciando pergunta:", pergunta);
+      setCountdown(null);
       setPerguntaAtual(pergunta);
       setAlternativasAtuais(pergunta.alternativas);
       setTempoRestante(tempo);
@@ -140,24 +152,31 @@ export function Sala() {
         });
       }, 1000);
     };
-
     socket.on("startQuestion", handleStartQuestion);
-    return () => {
-      socket.off("startQuestion", handleStartQuestion);
-    };
+    return () => socket.off("startQuestion", handleStartQuestion);
   }, [socket]);
 
   // RECEBE RESULTADO DA PERGUNTA DO SERVIDOR
   useEffect(() => {
     if (!socket) return;
-    const handleResultadoPergunta = ({ vencedor, respostaCorreta, scoreboard }: { vencedor: string | null, respostaCorreta: string, scoreboard: Array<{ userId: number; userName: string; pontos: number }> }) => {
+    const handleResultadoPergunta = ({ vencedor, respostaCorreta, scoreboard }: { vencedor: string | null, respostaCorreta: string, scoreboard: Score[] }) => {
       setVencedor(vencedor);
       setScoreboard(scoreboard);
     };
     socket.on("resultadoPergunta", handleResultadoPergunta);
-    return () => {
-      socket.off("resultadoPergunta", handleResultadoPergunta);
+    return () => socket.off("resultadoPergunta", handleResultadoPergunta);
+  }, [socket]);
+
+  // RECEBE EVENTO "quizFinalizado" DO SERVIDOR
+  useEffect(() => {
+    if (!socket) return;
+    const handleQuizFinalizado = ({ scoreboard, vencedorFinal }: { scoreboard: Score[], vencedorFinal: string }) => {
+      setScoreboard(scoreboard);
+      setQuizFinalizado(true);
+      setQuizStarted(false);
     };
+    socket.on("quizFinalizado", handleQuizFinalizado);
+    return () => socket.off("quizFinalizado", handleQuizFinalizado);
   }, [socket]);
 
   // CHAT
@@ -167,9 +186,7 @@ export function Sala() {
       setChatMessages(prev => [...prev, { message, sender }]);
     };
     socket.on("newMessage", handleNewMessage);
-    return () => {
-      socket.off("newMessage", handleNewMessage);
-    };
+    return () => socket.off("newMessage", handleNewMessage);
   }, [socket]);
 
   // MATÉRIAS SELECIONADAS
@@ -180,9 +197,7 @@ export function Sala() {
       formik.setFieldValue("materias", materiasSelecionadas);
     };
     socket.on("materiasSelecionadas", handleMateriasSelecionadas);
-    return () => {
-      socket.off("materiasSelecionadas", handleMateriasSelecionadas);
-    };
+    return () => socket.off("materiasSelecionadas", handleMateriasSelecionadas);
   }, [socket, formik]);
 
   // ATUALIZAÇÃO DA LISTA DE JOGADORES PRONTOS
@@ -192,9 +207,7 @@ export function Sala() {
       setReadyPlayers(data.readyUserIds);
     };
     socket.on("updateReady", handleUpdateReady);
-    return () => {
-      socket.off("updateReady", handleUpdateReady);
-    };
+    return () => socket.off("updateReady", handleUpdateReady);
   }, [socket]);
 
   // INICIA O QUIZ (evento "iniciarQuiz")
@@ -202,11 +215,10 @@ export function Sala() {
     if (!socket) return;
     const handleIniciarQuiz = () => {
       setQuizStarted(true);
+      setQuizFinalizado(false);
     };
     socket.on("iniciarQuiz", handleIniciarQuiz);
-    return () => {
-      socket.off("iniciarQuiz", handleIniciarQuiz);
-    };
+    return () => socket.off("iniciarQuiz", handleIniciarQuiz);
   }, [socket]);
 
   // SINCRONIZA AS PERGUNTAS RECEBIDAS
@@ -217,12 +229,10 @@ export function Sala() {
       setPerguntasMaterias(perguntas);
     };
     socket.on("receberPerguntas", handleReceberPerguntas);
-    return () => {
-      socket.off("receberPerguntas", handleReceberPerguntas);
-    };
+    return () => socket.off("receberPerguntas", handleReceberPerguntas);
   }, [socket]);
 
-  // Ao clicar em uma alternativa, envia a resposta (somente uma resposta)
+  // Ao clicar em uma alternativa, envia a resposta (uma única resposta por pergunta)
   function handleSelecionarAlternativa(alternativa: Alternativa) {
     if (jaRespondeu) return;
     setJaRespondeu(true);
@@ -262,7 +272,7 @@ export function Sala() {
     }
   };
 
-  // Busca da sala
+  // BUSCA DA SALA
   useEffect(() => {
     async function pegaSala() {
       const response = await fetch(`http://localhost:3000/sala/${codigo}`, {
@@ -280,7 +290,7 @@ export function Sala() {
     }
   }, [codigo, token]);
 
-  // Busca dos jogadores na sala
+  // BUSCA DOS JOGADORES NA SALA
   useEffect(() => {
     async function pegaSalaAlunos() {
       const response = await fetch(`http://localhost:3000/sala-alunos/${sala?.id}`, {
@@ -316,9 +326,7 @@ export function Sala() {
     };
   
     socket.on("playersUpdated", handlePlayersUpdated);
-    return () => {
-      socket.off("playersUpdated", handlePlayersUpdated);
-    };
+    return () => socket.off("playersUpdated", handlePlayersUpdated);
   }, [socket]);
 
   useEffect(() => {
@@ -327,12 +335,18 @@ export function Sala() {
     }
   }, [socket, user, sala?.id, usuarioNavBar?.nome, usuarioNavBar?.id]);
 
-  if (!usuarioNavBar) {
-    return <p>Carregando...</p>;
-  }
+  // Função para voltar à tela pré-quiz após o fim do quiz
+  const handleVoltar = () => {
+    setQuizStarted(false);
+    setQuizFinalizado(false);
+    setPerguntasMaterias([]);
+    setPerguntaAtual(null);
+    setAlternativasAtuais([]);
+    setScoreboard([]);
+    setVencedor(null);
+  };
 
-  // Função para gerar o placar ordenado
-  const renderScoreboard = () => {
+  function renderScoreboard() {
     if (scoreboard.length === 0) return null;
     const sorted = [...scoreboard].sort((a, b) => b.pontos - a.pontos);
     return (
@@ -346,60 +360,80 @@ export function Sala() {
         ))}
       </div>
     );
-  };
+  }
 
-  console.log(scoreboard)
+  if (!usuarioNavBar) {
+    return <p>Carregando...</p>;
+  }
+
   return (
     <>
-      {quizStarted ? (
-        // Quando o quiz começar, renderiza apenas a interface do quiz
-        <div className="w-screen flex pb-10 flex-col justify-center items-center min-h-screen gap-12 mb-40">
-          {/* Você pode optar por ocultar a Navbar se desejar */}
+      {quizFinalizado ? 
+        <div className="w-screen flex flex-col items-center justify-center min-h-screen gap-8">
           <Navbar id={usuarioNavBar.id} nivel={usuarioNavBar.nivel} avatar={usuarioNavBar.avatar.caminho || ''} />
-          <div className="w-[90%] pb-20 p-10 flex flex-col justify-center items-center gap-10">
-            <h1 className="text-2xl">Pergunta</h1>
-            <div className="w-[90%] h-fit p-10 flex flex-col justify-center items-center gap-4 border-2 rounded-md border-cyan-500">
-              <p className="text-2xl">{perguntaAtual?.pergunta}</p>
-            </div>
-            <div>
-              <p>Tempo restante: {tempoRestante} segundos</p>
-            </div>
-            {vencedor !== null ? (
-              <>
-                <div>
-                  <p className="text-2xl font-bold">
-                    {vencedor ? `Vencedor: ${vencedor}` : "Ninguém acertou a resposta."}
-                  </p>
-                </div>
-                {renderScoreboard()}
-              </>
-            ) : (
-              <div className="w-[90%] p-5 flex flex-wrap justify-center items-center gap-5">
-                {alternativasAtuais.map((alternativa, index) => (
-                  <div
-                    key={index}
-                    onClick={() => handleSelecionarAlternativa(alternativa)}
-                    className={`w-[45%] hover:bg-cyan-900 rounded-lg p-5 flex justify-start items-center gap-4 border-2 border-cyan-300 cursor-pointer ${jaRespondeu ? 'opacity-50 pointer-events-none' : ''}`}
-                  >
-                    <p>{alternativa.alternativa}</p>
-                  </div>
-                ))}
+          <h1 className="text-3xl font-bold">Quiz Finalizado!</h1>
+          <div className="w-[90%] p-5 border rounded-md">
+            <h2 className="text-2xl font-bold mb-3">Placar Final</h2>
+            {scoreboard.sort((a, b) => b.pontos - a.pontos).map(({ userId, userName, pontos }) => (
+              <div key={userId} className="flex justify-between border-b py-1">
+                <span>{userName}</span>
+                <span>{pontos} ponto{pontos !== 1 && 's'}</span>
               </div>
-            )}
+            ))}
           </div>
+          <Button size="lg" onClick={handleVoltar} color="primary">
+            Voltar
+          </Button>
         </div>
-      ) : (
-        // Antes do quiz iniciar, renderiza toda a interface (informações, chat, jogadores, etc.)
+       : quizStarted ? 
+        <div className="w-screen flex pb-10 flex-col justify-center items-center min-h-screen gap-12 mb-40">
+          <Navbar id={usuarioNavBar.id} nivel={usuarioNavBar.nivel} avatar={usuarioNavBar.avatar.caminho || ''} />
+          {countdown !== null ? 
+            <div className="text-4xl font-bold">Iniciando em {countdown}...</div>
+           : 
+            <div className="w-[90%] pb-20 p-10 flex flex-col justify-center items-center gap-10">
+              <h1 className="text-2xl">Pergunta</h1>
+              <div className="w-[90%] h-fit p-10 flex flex-col justify-center items-center gap-4 border-2 rounded-md border-cyan-500">
+                <p className="text-2xl">{perguntaAtual?.pergunta}</p>
+              </div>
+              <div>
+                <p>Tempo restante: {tempoRestante} segundos</p>
+              </div>
+              {vencedor !== null ? 
+                <>
+                  <div>
+                    <p className="text-2xl font-bold">
+                      {vencedor ? `Vencedor da rodada: ${vencedor}` : "Ninguém acertou a resposta."}
+                    </p>
+                  </div>
+                  {renderScoreboard()}
+                </>
+               : 
+                <div className="w-[90%] p-5 flex flex-wrap justify-center items-center gap-5">
+                  {alternativasAtuais.map((alternativa, index) => (
+                    <div
+                      key={index}
+                      onClick={() => handleSelecionarAlternativa(alternativa)}
+                      className={`w-[45%] hover:bg-cyan-900 rounded-lg p-5 flex justify-start items-center gap-4 border-2 border-cyan-300 cursor-pointer ${jaRespondeu ? 'opacity-50 pointer-events-none' : ''}`}
+                    >
+                      <p>{alternativa.alternativa}</p>
+                    </div>
+                  ))}
+                </div>
+              }
+            </div>
+          }
+        </div>
+       : 
         <div className="w-screen flex pb-10 flex-col justify-start items-center min-h-screen gap-12 mb-40">
           <Navbar id={usuarioNavBar.id} nivel={usuarioNavBar.nivel} avatar={usuarioNavBar.avatar.caminho || ''} />
           <div className="w-[95%] border flex justify-center items-start gap-10 p-5">
-            {/* Coluna de informações e seleção de matérias */}
             <div className="w-[25%] border flex flex-col gap-10 p-5">
               <div className="w-[100%] border flex flex-col gap-5 p-5">
                 <p>Código de sala {codigo}</p>
                 <p>Prontos: {readyPlayers.length} / {alunos.length}</p>
               </div>
-              {user?.id === sala?.host_id ? (
+              {user?.id === sala?.host_id ? 
                 <>
                   <h1>Selecione 3 disciplinas</h1>
                   <Form className="w-[100%] flex flex-col justify-center items-center gap-4" onSubmit={formik.handleSubmit} onReset={formik.handleReset}>
@@ -424,7 +458,7 @@ export function Sala() {
                     </div>
                   </Form>
                 </>
-              ) : (
+               : 
                 <div className="w-[100%] flex flex-col justify-center items-center gap-4">
                   <h2>Matérias Selecionadas:</h2>
                   {selectedMaterias && selectedMaterias.length > 0 ? (
@@ -436,10 +470,9 @@ export function Sala() {
                     <p>Nenhuma matéria selecionada</p>
                   )}
                 </div>
-              )}
+              }
             </div>
   
-            {/* Coluna de jogadores e botão "Pronto" */}
             <div className="w-[40%] border p-5 flex flex-col items-center justify-around gap-5">
               <>
                 <h1>Lista de jogadores</h1>
@@ -456,9 +489,10 @@ export function Sala() {
                 </div>
               </>
               <Button size="lg" onClick={handlePronto} color="primary">Pronto</Button>
+  
+              <div className="text-4xl font-bold">Iniciando em {countdown}...</div>
             </div>
   
-            {/* Coluna de Chat */}
             <div className="w-[25%] border p-5 flex flex-col gap-5">
               <h1>Chat</h1>
               <div className="flex flex-col gap-2 border p-2 h-80 overflow-y-auto">
@@ -476,8 +510,7 @@ export function Sala() {
             </div>
           </div>
         </div>
-      )}
+      }
     </>
   );
-  
 }
