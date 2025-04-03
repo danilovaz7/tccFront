@@ -185,7 +185,7 @@ export function PerfilPage() {
 
     useEffect(() => {
         async function carregarDados() {
-            const response = await fetch(`http://localhost:3000/estatisticas/${idUsuario}`, {
+            const response = await fetch(`http://localhost:3000/estatisticas/${user?.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -197,7 +197,7 @@ export function PerfilPage() {
             setCarregando(false);
         }
         carregarDados();
-    }, [idUsuario])
+    }, [user])
 
     async function trocaAvatar() {
         try {
@@ -355,15 +355,15 @@ export function PerfilPage() {
                                 <div className="w-9/10 border border-white rounded p-5 gap-6 flex flex-row justify-around items-start flex-wrap">
                                     <div className="w-1/4 flex flex-col justify-center items-center">
                                         <p className='text-2xl'>Perguntas totais</p>
-                                        <p className='text-xl'>{dados.total_perguntas}</p>
+                                        <p className='text-xl'>{dados?.total_perguntas}</p>
                                     </div>
                                     <div className="w-1/4 flex flex-col justify-center items-center">
                                         <p className='text-2xl'>Perguntas acertadas</p>
-                                        <p className='text-xl'>{dados.total_perguntas_acertadas}</p>
+                                        <p className='text-xl'>{dados?.total_perguntas_acertadas}</p>
                                     </div>
                                     <div className="w-1/4 flex flex-col justify-center items-center">
                                         <p className='text-2xl'>Disputas</p>
-                                        <p className='text-xl'>{dados.total_disputas}</p>
+                                        <p className='text-xl'>{dados?.total_disputas}</p>
                                     </div>
 
                                     <BarChart width={500} height={300} data={dataGrafico}>
