@@ -8,18 +8,17 @@ interface UserCardProps {
     nome: string;
     avatar?: string; 
     classe: string;
-    pontos?: number;
     onClick?: MouseEventHandler<HTMLDivElement>;
 }
 
-function UserCard({ id, nivel, avatar, nome, classe,pontos, onClick }: UserCardProps) {
+function UserCard({ id, nivel, avatar, nome, classe,onClick }: UserCardProps) {
 
     return (
         <div className={classe} onClick={onClick}>
             {avatar && <Avatar size='lg' src={avatar} />}
             <p>{nome}</p>
-            <p>Lvl {nivel}</p>
-            {pontos && <p>Pontos: {nivel}</p>}
+            {nivel && <p>Lvl {nivel}</p>}
+            
         </div>
     );
 }

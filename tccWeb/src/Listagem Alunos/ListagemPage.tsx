@@ -1,7 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
-import Navbar from '../components/Navbar/Navbar';
 import { Form, Input, Button, Select, SelectItem } from "@heroui/react";
 import CardAlunoLista from '../components/CardAlunoLista/CardAlunoLista';
 
@@ -145,7 +144,6 @@ export function ListagemPage() {
     return (
         <>
             <div className="w-screen flex flex-col justify-start items-center min-h-screen gap-12 mb-40">
-                <Navbar id={usuarioNavBar?.id} nivel={usuarioNavBar?.nivel} avatar={usuarioNavBar?.avatar.caminho || ''} />
                 <h1 className='text-white'>OLA PROFESSOR</h1>
 
                 <Form

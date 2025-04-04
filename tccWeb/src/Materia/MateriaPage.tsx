@@ -1,7 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
-import Navbar from '../components/Navbar/Navbar';
 import { Button } from "@heroui/react";
 
 interface Usuario {
@@ -287,7 +286,7 @@ function Materia() {
 
     return (
         <div className="flex w-screen text-center flex-col h-full justify-start items-center gap-20">
-            <Navbar id={usuario?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho} />
+
             {fimDeJogo ? (
                 <div className="w-[90%] pb-20 p-10 flex flex-col justify-center items-center gap-4">
                     <h1 className="text-5xl text-cyan-400">Fim de Jogo!</h1>

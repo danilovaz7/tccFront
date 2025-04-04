@@ -1,7 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
-import Navbar from '../components/Navbar/Navbar';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Legend, PieChart, Pie, Cell } from "recharts";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@heroui/react";
 import { Avatar } from "@heroui/react";
@@ -67,7 +66,7 @@ export function PerfilPage() {
     const [eloMaterias, setEloMaterias] = useState<EloMateria[]>([]);
     const [carregando, setCarregando] = useState(true);
     const [materiaSelecionada, setMateriaSelecionada] = useState<EloMateria | null>(null);
-    const {isOpen, onOpen, onOpenChange } = useDisclosure();
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [avatares, setAvatares] = useState<Avatar[]>([]);
     const [selectedAvatarId, setSelectedAvatarId] = useState<number | null>(null);
 
@@ -114,7 +113,7 @@ export function PerfilPage() {
         pegaUsuarios();
     }, [idUsuario])
 
-   
+
 
     useEffect(() => {
         async function pegaCargos() {
@@ -256,7 +255,7 @@ export function PerfilPage() {
     return (
         <>
             <div className="w-screen flex flex-col justify-start items-center min-h-screen gap-12 mb-40">
-                <Navbar id={usuarioNavBar?.id} nivel={usuarioNavBar?.nivel} avatar={usuarioNavBar?.avatar.caminho || ''} />
+                
 
                 <div className="w-4/5 flex flex-col justify-center items-center gap-10">
                     <div className="w-full flex p-2.5 justify-center items-center text-lg">
@@ -321,21 +320,21 @@ export function PerfilPage() {
                                         return null;
                                     })
                             }
-                            
+
                             {
                                 usuario?.tipo_usuario_id === 3 ?
-                                eloMaterias.map((eloMateria, index) => {
-                                    if (usuario?.tipo_usuario_id === eloMateria.materia.id) {
-                                        return (
-                                            <p className="text-2xl font-bold">Materia: {eloMateria.materia.nome}</p>
-                                        );
-                                    }
-                                    return null;
-                                })
-                                    
+                                    eloMaterias.map((eloMateria, index) => {
+                                        if (usuario?.tipo_usuario_id === eloMateria.materia.id) {
+                                            return (
+                                                <p className="text-2xl font-bold">Materia: {eloMateria.materia.nome}</p>
+                                            );
+                                        }
+                                        return null;
+                                    })
+
                                     : null
                             }
-                            
+
                             {
                                 usuarios.map((usuarioRank, index) => {
                                     if (usuario?.id === usuarioRank.id) {

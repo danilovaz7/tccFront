@@ -1,7 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
-import Navbar from '../components/Navbar/Navbar';
 import { Form, Input, Button, Select, SelectItem } from "@heroui/react";
 import { Accordion, AccordionItem, Avatar } from "@heroui/react";
 
@@ -122,7 +121,7 @@ export function ListagemPerguntasPage() {
     return (
         <>
             <div className="w-screen flex flex-col justify-start items-center min-h-screen gap-12 mb-40">
-                <Navbar id={usuarioNavBar?.id} nivel={usuarioNavBar?.nivel} avatar={usuarioNavBar?.avatar.caminho || ''} />
+                
                 {usuarioNavBar.tipo_usuario_id === 1 ? <h1 className='text-white'>Ola diretor {usuarioNavBar.nome} </h1> : null}
                 {usuarioNavBar.tipo_usuario_id === 3 ? <h1 className='text-white'>Ola professor {usuarioNavBar.nome} </h1> : null}
                 {

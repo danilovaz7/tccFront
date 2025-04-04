@@ -139,7 +139,6 @@ export function HomePage() {
     async function postSala() {
 
         const code = Math.random().toString(36).substring(2, 8).toUpperCase();
-
         const resposta = await fetch(`http://localhost:3000/sala`, {
             method: 'POST',
             headers: {
@@ -195,8 +194,6 @@ export function HomePage() {
     return (
 
         <div className="w-screen flex flex-col justify-start items-center h-screen gap-12">
-            <Navbar id={usuario?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho} />
-
             <div className="w-11/12 flex flex-wrap justify-around">
                 {
                     usuario?.tipo_usuario_id === 2 ?

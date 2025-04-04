@@ -6,7 +6,7 @@ import { Form, Input, Button } from "@heroui/react";
 import { Select, SelectItem } from "@heroui/react";
 import { useFormik } from 'formik';
 import { useMaterias } from '../hooks/useMaterias.js';
-import Navbar from '../components/Navbar/Navbar';
+
 
 interface Usuario {
     id: number,
@@ -123,7 +123,7 @@ export function AddAlunoPage() {
 
     return (
         <div className="size-[90vw] w-screen flex flex-col justify-start items-center gap-8">
-            <Navbar id={usuario?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho} />
+            
             <h1 className="text-2xl font-bold">Adicione aqui um aluno novo</h1>
             <Form
                 className="w-[80%] flex flex-col justify-center gap-4 border-2 p-10 border-white"

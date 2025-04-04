@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 import { Form, Input, Button, Select, SelectItem, RadioGroup, Radio, Checkbox } from "@heroui/react";
 import { useFormik } from 'formik';
-import Navbar from '../components/Navbar/Navbar';
+
 
 interface Usuario {
     id: number,
@@ -86,7 +86,7 @@ export function AddPerguntaPage() {
 
     return (
         <div className="size-[90vw] w-screen flex flex-col justify-start items-center gap-8">
-            <Navbar id={usuario?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho} />
+           
             <h1 className="text-2xl font-bold">Adicione aqui uma pergunta nova</h1>
             { usuario.tipo_usuario_id === 1 ? <p>Somente professores são autorizados a criar perguntas !</p> : null}
             <Form

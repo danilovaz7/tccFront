@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 import { Form, Input, Button } from "@heroui/react";
 import { useFormik } from 'formik';
-import Navbar from '../components/Navbar/Navbar';
+
 
 interface Usuario {
     id: number,
@@ -65,7 +65,6 @@ export function AddEscolaPage() {
 
     return (
         <div className="size-[90vw] w-screen flex flex-col justify-start items-center gap-8">
-            <Navbar id={usuario?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho} />
             <h1 className="text-2xl font-bold">Adicione aqui uma escola nova</h1>
             <Form
                 className="w-[80%] flex flex-col justify-center gap-4 border-2 p-10 border-white"
