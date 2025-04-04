@@ -25,7 +25,7 @@ function UserCardRank({ id, nivel, avatar, nome, acertos,classe,classeStats,clas
             <img className={classeImg} src={avatar} alt="" />
             <div className={classeStats}>
                 <p>Nome: {nome}</p>
-                <p>Win rate {acertos}%</p>
+                <p>WinRate {acertos}%</p>
                 <p>Lvl {nivel}</p>
             </div>
         </div>

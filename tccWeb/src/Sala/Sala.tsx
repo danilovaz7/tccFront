@@ -36,7 +36,9 @@ interface Sala {
   id: number;
   codigo: string;
   host_id: number;
+  status: string;
 }
+
 interface ChatMessage { /* ... */ }
 
 interface Estatisticas {
@@ -135,21 +137,20 @@ export function Sala() {
 
   useEffect(() => {
     async function carregarDados() {
-        const response = await fetch(`http://localhost:3000/estatisticas/${user?.id}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
-        });
-        const estaticasUsuario = await response.json();
-        setDados(estaticasUsuario);
-        setCarregando(false);
+      const response = await fetch(`http://localhost:3000/estatisticas/${user?.id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      const estaticasUsuario = await response.json();
+      setDados(estaticasUsuario);
+      setCarregando(false);
     }
     carregarDados();
-}, [user, token])
+  }, [user, token])
 
-  
 
   // RECEBE EVENTO "countdown"
   useEffect(() => {
@@ -158,7 +159,9 @@ export function Sala() {
       setCountdown(countdown);
     };
     socket.on("countdown", handleCountdown);
-    return () => socket.off("countdown", handleCountdown);
+    return () => {
+      socket.off("countdown", handleCountdown);
+    }
   }, [socket]);
 
   // RECEBE EVENTO "startQuestion"
@@ -173,7 +176,9 @@ export function Sala() {
       setJaRespondeu(false);
     };
     socket.on("startQuestion", handleStartQuestion);
-    return () => socket.off("startQuestion", handleStartQuestion);
+    return () => {
+      socket.off("startQuestion", handleStartQuestion);
+    }
   }, [socket]);
 
   // RECEBE ATUALIZAÇÃO DO TIMER
@@ -183,10 +188,12 @@ export function Sala() {
       setTempoRestante(remainingTime);
     };
     socket.on("updateTimer", handleUpdateTimer);
-    return () => socket.off("updateTimer", handleUpdateTimer);
+    return () => {
+      socket.off("updateTimer", handleUpdateTimer);
+    }
   }, [socket]);
 
-  
+
   // RECEBE RESULTADO DA PERGUNTA
   useEffect(() => {
     if (!socket) return;
@@ -195,7 +202,9 @@ export function Sala() {
       setScoreboard(scoreboard);
     };
     socket.on("resultadoPergunta", handleResultadoPergunta);
-    return () => socket.off("resultadoPergunta", handleResultadoPergunta);
+    return () => {
+      socket.off("resultadoPergunta", handleResultadoPergunta);
+    }
   }, [socket]);
 
   // RECEBE EVENTO "quizFinalizado"
@@ -203,12 +212,16 @@ export function Sala() {
     if (!socket) return;
     const handleQuizFinalizado = ({ scoreboard, vencedorFinal }: { scoreboard: Score[], vencedorFinal: string }) => {
       setScoreboard(scoreboard);
+      console.log('vencedorFinal', vencedorFinal)
+      atualizarSala("encerrada", parseInt(vencedorFinal))
       setQuizFinalizado(true);
       setQuizStarted(false);
     };
     socket.on("quizFinalizado", handleQuizFinalizado);
-    return () => socket.off("quizFinalizado", handleQuizFinalizado);
-  }, [socket]);
+    return () => {
+      socket.off("quizFinalizado", handleQuizFinalizado);
+    }
+  }, [socket, sala]);
 
   // CHAT
   useEffect(() => {
@@ -217,7 +230,9 @@ export function Sala() {
       setChatMessages(prev => [...prev, { message, sender }]);
     };
     socket.on("newMessage", handleNewMessage);
-    return () => socket.off("newMessage", handleNewMessage);
+    return () => {
+      socket.off("newMessage", handleNewMessage);
+    }
   }, [socket]);
 
   // MATÉRIAS SELECIONADAS
@@ -228,7 +243,9 @@ export function Sala() {
       formik.setFieldValue("materias", materiasSelecionadas);
     };
     socket.on("materiasSelecionadas", handleMateriasSelecionadas);
-    return () => socket.off("materiasSelecionadas", handleMateriasSelecionadas);
+    return () => {
+      socket.off("materiasSelecionadas", handleMateriasSelecionadas);
+    }
   }, [socket, formik]);
 
   // ATUALIZAÇÃO DA LISTA DE JOGADORES PRONTOS
@@ -238,19 +255,46 @@ export function Sala() {
       setReadyPlayers(data.readyUserIds);
     };
     socket.on("updateReady", handleUpdateReady);
-    return () => socket.off("updateReady", handleUpdateReady);
+    return () => {
+      socket.off("updateReady", handleUpdateReady);
+    }
   }, [socket]);
+
+
 
   // INICIA O QUIZ
   useEffect(() => {
     if (!socket) return;
     const handleIniciarQuiz = () => {
+      atualizarSala("em andamento", null)
       setQuizStarted(true);
       setQuizFinalizado(false);
     };
     socket.on("iniciarQuiz", handleIniciarQuiz);
-    return () => socket.off("iniciarQuiz", handleIniciarQuiz);
-  }, [socket]);
+    return () => {
+      socket.off("iniciarQuiz", handleIniciarQuiz);
+    }
+  }, [socket, sala]);
+
+  async function atualizarSala(status: string, vencedorId: number | null) {
+    const resposta = await fetch(`http://localhost:3000/sala/${sala?.codigo}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        status: status,
+        vencedor_id: vencedorId
+      })
+    });
+
+    if (resposta.ok) {
+      console.log('sala em andamneto')
+    } else {
+      console.log('erro ao atualizar sala')
+    }
+  }
 
   // RECEBE PERGUNTAS (caso venha algum evento extra)
   useEffect(() => {
@@ -260,7 +304,9 @@ export function Sala() {
       setPerguntasMaterias(perguntas);
     };
     socket.on("receberPerguntas", handleReceberPerguntas);
-    return () => socket.off("receberPerguntas", handleReceberPerguntas);
+    return () => {
+      socket.off("receberPerguntas", handleReceberPerguntas);
+    }
   }, [socket]);
 
   // Ao clicar em uma alternativa, envia a resposta (apenas uma por pergunta)
@@ -342,7 +388,7 @@ export function Sala() {
     if (sala?.id) {
       pegaSalaAlunos();
     }
-  }, [sala, token]);
+  }, [sala, token, socket]);
 
   useEffect(() => {
     if (!socket) return;
@@ -361,7 +407,9 @@ export function Sala() {
       setAlunos(alunosFormatados);
     };
     socket.on("playersUpdated", handlePlayersUpdated);
-    return () => socket.off("playersUpdated", handlePlayersUpdated);
+    return () => {
+      socket.off("playersUpdated", handlePlayersUpdated);
+    }
   }, [socket]);
 
   useEffect(() => {
@@ -371,7 +419,6 @@ export function Sala() {
   }, [socket, user, sala, usuarioNavBar]);
 
   async function atualizeXP(xp: number) {
-      
     try {
       const response = await fetch(`http://localhost:3000/usuarios/${user?.id}/atualizaexperiencia`, {
         method: 'PUT',
@@ -380,11 +427,11 @@ export function Sala() {
         },
         body: JSON.stringify({ xpGanho: xp })
       });
-  
+
       if (!response.ok) {
         throw new Error(`Erro ao atualizar usuário: ${response.statusText}`);
       }
-  
+
       const data = await response.json();
       return data;
     } catch (error) {
@@ -392,26 +439,23 @@ export function Sala() {
     }
   }
 
-
   async function handleVoltar(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault();
-  
+
     const userIndex = scoreboard.findIndex(scoreUser => scoreUser.userId === usuarioNavBar?.id);
-  
-  
+
     const xpToUpdate = userIndex === 0 ? 1200 : 200;
     xpToUpdate === 1200 ? atualizeXP(1200) : atualizeXP(200);
 
     const vitorias = userIndex === 0 ? 1 : 0;
 
     const pontos = scoreboard[userIndex]?.pontos || 0;
-  
+
     const totalPerguntas = (dados?.total_perguntas || 0) + 12;
     const totalPerguntasAcertadas = (dados?.total_perguntas_acertadas || 0) + pontos;
     const totalDisputas = (dados?.total_disputas || 0) + 1;
     const totalDisputasGanhas = (dados?.total_disputas_ganhas || 0) + vitorias;
 
-  
     const resposta = await fetch(`http://localhost:3000/estatisticas/${user?.id}`, {
       method: 'PUT',
       headers: {
@@ -425,7 +469,7 @@ export function Sala() {
         total_disputas_ganhas: totalDisputasGanhas
       })
     });
-  
+
     if (resposta.ok) {
       alert('Usuário atualizado com sucesso');
       navigate('/home');
@@ -433,8 +477,8 @@ export function Sala() {
       alert("Erro ao atualizar usuário");
     }
   }
-  
-  
+
+
 
   function renderScoreboard() {
     if (scoreboard.length === 0) return null;
@@ -452,11 +496,10 @@ export function Sala() {
     );
   }
 
-
   if (!usuarioNavBar) {
     return <p>Carregando...</p>;
   }
-
+  if (!sala || !sala.codigo) return;
   if (carregando && usuarioNavBar?.tipo_usuario_id === 2) return <p>Carregando estatísticas...</p>;
   if (!dados && usuarioNavBar?.tipo_usuario_id === 2) return <p>Erro ao carregar estatísticas.</p>;
 

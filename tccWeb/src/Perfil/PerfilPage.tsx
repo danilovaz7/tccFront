@@ -185,7 +185,7 @@ export function PerfilPage() {
 
     useEffect(() => {
         async function carregarDados() {
-            const response = await fetch(`http://localhost:3000/estatisticas/${user?.id}`, {
+            const response = await fetch(`http://localhost:3000/estatisticas/${idUsuario}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

@@ -68,7 +68,8 @@ export function RankingPage() {
                     <div className="w-[80%] flex flex-col justify-center pb-12 items-center p-1 gap-3">
                         {
                             usuarios.map((usuarioRank, index) => {
-                                let porcentAcerto = ((usuarioRank.estatisticas_gerais.total_disputas_ganhas / usuarioRank.estatisticas_gerais.total_disputas) * 100);
+                                let porcentAcerto = Number(((usuarioRank.estatisticas_gerais.total_disputas_ganhas / usuarioRank.estatisticas_gerais.total_disputas) * 100).toFixed(2));
+
                                 if (isNaN(porcentAcerto)) {
                                     porcentAcerto = 0;
                                 }
@@ -77,7 +78,7 @@ export function RankingPage() {
                                     return (
                                         <UserCardRank id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} acertos={porcentAcerto}
                                             classe="w-full flex justify-center items-center gap-2 p-3 text-black rounded-lg bg-yellow-400 cursor-pointer"
-                                            classeStats="w-[80%] text-3xl flex justify-between p-5 items-center"
+                                            classeStats="w-[100%] text-3xl flex justify-between p-5 items-center"
                                             classeImg='w-1/4' 
                                             
                                             />
@@ -85,8 +86,8 @@ export function RankingPage() {
                                 }
                                 return (
                                     <UserCardRank id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} acertos={porcentAcerto}
-                                        classe="w-[90%] flex justify-center items-center gap-2 p-3 text-black rounded-lg bg-gray-400 cursor-pointer"
-                                        classeStats="w-[80%] text-2xl flex justify-between p-5 items-center"
+                                        classe="w-[95%] flex justify-center items-center gap-2 p-3 text-black rounded-lg bg-gray-400 cursor-pointer"
+                                        classeStats="w-[100%] text-2xl flex justify-between p-5 items-center"
                                         classeImg='w-1/4' />
                                 );
                             })

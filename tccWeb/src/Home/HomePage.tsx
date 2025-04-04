@@ -178,12 +178,13 @@ export function HomePage() {
                     id_aluno: values.id_aluno
                 })
             });
-            console.log(resposta.ok)
+            const erro = await resposta.json()
     
             if (resposta.ok) {
                 navigate(`/sala/${values.codigo}`);
             } else {
-                alert('Erro ao tentar entrar na sala')
+
+                alert(erro.error)
             }
         }
     });
