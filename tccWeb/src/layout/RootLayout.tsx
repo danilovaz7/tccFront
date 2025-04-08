@@ -37,7 +37,7 @@ export function RootLayout() {
     }, [user, token]);
 
     return (
-        <div className="w-screen flex flex-col justify-start items-center h-screen gap-12">
+        <div className=" overflow-x-hidden w-screen flex flex-col justify-start items-center h-screen gap-12">
             <Navbar id={usuario?.id} nivel={usuario?.nivel} avatar={usuario?.avatar.caminho} />
 
             <Outlet/>
