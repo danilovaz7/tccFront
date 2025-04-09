@@ -254,9 +254,7 @@ export function PerfilPage() {
 
     return (
         <>
-            <div className="w-screen flex flex-col justify-start items-center min-h-screen gap-12 mb-40">
-                
-
+            <div className="w-screen flex flex-col justify-start items-center min-h-screen gap-12 mb-40">  
                 <div className="w-4/5 flex flex-col justify-center items-center gap-10">
                     <div className="w-full flex p-2.5 justify-center items-center text-lg">
                         <div className="w-1/5 flex flex-col gap-5">

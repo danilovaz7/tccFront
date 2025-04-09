@@ -60,11 +60,10 @@ export function RankingPage() {
 
     return (
         <>
-            <div className="w-screen flex flex-col justify-start items-center h-screen gap-10 mb-15">
-               
-                <div className="flex flex-col justify-center items-center w-7/10 gap-10 ">
-                    <h1 className='text-5xl'>Rank de sala do {id_turma}º ano</h1>
-                    <div className="w-[80%] flex flex-col justify-center pb-12 items-center p-1 gap-3">
+            <div className="w-screen flex flex-col justify-start items-center h-auto sm:h-screen gap-6 p-3 sm:p-5">
+                <div className="flex flex-col justify-center items-center w-[95%] sm:w-[70%] gap-6 sm:gap-10">
+                    <h1 className="text-xl sm:text-5xl text-center">Rank de sala do {id_turma}º ano</h1>
+                    <div className="w-full sm:w-[90%] flex flex-col justify-center pb-6 sm:pb-12 items-center p-1 gap-2 sm:gap-3">
                         {
                             usuarios.map((usuarioRank, index) => {
                                 let porcentAcerto = Number(((usuarioRank.estatisticas_gerais.total_disputas_ganhas / usuarioRank.estatisticas_gerais.total_disputas) * 100).toFixed(2));
@@ -75,19 +74,29 @@ export function RankingPage() {
 
                                 if (index === 0) {
                                     return (
-                                        <UserCardRank id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} acertos={porcentAcerto}
-                                            classe="w-full flex justify-center items-center gap-2 p-3 text-black rounded-lg bg-yellow-400 cursor-pointer"
-                                            classeStats="w-[100%] text-3xl flex justify-between p-5 items-center"
-                                            classeImg='w-1/4' 
-                                            
-                                            />
+                                        <UserCardRank
+                                            id={usuarioRank.id}
+                                            nivel={usuarioRank.nivel}
+                                            nome={usuarioRank.nome}
+                                            avatar={usuarioRank.avatar.caminho}
+                                            acertos={porcentAcerto}
+                                            classe="w-full flex flex-row justify-start items-center gap-4 sm:gap-10 p-2 sm:p-3 text-black rounded-lg bg-yellow-400 cursor-pointer"
+                                            classeStats="text-md sm:text-xl w-full flex flex-col sm:flex-row justify-center sm:justify-around gap-2 sm:gap-3 items-start sm:items-center"
+                                            classeImg="w-[30%] sm:w-[20%] rounded-full"
+                                        />
                                     );
                                 }
                                 return (
-                                    <UserCardRank id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho} acertos={porcentAcerto}
-                                        classe="w-[95%] flex justify-center items-center gap-2 p-3 text-black rounded-lg bg-gray-400 cursor-pointer"
-                                        classeStats="w-[100%] text-2xl flex justify-between p-5 items-center"
-                                        classeImg='w-1/4' />
+                                    <UserCardRank
+                                        id={usuarioRank.id}
+                                        nivel={usuarioRank.nivel}
+                                        nome={usuarioRank.nome}
+                                        avatar={usuarioRank.avatar.caminho}
+                                        acertos={porcentAcerto}
+                                        classe="w-[95%] flex flex-row justify-start items-center gap-4 sm:gap-10 p-2 sm:p-3 text-black rounded-lg bg-gray-400 cursor-pointer"
+                                        classeStats="text-sm sm:text-xl w-full flex flex-col sm:flex-row justify-center  sm:justify-around gap-2 sm:gap-3 items-start sm:items-center"
+                                        classeImg="w-[30%] sm:w-[20%] rounded-full"
+                                    />
                                 );
                             })
                         }

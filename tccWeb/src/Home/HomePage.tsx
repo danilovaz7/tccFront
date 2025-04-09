@@ -178,7 +178,7 @@ export function HomePage() {
                 })
             });
             const erro = await resposta.json()
-    
+
             if (resposta.ok) {
                 navigate(`/sala/${values.codigo}`);
             } else {
@@ -187,25 +187,25 @@ export function HomePage() {
             }
         }
     });
-    
 
-    
+
+console.log(usuario)
 
     return (
 
-        <div className="w-screen flex flex-col justify-start items-center h-screen gap-12">
-            <div className="w-11/12 flex flex-wrap justify-around">
+        <div className="w-11/12 flex flex-wrap overflow-x-hidden-hidden gap-10 justify-around">
+            <div className="w-11/12 flex flex-wrap justify-around flex-col md:flex-row gap-5">
                 {
                     usuario?.tipo_usuario_id === 2 ?
-                        <div className="w-[25%] h-auto p-5 flex flex-col justify-start items-center gap-3 rounded-md">
-                            <h1 className="text-4xl">Que tal jogar com amigos?</h1>
-                            <p>É sempre melhor evoluir juntos!</p>
-                            <div className="w-full flex p-2.5 flex-col justify-start items-center gap-5 rounded-md  shadow-xl">
+                        <div className="w-full md:w-[25%] h-fit p-5 flex flex-col justify-start items-center gap-3 rounded-md shadow-md">
+                            <h1 className="text-2xl md:text-4xl text-center">Que tal jogar com amigos?</h1>
+                            <p className="text-sm md:text-base text-center">É sempre melhor evoluir juntos!</p>
+                            <div className="w-full flex flex-col justify-start items-center gap-5 p-3 rounded-md ">
                                 <Button onClick={postSala} color="danger">CRIAR SALA</Button>
-                                <Form onSubmit={formik.handleSubmit} className='w-[90%] flex flex-col justify-center items-center gap-3'>
+                                <Form onSubmit={formik.handleSubmit} className="w-full flex flex-col justify-center items-center gap-3">
                                     <Input
                                         isRequired
-                                        errorMessage="Coloque um codigo valido"
+                                        errorMessage="Coloque um código válido"
                                         variant="bordered"
                                         onChange={formik.handleChange}
                                         value={formik.values.codigo}
@@ -213,104 +213,102 @@ export function HomePage() {
                                         placeholder="Código de sala..."
                                         type="text"
                                     />
-                                    <Button className='w-full' color="danger" type="submit">ENTRAR EM SALA</Button>
+                                    <Button className="w-full" color="danger" type="submit">ENTRAR EM SALA</Button>
                                 </Form>
                             </div>
                         </div>
                         :
-                        <div className="w-[25%] border border-black h-auto p-5 flex flex-col justify-start items-center gap-3 rounded-md">
-                            <div className='flex justify-start  flex-col items-center gap-10'>
-                                <h1 className='text-3xl'>Oque deseja fazer?</h1>
-                                <div className='w-[100%] flex flex-col justify-center items-start  gap-5'>
+                        <div className="w-full md:w-[25%] border h-fit p-5 flex flex-col justify-start items-center gap-3 rounded-md shadow-sm">
+                            <div className="flex flex-col justify-start items-center gap-10">
+                                <h1 className="text-2xl md:text-3xl text-center">O que deseja fazer?</h1>
+                                <div className="w-full flex flex-col justify-center items-start gap-5">
                                     {(usuario?.tipo_usuario_id === 4 || usuario?.tipo_usuario_id === 1) && (
                                         <>
-                                            <NavLink className="w-full" to="/addAluno"><button className="bg-cyan-400 p-2.5 w-full rounded-md">Adicionar usuario</button></NavLink>
-                                            <NavLink className="w-full" to="/addEscola"><button className="bg-cyan-400 p-2.5 w-full  rounded-md">Adicionar escola</button></NavLink>
+                                            <NavLink className="w-full" to="/addAluno">
+                                                <button className="bg-cyan-400 p-2.5 w-full rounded-md">Adicionar usuário</button>
+                                            </NavLink>
+                                            <NavLink className="w-full" to="/addEscola">
+                                                <button className="bg-cyan-400 p-2.5 w-full rounded-md">Adicionar escola</button>
+                                            </NavLink>
                                         </>
                                     )}
                                     {(usuario?.tipo_usuario_id === 3 || usuario?.tipo_usuario_id === 1) && (
-                                        <NavLink className="w-full" to="/addPergunta"><button className="bg-cyan-400 p-2.5 w-full  rounded-md">Adicionar pergunta</button></NavLink>
+                                        <NavLink className="w-full" to="/addPergunta">
+                                            <button className="bg-cyan-400 p-2.5 w-full rounded-md">Adicionar pergunta</button>
+                                        </NavLink>
                                     )}
-
-                                    <NavLink className="w-full" to="/listagem-alunos"><button className="bg-cyan-400  p-2.5 w-full  rounded-md">Ver turma</button></NavLink>
-                                    <NavLink className="w-full" to="/listagem-perguntas"><button className="bg-cyan-400  p-2.5 w-full  rounded-md">Ver perguntas</button></NavLink>
+                                    <NavLink className="w-full" to="/listagem-alunos">
+                                        <button className="bg-cyan-400 p-2.5 w-full rounded-md">Ver turma</button>
+                                    </NavLink>
+                                    <NavLink className="w-full" to="/listagem-perguntas">
+                                        <button className="bg-cyan-400 p-2.5 w-full rounded-md">Ver perguntas</button>
+                                    </NavLink>
                                 </div>
-
                             </div>
                         </div>
-
                 }
 
-
-                <div className="w-[45%] h-full p-3 flex flex-col justify-center items-center">
-                    <img className="w-[50%] rounded-full shadow-xl" src="./src/assets/gifCentro.gif" alt="" />
+                <div className="w-full md:w-[40%] h-auto flex flex-col justify-center items-center">
+                    <img className="w-[75%] md:w-[65%] rounded-full shadow-md" src="./src/assets/gifCentro.gif" alt="GIF" />
                 </div>
 
-                <div className="w-1/4 border h-fit border-black shadow-xl p-2.5 flex flex-col justify-start items-center rounded-md">
+                <div className="w-full md:w-[30%] pb-20 sm:pb-5 h-auto p-5 flex flex-col justify-start items-center gap-5 shadow-md">
                     {
-                        usuario?.tipo_usuario_id != 2
-                            ?
+                        usuario?.tipo_usuario_id !== 2 ?
                             <>
-                                <h1 className="text-4xl">Ranking das<span className="text-yellow-400"> salas</span></h1>
-                                <div className="w-full p-2.5 flex flex-col justify-center items-center gap-6">
+                                <h1 className="text-2xl md:text-4xl text-center">Ranking das<span className="text-yellow-400"> salas</span></h1>
+                                <div className="w-full flex flex-col gap-3">
                                     {
-                                        turmas.map((turma, index) => {
-                                            return (
-                                                <div key={index} onClick={() => { navigate(`/ranking/${index + 1}/${usuario?.id_escola}`); }} className='w-[90%] flex justify-center items-center p-3 rounded-md bg-cyan-500 text-black hover:bg-cyan-700 cursor-pointer '>
-                                                    <h1 className='text-2xl w-[100%] flex justify-around items-center gap-3'>{turma.nome} <span><MdKeyboardArrowRight size={20} /></span></h1>
-                                                </div>
-                                            );
-                                        })
+                                        turmas.map((turma, index) => (
+                                            <div
+                                                key={index}
+                                                className="w-full flex justify-between items-center p-3 bg-cyan-500 rounded-md hover:bg-cyan-700 text-white cursor-pointer"
+                                                onClick={() => navigate(`/ranking/${index + 1}/${usuario?.id_escola}`)}
+                                            >
+                                                <h2 className="text-sm md:text-base">{turma.nome}</h2>
+                                                <MdKeyboardArrowRight size={24} />
+                                            </div>
+                                        ))
                                     }
                                 </div>
                             </>
-
                             :
                             <>
-                                <h1 className="text-4xl">Ranking da <span className="text-yellow-400">sala</span></h1>
-                                <div className="w-full p-2.5 flex flex-col justify-center items-center gap-2.5">
+                                <h1 className="text-2xl md:text-4xl text-center">Ranking da <span className="text-yellow-400">sala</span></h1>
+                                <div className="w-full flex flex-col justify-center items-center gap-3">
                                     {
-                                        usuarios.map((usuarioRank, index) => {
-                                            if (index === 0) {
-                                                return (
-                                                    <UserCard key={index} id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho}
-                                                        classe="w-full bg-yellow-400 flex justify-around items-center text-black p-2.5 cursor-point rounded-md transition-transform ease-in-out hover:scale-105"
-                                                        onClick={() => {
-                                                            navigate(`/perfil/${usuarioRank.id}`);
-                                                        }}
-                                                    />
-                                                )
-                                            }
-                                            return (
-                                                <UserCard key={index} id={usuarioRank.id} nivel={usuarioRank.nivel} nome={usuarioRank.nome} avatar={usuarioRank.avatar.caminho}
-                                                    classe="w-[90%] bg-gray-400 flex justify-around items-center text-black p-2.5 cursor-point rounded-md transition-transform ease-in-out hover:scale-102"
-                                                    onClick={() => {
-                                                        navigate(`/perfil/${usuarioRank.id}`);
-                                                    }}
-                                                />
-                                            );
-                                        })
+                                        usuarios.map((usuarioRank, index) => (
+                                            <UserCard
+                                                key={index}
+                                                id={usuarioRank.id}
+                                                nivel={usuarioRank.nivel}
+                                                nome={usuarioRank.nome}
+                                                avatar={usuarioRank.avatar.caminho}
+                                                classe={`${index === 0 ? 'w-full' : 'w-[90%]'} ${index === 0 ? 'bg-yellow-400' : 'bg-gray-400'} flex justify-around items-center text-black p-2.5 cursor-pointer rounded-md transition-transform hover:scale-105`}
+                                                onClick={() => navigate(`/perfil/${usuarioRank.id}`)}
+                                            />
+                                        ))
                                     }
-                                    <Button onClick={() => { navigate(`/ranking/${usuario?.id_turma}/${usuario?.id_escola}`); }} color='primary'> Ver mais <span><MdKeyboardArrowRight size={16} /></span></Button>
+                                    <Button onClick={() => { navigate(`/ranking/${usuario?.id_turma}/${usuario?.id_escola}`); }} color="primary" className="mt-3">
+                                        Ver mais <span><MdKeyboardArrowRight size={16} /></span>
+                                    </Button>
                                 </div>
                             </>
                     }
-
                 </div>
             </div>
 
 
 
+
+
             {
-                usuario?.tipo_usuario_id === 2
-                    ?
-
+                usuario?.tipo_usuario_id === 2 ?
                     <div className="w-11/12 flex flex-col justify-center items-center gap-4 pb-14">
-                        <h1 className="text-cyan-400 text-5xl">Aperfeiçoe seus conhecimentos</h1>
-                        <h3 className="text-3xl">Selecione a matéria que deseja treinar</h3>
+                        <h1 className="text-cyan-400 text-3xl md:text-5xl text-center">Aperfeiçoe seus conhecimentos</h1>
+                        <h3 className="text-xl md:text-3xl text-center">Selecione a matéria que deseja treinar</h3>
 
-
-                        <div className="w-11/12 p-2.5 shadow-2xl flex gap-5 flex-wrap rounded-lg justify-center items-center">
+                        <div className="w-full p-2.5 shadow-2xl flex gap-3 flex-wrap rounded-lg justify-center items-center">
                             {
                                 eloMaterias.map((eloMateria, index) => {
                                     let eloIcon = '';
@@ -330,15 +328,17 @@ export function HomePage() {
                                     }
 
                                     return (
-                                        <>
-                                            <CardMateria key={index} id={0} materiaLogo={eloMateria.materia.icone} nome={eloMateria.materia.nome} icon={eloIcon} onClick={() => {
-                                                handleMateriaClick(eloMateria)
-                                                handleShowPopup()
-                                            }
-                                            } />
-                                        </>
-
-
+                                        <CardMateria
+                                            key={index}
+                                            id={0}
+                                            materiaLogo={eloMateria.materia.icone}
+                                            nome={eloMateria.materia.nome}
+                                            icon={eloIcon}
+                                            onClick={() => {
+                                                handleMateriaClick(eloMateria);
+                                                handleShowPopup();
+                                            }}
+                                        />
                                     );
                                 })
                             }
@@ -350,8 +350,7 @@ export function HomePage() {
                             onCancel={handleCancel}
                         />
                     </div>
-                    :
-                    null
+                    : null
             }
 
 

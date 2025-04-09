@@ -79,7 +79,7 @@ function Materia() {
     useEffect(() => {
         setTotalAcertosEloAtualizado((eloMateria?.respostas_corretas_elo || 0) + contagemAcertos);
         setTotalAcertosMateriaAtualizado((eloMateria?.respostas_corretas_total || 0) + contagemAcertos);
-    
+
         if (totalAcertosEloAtualizado > 20) {
             setSubeloAtualizado(3);
         } else if (totalAcertosEloAtualizado > 10 && totalAcertosEloAtualizado <= 20) {
@@ -180,7 +180,7 @@ function Materia() {
             }
             pegaPerguntasMateria();
         }
-    }, [nmMateria, token, eloMateria]); 
+    }, [nmMateria, token, eloMateria]);
 
 
     useEffect(() => {
@@ -216,7 +216,7 @@ function Materia() {
             pegaEloMaterias();
         }
     }, [usuario?.id, nmMateria, token]);
-    
+
     useEffect(() => {
         if (eloMateria) {
             setEloAtualizado(eloMateria.elo_id);
@@ -227,7 +227,7 @@ function Materia() {
     const [eloAtualizado, setEloAtualizado] = useState<number | null>(null);
     const [subeloAtualizado, setSubeloAtualizado] = useState<number | null>(null);
 
-    async function atualizeXP(xp :number) {
+    async function atualizeXP(xp: number) {
         try {
             const response = await fetch(`http://localhost:3000/usuarios/${user?.id}/atualizaexperiencia`, {
                 method: 'PUT',
@@ -247,67 +247,66 @@ function Materia() {
             console.error("Erro ao atualizar o usuário:", error);
         }
     }
-    
-   async function handleUpdate(evento: FormEvent<HTMLFormElement>) {
-    evento.preventDefault();
 
-    if((eloAtualizado || 0) >= 7){
-      setEloAtualizado(6)
-    }
+    async function handleUpdate(evento: FormEvent<HTMLFormElement>) {
+        evento.preventDefault();
 
-    if(totalAcertosEloAtualizado >= 30 && eloAtualizado != 6){
-      atualizeXP(1000 * (eloMateria?.elo_id || 0) )
-    }else {
-        atualizeXP(20 * contagemAcertos)
-    }
-  
-  
-    const resposta = await fetch(`http://localhost:3000/eloMaterias/${usuario?.id}/materia/${nmMateria}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-            elo_id: eloAtualizado,
-            subelo_id: subeloAtualizado,
-            respostas_corretas_elo: totalAcertosEloAtualizado,
-            respostas_corretas_total: totalAcertosMateriaAtualizado
-        })
-    });
+        if ((eloAtualizado || 0) >= 7) {
+            setEloAtualizado(6)
+        }
 
-    if (resposta.ok) {
-        alert('Usuário atualizado com sucesso');
-        navigate('/home');
-    } else {
-        alert("Erro ao atualizar usuário");
+        if (totalAcertosEloAtualizado >= 30 && eloAtualizado != 6) {
+            atualizeXP(1000 * (eloMateria?.elo_id || 0))
+        } else {
+            atualizeXP(20 * contagemAcertos)
+        }
+
+
+        const resposta = await fetch(`http://localhost:3000/eloMaterias/${usuario?.id}/materia/${nmMateria}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                elo_id: eloAtualizado,
+                subelo_id: subeloAtualizado,
+                respostas_corretas_elo: totalAcertosEloAtualizado,
+                respostas_corretas_total: totalAcertosMateriaAtualizado
+            })
+        });
+
+        if (resposta.ok) {
+            alert('Usuário atualizado com sucesso');
+            navigate('/home');
+        } else {
+            alert("Erro ao atualizar usuário");
+        }
     }
-}
 
     return (
-        <div className="flex w-screen text-center flex-col h-full justify-start items-center gap-20">
-
+        <div className="flex w-screen text-center flex-col h-auto justify-start items-center gap-10 sm:gap-20 p-4">
             {fimDeJogo ? (
-                <div className="w-[90%] pb-20 p-10 flex flex-col justify-center items-center gap-4">
-                    <h1 className="text-5xl text-cyan-400">Fim de Jogo!</h1>
-                    <p className="text-2xl">Parabéns, você completou todas as perguntas!</p>
-                    <h2 className="text-2xl text-cyan-400">Aqui estão suas estatísticas:</h2>
-                    <div className="w-[90%] p-5 flex flex-col justify-center items-start gap-4 border-2 border-cyan-400">
-                        <p className='text-xl'>Acertos: {contagemAcertos}/{perguntasMateria.length}</p>
-                        <p className='text-xl'>Total de acertos no elo atualizados: {totalAcertosEloAtualizado}/30 </p>
-                        <p className='text-xl'>Total de acertos na materia atualizados: {totalAcertosMateriaAtualizado} acertos</p>
+                <div className="w-[100%] sm:w-[90%] pb-10 sm:pb-20 p-6 sm:p-10 flex flex-col justify-center items-center gap-4">
+                    <h1 className="text-3xl sm:text-5xl text-cyan-400">Fim de Jogo!</h1>
+                    <p className="text-lg sm:text-2xl">Parabéns, você completou todas as perguntas!</p>
+                    <h2 className="text-lg sm:text-2xl text-cyan-400">Aqui estão suas estatísticas:</h2>
+                    <div className="w-full sm:w-[90%] p-2 sm:p-5 flex flex-col justify-center items-start gap-3 sm:gap-4 border-2 border-cyan-400 rounded-md">
+                        <p className="text-base sm:text-xl">Acertos: {contagemAcertos}/{perguntasMateria.length}</p>
+                        <p className="text-sm sm:text-xl">Total de acertos no elo: {totalAcertosEloAtualizado}/30</p>
+                        <p className="text-sm sm:text-xl">Total de acertos na matéria: {totalAcertosMateriaAtualizado} acertos</p>
                     </div>
-                    <h2 className="text-2xl mt-6">Respostas:</h2>
-                    <div className="w-full max-w-4xl flex flex-col gap-4 mt-4">
+                    <h2 className="text-lg sm:text-2xl mt-4 sm:mt-6">Respostas:</h2>
+                    <div className="w-full sm:max-w-4xl flex flex-col gap-3 sm:gap-4 mt-4">
                         {respostas.map((resposta, index) => (
-                            <div key={index} className="p-4 border rounded-lg shadow-md">
-                                <p className="text-xl font-bold">Pergunta: {resposta.pergunta.pergunta}</p>
-                                <p className="text-green-500">Resposta Correta: {resposta.respostaCorreta}</p>
+                            <div key={index} className="p-3 sm:p-4 border rounded-lg shadow-md">
+                                <p className="text-base sm:text-xl font-bold">Pergunta: {resposta.pergunta.pergunta}</p>
+                                <p className="text-green-500 text-sm sm:text-base">Resposta Correta: {resposta.respostaCorreta}</p>
                                 <p
                                     className={
                                         resposta.respostaUsuario === resposta.respostaCorreta
-                                            ? 'text-blue-500'
-                                            : 'text-red-500'
+                                            ? "text-blue-500 text-sm sm:text-base"
+                                            : "text-red-500 text-sm sm:text-base"
                                     }
                                 >
                                     Sua Resposta: {resposta.respostaUsuario}
@@ -316,52 +315,45 @@ function Materia() {
                         ))}
                     </div>
                     <form onSubmit={handleUpdate}>
-                        <button className="mt-6 bg-cyan-400 text-black p-4 rounded-md">
+                        <button className="mt-4 sm:mt-6 bg-cyan-400 text-black p-3 sm:p-4 rounded-md">
                             Voltar ao Início
                         </button>
                     </form>
-
                 </div>
             ) : inicioPerguntas ? (
-                <div className="w-[90%] pb-20 p-10 flex flex-col justify-center items-center gap-10">
-                    <h1 className="text-2xl">Pergunta</h1>
-                    <div className="w-[90%] h-fit p-10 flex flex-col justify-center items-center gap-4 border-2 rounded-md border-cyan-500">
-                        <p className="text-2xl">{perguntaAtual?.pergunta}</p>
+                <div className="w-[95%] sm:w-[90%] pb-10 sm:pb-20 p-6 sm:p-10 flex flex-col justify-center items-center gap-6 sm:gap-10">
+                    <h1 className="text-lg sm:text-2xl">Pergunta</h1>
+                    <div className="w-full sm:w-[90%] h-fit p-6 sm:p-10 flex flex-col justify-center items-center gap-4 border-2 rounded-md border-cyan-500">
+                        <p className="text-base sm:text-2xl">{perguntaAtual?.pergunta}</p>
                     </div>
-                    <div className="w-[90%] p-5 flex flex-wrap justify-center items-center gap-5">
-                        {
-                            alternativasAtuais.map((alternativa, index) => {
-
-                                return (
-                                    <div
-                                        onClick={() => {
-                                            if (alternativa.correta == true) {
-                                                setContagemAcertos(contagemAcertos + 1)
-                                            }
-
-                                            handleSelecionarAlternativa(alternativa)
-                                        }
-                                        }
-                                        className="w-[45%] hover:bg-cyan-900 rounded-lg p-5 flex justify-start items-center gap-4 border-2 border-cyan-300"
-                                    >
-                                        <p>{alternativa.alternativa}</p>
-                                    </div>
-                                );
-                            })
-                        }
+                    <div className="w-full sm:w-[90%] p-4 sm:p-5 flex flex-wrap justify-center items-center gap-4 sm:gap-5">
+                        {alternativasAtuais.map((alternativa, index) => (
+                            <div
+                                key={index}
+                                onClick={() => {
+                                    if (alternativa.correta === true) {
+                                        setContagemAcertos(contagemAcertos + 1);
+                                    }
+                                    handleSelecionarAlternativa(alternativa);
+                                }}
+                                className="w-[70%] sm:w-[45%] hover:bg-cyan-900 rounded-lg p-3 sm:p-5 flex justify-start items-center gap-3 sm:gap-4 border-2 border-cyan-300"
+                            >
+                                <p className="text-sm sm:text-base">{alternativa.alternativa}</p>
+                            </div>
+                        ))}
                     </div>
                 </div>
             ) : (
                 <>
                     {contagem > 0 ? (
                         <>
-                            <h1 className="text-4xl">Olá {usuario?.nome}, vamos treinar {nmMateria}?</h1>
-                            <p className="text-7xl">{contagem}...</p>
+                            <h1 className="text-2xl sm:text-4xl">Olá {usuario?.nome}, vamos treinar {nmMateria}?</h1>
+                            <p className="text-5xl sm:text-7xl">{contagem}...</p>
                         </>
                     ) : (
                         <>
-                            <h1 className="text-4xl">Olá {usuario?.nome}, vamos treinar {nmMateria}?</h1>
-                            <Button onClick={iniciarJogo} size='lg' color='primary'>
+                            <h1 className="text-2xl sm:text-4xl">Olá {usuario?.nome}, vamos treinar {nmMateria}?</h1>
+                            <Button onClick={iniciarJogo} size="lg" color="primary" className="mt-4 sm:mt-6">
                                 Iniciar jogo!
                             </Button>
                         </>
@@ -369,6 +361,7 @@ function Materia() {
                 </>
             )}
         </div>
+
     );
 }
 

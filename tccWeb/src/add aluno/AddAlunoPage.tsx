@@ -122,17 +122,16 @@ export function AddAlunoPage() {
     }
 
     return (
-        <div className="size-[90vw] w-screen flex flex-col justify-start items-center gap-8">
-            
-            <h1 className="text-2xl font-bold">Adicione aqui um aluno novo</h1>
+        <div className="size-[90vw] w-screen flex flex-col justify-start items-center gap-8 p-4 sm:p-8">
+            <h1 className="text-xl sm:text-2xl font-bold text-center">Adicione aqui um aluno novo</h1>
             <Form
-                className="w-[80%] flex flex-col justify-center gap-4 border-2 p-10 border-white"
+                className="w-[95%] sm:w-[80%] flex flex-col justify-center gap-6  p-6 sm:p-10 "
                 onSubmit={formik.handleSubmit}
                 onReset={formik.handleReset}
             >
                 <Input
                     isRequired
-                    errorMessage="Coloque um nome valido"
+                    errorMessage="Coloque um nome válido"
                     label="Nome"
                     labelPlacement="outside"
                     onChange={formik.handleChange}
@@ -141,35 +140,32 @@ export function AddAlunoPage() {
                     placeholder="Nome..."
                     type="text"
                     classNames={{
-                        label: '!text-white'
+                        label: '!text-white',
                     }}
                 />
                 <Select
                     isRequired
                     onChange={(e) => formik.setFieldValue('tipo_usuario_id', parseInt(e.target.value))}
                     value={formik.values.tipo_usuario_id}
-                    className="max-w-xs"
+                    className="max-w-full sm:max-w-xs"
                     label="Selecione o tipo do usuário"
                 >
-                    <SelectItem key={2} className='text-black'>Aluno</SelectItem>
-                    <SelectItem key={3} className='text-black'>Professor</SelectItem>
+                    <SelectItem key={2} className="text-black">Aluno</SelectItem>
+                    <SelectItem key={3} className="text-black">Professor</SelectItem>
                 </Select>
-                
-                {
-                    formik.values.tipo_usuario_id == 3 ?
-                        <Select
-                            onChange={(e) => formik.setFieldValue('id_materia', parseInt(e.target.value))}
-                            value={formik.values.id_materia}
-                            className="max-w-xs"
-                            label="Selecione o a materia"
-                        >
-                            {materias.map((materia) => (
-                            <SelectItem className='text-black' key={materia.id}>{materia.nome}</SelectItem>
+
+                {formik.values.tipo_usuario_id == 3 && (
+                    <Select
+                        onChange={(e) => formik.setFieldValue('id_materia', parseInt(e.target.value))}
+                        value={formik.values.id_materia}
+                        className="max-w-full sm:max-w-xs"
+                        label="Selecione a matéria"
+                    >
+                        {materias.map((materia) => (
+                            <SelectItem className="text-black" key={materia.id}>{materia.nome}</SelectItem>
                         ))}
-                        </Select>
-                        :
-                        null
-                }
+                    </Select>
+                )}
 
                 <Input
                     isRequired
@@ -182,7 +178,7 @@ export function AddAlunoPage() {
                     placeholder="Email..."
                     type="email"
                     classNames={{
-                        label: '!text-white'
+                        label: '!text-white',
                     }}
                 />
 
@@ -190,28 +186,28 @@ export function AddAlunoPage() {
                     isRequired
                     onChange={(e) => formik.setFieldValue('genero', e.target.value)}
                     value={formik.values.genero}
-                    className="max-w-xs"
+                    className="max-w-full sm:max-w-xs"
                     label="Selecione o gênero"
                 >
-                    <SelectItem key={'M'} className='text-black'>Masculino</SelectItem>
-                    <SelectItem key={'F'} className='text-black'>Feminino</SelectItem>
+                    <SelectItem key={'M'} className="text-black">Masculino</SelectItem>
+                    <SelectItem key={'F'} className="text-black">Feminino</SelectItem>
                 </Select>
 
                 <Input
                     isRequired
-                    className="max-w-xs"
-                    errorMessage="Insira uma matrícula válida de 6 digitos"
-                    label="Matricula"
+                    className="max-w-full sm:max-w-xs"
+                    errorMessage="Insira uma matrícula válida de 6 dígitos"
+                    label="Matrícula"
                     onChange={formik.handleChange}
                     value={formik.values.matricula}
                     labelPlacement="outside"
                     name="matricula"
-                    placeholder="Matricula..."
+                    placeholder="Matrícula..."
                     type="text"
                     maxLength={6}
                     minLength={6}
                     classNames={{
-                        label: '!text-white'
+                        label: '!text-white',
                     }}
                 />
 
@@ -219,46 +215,60 @@ export function AddAlunoPage() {
                     isRequired
                     onChange={(e) => formik.setFieldValue('id_turma', parseInt(e.target.value))}
                     value={formik.values.id_turma}
-                    className="max-w-xs"
+                    className="max-w-full sm:max-w-xs"
                     label="Selecione a turma"
                 >
-                    <SelectItem key={1} className='text-black'>1° ano</SelectItem>
-                    <SelectItem key={2} className='text-black'>2° ano</SelectItem>
-                    <SelectItem key={3} className='text-black'>3° ano</SelectItem>
+                    <SelectItem key={1} className="text-black">1° ano</SelectItem>
+                    <SelectItem key={2} className="text-black">2° ano</SelectItem>
+                    <SelectItem key={3} className="text-black">3° ano</SelectItem>
                 </Select>
 
                 <Select
                     isRequired
                     onChange={(e) => formik.setFieldValue('id_escola', parseInt(e.target.value))}
                     value={formik.values.id_escola}
-                    className="max-w-xs"
+                    className="max-w-full sm:max-w-xs"
                     label="Selecione a escola"
                 >
                     {escolas.map((escola) => (
-                        <SelectItem className='text-black' key={escola.id}>{escola.nome}</SelectItem>
+                        <SelectItem className="text-black" key={escola.id}>{escola.nome}</SelectItem>
                     ))}
                 </Select>
 
-                <div className="w-full flex justify-start items-center gap-5">
-                    <label className="w-1/10 p-2">Avatar</label>
-                    <div className="flex w-1/5 justify-center items-center flex-col gap-5">
+                <div className="w-full flex flex-wrap sm:flex-nowrap justify-start items-center gap-5">
+                    <label className="w-[10%] sm:w-1/10 p-2">Avatar</label>
+                    <div className="flex w-full sm:w-1/5 justify-center items-center flex-col gap-3 sm:gap-5">
                         {avatares[contador] ? (
-                            <img className="w-4/5 rounded-full" src={avatares[contador].caminho} alt="" />
+                            <img className="w-[50%] sm:w-[100%] rounded-full" src={avatares[contador].caminho} alt="" />
                         ) : (
                             <div>Carregando Avatar...</div>
                         )}
-                        <div className="flex justify-center items-center w-full gap-5">
-                            <button type="button" onClick={() => setContador(contador > 0 ? contador - 1 : 0)} className="w-2/5 bg-cyan-400 text-black flex justify-center items-center p-1 rounded cursor-pointer text-xs border-none">
+                        <div className="flex justify-center items-center w-full gap-3 sm:gap-5">
+                            <button
+                                type="button"
+                                onClick={() => setContador(contador > 0 ? contador - 1 : 0)}
+                                className="w-[30%] sm:w-2/5 bg-cyan-400 text-black flex justify-center items-center p-1 rounded cursor-pointer text-xs border-none"
+                            >
                                 <FaArrowLeft />
                             </button>
-                            <button type='button' onClick={selecionarAvatarAleatorio} className="w-2/5 bg-cyan-400 text-black flex justify-center items-center p-1 rounded cursor-pointer text-xs border-none"><strong>?</strong></button>
-                            <button type="button" onClick={() => setContador(contador < avatares.length - 1 ? contador + 1 : avatares.length - 1)} className="w-2/5 bg-cyan-400 text-black flex justify-center items-center p-1 rounded cursor-pointer text-xs border-none">
+                            <button
+                                type="button"
+                                onClick={selecionarAvatarAleatorio}
+                                className="w-[30%] sm:w-2/5 bg-cyan-400 text-black flex justify-center items-center p-1 rounded cursor-pointer text-xs border-none"
+                            >
+                                <strong>?</strong>
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setContador(contador < avatares.length - 1 ? contador + 1 : avatares.length - 1)}
+                                className="w-[30%] sm:w-2/5 bg-cyan-400 text-black flex justify-center items-center p-1 rounded cursor-pointer text-xs border-none"
+                            >
                                 <FaArrowRight />
                             </button>
                         </div>
                     </div>
 
-                    <div className="w-[40%] bg-yellow-400 flex justify-around items-center text-black text-lg p-2 rounded cursor-pointer transition-transform duration-300 ease-in-out">
+                    <div className="w-full sm:w-[40%] bg-yellow-400 flex justify-around items-center text-black text-sm sm:text-lg p-2 rounded cursor-pointer transition-transform duration-300 ease-in-out">
                         {avatares[contador] ? (
                             <img className="w-1/5 rounded-full" src={avatares[contador].caminho} alt="" />
                         ) : (
@@ -269,15 +279,16 @@ export function AddAlunoPage() {
                     </div>
                 </div>
 
-                <div className="flex gap-2">
-                    <Button size='lg' color="primary" type="submit">
+                <div className="flex flex-wrap sm:flex-nowrap gap-2 justify-center">
+                    <Button size="lg" color="primary" type="submit">
                         Enviar
                     </Button>
-                    <Button size='lg' type="reset" variant="flat">
+                    <Button size="lg" type="reset" variant="flat">
                         Limpar
                     </Button>
                 </div>
             </Form>
         </div>
+
     );
 }
