@@ -481,7 +481,7 @@ export function Sala() {
     if (scoreboard.length === 0) return null;
     const sorted = [...scoreboard].sort((a, b) => b.pontos - a.pontos);
     return (
-      <div className="w-[90%] p-5 border rounded-md mt-5 border-cyan-500">
+      <div className="w-[100%] md:w-[40%] p-5 border rounded-md mt-5 border-cyan-500">
         <h2 className="text-xl font-bold mb-3">Placar</h2>
         {sorted.map(({ userId, userName, pontos }) => (
           <div key={userId} className="flex justify-between border-b py-1 border-cyan-700">
@@ -501,22 +501,30 @@ export function Sala() {
   if (!dados && usuarioNavBar?.tipo_usuario_id === 2) return <p className="text-white p-5">Erro ao carregar estatísticas.</p>;
 
   return (
-    <div className="min-h-screen text-white ">
-      {quizFinalizado ?
-        <div className="w-screen  flex flex-col justify-start items-center gap-12 pb-10 mb-40">
-          
+    <div className="min-h-screen md:w-[100%] text-white">
+      {quizFinalizado ? (
+        <div className="w-full flex flex-col justify-start items-center gap-12 pb-10 mb-40 px-4">
           <h1 className="text-3xl font-bold">Quiz Finalizado!</h1>
-          <div className='w-[80%] flex justify-around items-start gap-5'>
-            <div className="w-[40%] p-5 border rounded-md border-cyan-500">
+          <div className="w-full md:w-[80%] flex flex-col md:flex-row justify-around items-start gap-5">
+            {/* Placar Final */}
+            <div className="w-full md:w-[40%] p-5 border rounded-md border-cyan-500">
               <h2 className="text-2xl font-bold mb-3">Placar Final</h2>
-              {scoreboard.sort((a, b) => b.pontos - a.pontos).map(({ userId, userName, pontos }) => (
-                <div key={userId} className="flex justify-between border-b py-1 border-cyan-700">
-                  <span>{userName}</span>
-                  <span>{pontos} ponto{pontos !== 1 && 's'}</span>
-                </div>
-              ))}
+              {scoreboard
+                .sort((a, b) => b.pontos - a.pontos)
+                .map(({ userId, userName, pontos }) => (
+                  <div
+                    key={userId}
+                    className="flex justify-between border-b py-1 border-cyan-700"
+                  >
+                    <span>{userName}</span>
+                    <span>
+                      {pontos} ponto{pontos !== 1 && "s"}
+                    </span>
+                  </div>
+                ))}
             </div>
-            <div className="w-[40%] border p-5 flex flex-col gap-5 rounded-md border-cyan-500">
+            {/* Chat */}
+            <div className="w-full md:w-[40%] border p-5 flex flex-col gap-5 rounded-md border-cyan-500">
               <h1 className="text-xl font-bold">Chat</h1>
               <div className="flex flex-col gap-2 border p-2 h-80 overflow-y-auto border-cyan-700">
                 {chatMessages.map((msg, index) => (
@@ -527,140 +535,209 @@ export function Sala() {
                 ))}
               </div>
               <form onSubmit={handleSendMessage} className="flex gap-2">
-                <Input value={chatText} onChange={(e) => setChatText(e.target.value)} placeholder="Digite sua mensagem..." className="flex-1 bg-gray-800 text-white" />
-                <Button type="submit" color="primary" className="bg-cyan-500 hover:bg-cyan-600">Enviar</Button>
+                <Input
+                  value={chatText}
+                  onChange={(e) => setChatText(e.target.value)}
+                  placeholder="Digite sua mensagem..."
+                  className="flex-1 bg-gray-800 text-white"
+                />
+                <Button
+                  type="submit"
+                  color="primary"
+                  className="bg-cyan-500 hover:bg-cyan-600"
+                >
+                  Enviar
+                </Button>
               </form>
             </div>
           </div>
-          <Button size="lg" onClick={handleVoltar} color="primary" className="bg-cyan-500 hover:bg-cyan-600">
+          <Button
+            size="lg"
+            onClick={handleVoltar}
+            color="primary"
+            className="bg-cyan-500 hover:bg-cyan-600"
+          >
             Encerrar sala
           </Button>
         </div>
-        : quizStarted ?
-          <div className="w-screen flex flex-col justify-center items-center gap-12 pb-10 mb-40">
-            
-            {countdown !== null ?
-              <div className="text-4xl font-bold">Iniciando em {countdown}...</div>
-              :
-              <div className="w-[90%] pb-20 p-10 flex flex-col justify-center items-center gap-10">
-                <h1 className="text-2xl">Pergunta</h1>
-                <div className="w-[90%] p-10 flex flex-col justify-center items-center gap-4 border-2 rounded-md border-cyan-500">
-                  <p className="text-2xl">{perguntaAtual?.pergunta}</p>
-                </div>
-                <div>
-                  <p>Tempo restante: {tempoRestante} segundos</p>
-                </div>
-                <div className="w-[90%] p-5 flex flex-wrap justify-center items-center gap-5">
-                  {alternativasAtuais.map((alternativa, index) => (
-                    <div
-                      key={index}
-                      onClick={() => handleSelecionarAlternativa(alternativa)}
-                      className={`w-[45%] hover:bg-cyan-700 rounded-lg p-5 flex justify-start items-center gap-4 border-2 border-cyan-500 cursor-pointer ${jaRespondeu ? 'opacity-50 pointer-events-none' : ''}`}
-                    >
-                      <p>{alternativa.alternativa}</p>
-                    </div>
-                  ))}
-                </div>
-                <div>
-                  <p className="text-2xl font-bold">
-                    {vencedor ? `Vencedor da rodada: ${vencedor}` : ""}
-                  </p>
-                </div>
-                {renderScoreboard()}
-                {vencedor !== null && user?.id === sala?.host_id && (
-                  <Button onClick={handleNextQuestion} color="primary" className="bg-cyan-500 hover:bg-cyan-600">
-                    Próxima Pergunta
-                  </Button>
-                )}
+      ) : quizStarted ? (
+        <div className="w-full flex flex-col justify-center items-center gap-12 pb-10 mb-40 px-4">
+          {countdown !== null ? (
+            <div className="text-4xl font-bold">Iniciando em {countdown}...</div>
+          ) : (
+            <div className="w-full md:w-[90%] pb-20 p-10 flex flex-col justify-center items-center gap-10">
+              <h1 className="text-2xl">Pergunta</h1>
+              <div className="w-full md:w-[90%] p-10 flex flex-col justify-center items-center gap-4 border-2 rounded-md border-cyan-500">
+                <p className="text-2xl">{perguntaAtual?.pergunta}</p>
               </div>
-            }
-          </div>
-          :
-          <div className="w-screen flex flex-col justify-start items-center gap-12 pb-10 mb-40">
-          
-            <div className="w-[95%] border flex justify-center items-start gap-10 p-5 border-cyan-500 rounded-md">
-              <div className="w-[25%] flex flex-col gap-10 p-5">
-                <div className="w-full flex flex-col gap-5 p-5 border border-cyan-500 rounded-md">
-                  <p>Código de sala: <span className="font-bold text-3xl">{codigo}</span></p>
-                  <p>Prontos: {readyPlayers.length} / {alunos.length}</p>
-                </div>
-                {user?.id === sala?.host_id ?
-                  <>
-                    <h1 className="text-xl font-bold">Selecione 3 disciplinas</h1>
-                    <Form className="w-full flex flex-col justify-center items-center gap-4" onSubmit={formik.handleSubmit} onReset={formik.handleReset}>
-                      {['materia1', 'materia2', 'materia3'].map((materiaKey, index) => (
-                        <Select
-                          key={materiaKey}
-                          onChange={(e) => handleSelectMateria(e, index)}
-                          value={selectedMaterias[index] || ''}
-                          className="w-4/5 bg-gray-800 text-black "
-                          label={`Selecione a disciplina ${index + 1}`}
-                        >
-                          {materias.map((materia) => (
-                            <SelectItem key={`${materia.id}-${index}`} value={materia.id} className="text-black">
-                              {materia.nome}
-                            </SelectItem>
-                          ))}
-                        </Select>
-                      ))}
-                      <div className="flex gap-2">
-                        <Button size="sm" color="primary" type="submit" className="bg-cyan-500 hover:bg-cyan-600">Enviar</Button>
-                        <Button size="sm" type="reset" variant="flat" className="border border-cyan-500 text-white">Limpar</Button>
-                      </div>
-                    </Form>
-                  </>
-                  :
-                  <div className="w-full flex flex-col justify-center items-center gap-4">
-                    <h2 className="text-xl font-bold">Matérias Selecionadas:</h2>
-                    {selectedMaterias && selectedMaterias.length > 0 ?
-                      selectedMaterias.map((materiaId, index) => {
-                        const materia = materias.find(m => m.id === materiaId);
-                        return <p key={index} className="text-lg font-semibold">{materia ? materia.nome : 'Matéria não encontrada'}</p>;
-                      })
-                      :
-                      <p>Nenhuma matéria selecionada</p>
-                    }
+              <div>
+                <p>Tempo restante: {tempoRestante} segundos</p>
+              </div>
+              <div className="w-full md:w-[90%] p-5 flex flex-col md:flex-wrap md:flex-row justify-center items-center gap-5">
+                {alternativasAtuais.map((alternativa, index) => (
+                  <div
+                    key={index}
+                    onClick={() => handleSelecionarAlternativa(alternativa)}
+                    className={`w-[100%] md:w-[45%] hover:bg-cyan-700 rounded-lg p-5 flex justify-start items-center gap-4 border-2 border-cyan-500 cursor-pointer ${jaRespondeu ? "opacity-50 pointer-events-none" : ""
+                      }`}
+                  >
+                    <p>{alternativa.alternativa}</p>
                   </div>
-                }
+                ))}
               </div>
-              <div className="w-[40%]  p-5 flex flex-col items-center gap-5">
-                <h1 className="text-xl font-bold">Lista de jogadores</h1>
-                <div className="flex flex-col items-center gap-5 w-full pb-10">
-                  {alunos.map((aluno) => (
-                    <UserCard
-                      key={aluno.usuario.id}
-                      id={aluno.usuario.id}
-                      nivel={aluno.usuario.nivel}
-                      nome={aluno.usuario.nome}
-                      classe="w-3/5 bg-gray-800 flex justify-between items-center text-white p-2.5 cursor-pointer rounded-md"
-                    />
-                  ))}
-                </div>
-                <div className="text-4xl font-bold">Iniciando em {countdown}...</div>
-                {alunos.length >= 2 && (
-                  <Button size="lg" onClick={handlePronto} color="primary" className="bg-cyan-500 hover:bg-cyan-600">
-                    Pronto
-                  </Button>
-                )}
+              <div>
+                <p className="text-2xl font-bold">
+                  {vencedor ? `Vencedor da rodada: ${vencedor}` : ""}
+                </p>
               </div>
-              <div className="w-[25%] border p-5 flex flex-col gap-5 rounded-md border-cyan-500">
-                <h1 className="text-xl font-bold">Chat</h1>
-                <div className="flex flex-col gap-2 border p-2 h-80 overflow-y-auto border-cyan-700">
-                  {chatMessages.map((msg, index) => (
-                    <div key={index} className="p-1 border-b border-cyan-700">
-                      <strong>{msg.sender}: </strong>
-                      <span>{msg.message}</span>
+              {renderScoreboard()}
+              {vencedor !== null && user?.id === sala?.host_id && (
+                <Button
+                  onClick={handleNextQuestion}
+                  color="primary"
+                  className="bg-cyan-500 hover:bg-cyan-600"
+                >
+                  Próxima Pergunta
+                </Button>
+              )}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="w-full flex flex-col justify-start items-center gap-12 pb-10 mb-40 px-4">
+          <div className="w-full md:w-[95%] border flex flex-col md:flex-row justify-center items-start gap-10 p-5 border-cyan-500 rounded-md">
+            {/* Dados da sala e seleção de disciplinas */}
+            <div className="w-full md:w-[25%] flex flex-col gap-10 p-5">
+              <div className="w-full flex flex-col gap-5 p-5 border border-cyan-500 rounded-md">
+                <p>
+                  Código de sala: <span className="font-bold text-3xl">{codigo}</span>
+                </p>
+                <p>
+                  Prontos: {readyPlayers.length} / {alunos.length}
+                </p>
+              </div>
+              {user?.id === sala?.host_id ? (
+                <>
+                  <h1 className="text-xl font-bold">Selecione 3 disciplinas</h1>
+                  <Form
+                    className="w-full flex flex-col justify-center items-center gap-4"
+                    onSubmit={formik.handleSubmit}
+                    onReset={formik.handleReset}
+                  >
+                    {["materia1", "materia2", "materia3"].map((materiaKey, index) => (
+                      <Select
+                        key={materiaKey}
+                        onChange={(e) => handleSelectMateria(e, index)}
+                        value={selectedMaterias[index] || ""}
+                        className="w-full md:w-4/5 bg-gray-800 text-black"
+                        label={`Selecione a disciplina ${index + 1}`}
+                      >
+                        {materias.map((materia) => (
+                          <SelectItem
+                            key={`${materia.id}-${index}`}
+                            value={materia.id}
+                            className="text-black"
+                          >
+                            {materia.nome}
+                          </SelectItem>
+                        ))}
+                      </Select>
+                    ))}
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        color="primary"
+                        type="submit"
+                        className="bg-cyan-500 hover:bg-cyan-600"
+                      >
+                        Enviar
+                      </Button>
+                      <Button
+                        size="sm"
+                        type="reset"
+                        variant="flat"
+                        className="border border-cyan-500 text-white"
+                      >
+                        Limpar
+                      </Button>
                     </div>
-                  ))}
+                  </Form>
+                </>
+              ) : (
+                <div className="w-full flex flex-col justify-center items-center gap-4">
+                  <h2 className="text-xl font-bold">Matérias Selecionadas:</h2>
+                  {selectedMaterias && selectedMaterias.length > 0 ? (
+                    selectedMaterias.map((materiaId, index) => {
+                      const materia = materias.find((m) => m.id === materiaId);
+                      return (
+                        <p key={index} className="text-lg font-semibold">
+                          {materia ? materia.nome : "Matéria não encontrada"}
+                        </p>
+                      );
+                    })
+                  ) : (
+                    <p>Nenhuma matéria selecionada</p>
+                  )}
                 </div>
-                <form onSubmit={handleSendMessage} className="flex gap-2">
-                  <Input value={chatText} onChange={(e) => setChatText(e.target.value)} placeholder="Digite sua mensagem..." className="flex-1 bg-gray-800 text-white" />
-                  <Button type="submit" color="primary" className="bg-cyan-500 hover:bg-cyan-600">Enviar</Button>
-                </form>
+              )}
+            </div>
+            {/* Lista de jogadores */}
+            <div className="w-full md:w-[40%] p-5 flex flex-col items-center gap-5">
+              <h1 className="text-xl font-bold">Lista de jogadores</h1>
+              <div className="flex flex-col items-center gap-5 w-full pb-10">
+                {alunos.map((aluno) => (
+                  <UserCard
+                    key={aluno.usuario.id}
+                    id={aluno.usuario.id}
+                    nivel={aluno.usuario.nivel}
+                    nome={aluno.usuario.nome}
+                    classe="w-full md:w-3/5 bg-gray-800 flex justify-between items-center text-white p-2.5 cursor-pointer rounded-md"
+                  />
+                ))}
               </div>
+              <div className="text-4xl font-bold">Iniciando em {countdown}...</div>
+              {alunos.length >= 2 && (
+                <Button
+                  size="lg"
+                  onClick={handlePronto}
+                  color="primary"
+                  className="bg-cyan-500 hover:bg-cyan-600"
+                >
+                  Pronto
+                </Button>
+              )}
+            </div>
+            {/* Chat */}
+            <div className="w-full md:w-[25%] border p-5 flex flex-col gap-5 rounded-md border-cyan-500">
+              <h1 className="text-xl font-bold">Chat</h1>
+              <div className="flex flex-col gap-2 border p-2 h-80 overflow-y-auto border-cyan-700">
+                {chatMessages.map((msg, index) => (
+                  <div key={index} className="p-1 border-b border-cyan-700">
+                    <strong>{msg.sender}: </strong>
+                    <span>{msg.message}</span>
+                  </div>
+                ))}
+              </div>
+              <form onSubmit={handleSendMessage} className="flex gap-2">
+                <Input
+                  value={chatText}
+                  onChange={(e) => setChatText(e.target.value)}
+                  placeholder="Digite sua mensagem..."
+                  className="flex-1 bg-gray-800 text-white"
+                />
+                <Button
+                  type="submit"
+                  color="primary"
+                  className="bg-cyan-500 hover:bg-cyan-600"
+                >
+                  Enviar
+                </Button>
+              </form>
             </div>
           </div>
-      }
+        </div>
+      )}
     </div>
+
   );
 }

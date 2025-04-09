@@ -95,7 +95,7 @@ export function ListagemPerguntasPage() {
         evento.preventDefault();
 
         async function pegaPerguntas() {
-
+            console.log(`http://localhost:3000/materias/${pesquisa.materia_id}/perguntas/escola/${pesquisa.escola_id}/turma/${pesquisa.id_turma}`)
             const response = await fetch(`http://localhost:3000/materias/${pesquisa.materia_id}/perguntas/escola/${pesquisa.escola_id}/turma/${pesquisa.id_turma}`, {
                 method: 'GET',
                 headers: {
