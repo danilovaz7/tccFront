@@ -12,6 +12,7 @@ import { ListagemPage } from './Listagem Alunos/ListagemPage.tsx';
 import { ListagemPerguntasPage } from './Listagem Perguntas/ListagemPerguntasPage.tsx';
 import { AddEscolaPage } from './add Escola/AddEscolaPage.tsx';
 import { AddPerguntaPage } from './add Pergunta/addPerguntaPage.tsx';
+import DashboardPage from "./dashboard/DashboardPage.tsx"
 import { Sala } from './Sala/Sala.tsx';
 import Materia from './Materia/MateriaPage.tsx';
 import { RootLayout } from './layout/RootLayout.tsx';
@@ -75,7 +76,12 @@ const router = createBrowserRouter([
         {
           path: '/redefinir-senha/:token',
           element: <RedefinirSenhaPage />
-        }]
+        },
+        {
+          path: '/dashboard',
+          element: <DashboardPage />
+        }
+      ]
       }
     ]
   }

@@ -243,6 +243,9 @@ console.log(usuario)
                                     <NavLink className="w-full" to="/listagem-perguntas">
                                         <button className="bg-cyan-400 p-2.5 w-full rounded-md">Ver perguntas</button>
                                     </NavLink>
+                                    <NavLink className="w-full" to="/dashboard">
+                                        <button className="bg-cyan-400 p-2.5 w-full rounded-md">Ver dashboard</button>
+                                    </NavLink>
                                 </div>
                             </div>
                         </div>
