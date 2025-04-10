@@ -102,7 +102,7 @@ export function Sala() {
     initialValues: { materias: [] },
     onSubmit: async (values) => {
       const response = await fetch(
-        `http://localhost:3000/sala/perguntas/1/3/${values.materias[0]}/${values.materias[1]}/${values.materias[2]}`,
+        `http://localhost:3000/sala/${sala?.id}/perguntas/1/3/${values.materias[0]}/${values.materias[1]}/${values.materias[2]}`,
         {
           method: 'GET',
           headers: {
@@ -150,6 +150,8 @@ export function Sala() {
     }
     carregarDados();
   }, [user, token])
+
+
 
   // SOCKET EVENTS
 
@@ -307,9 +309,28 @@ export function Sala() {
   }, [socket]);
 
   // Answering a question
-  function handleSelecionarAlternativa(alternativa: Alternativa) {
+  async function handleSelecionarAlternativa(alternativa: Alternativa) {
     if (jaRespondeu) return;
     setJaRespondeu(true);
+
+    const resposta = await fetch(`http://localhost:3000/sala/resposta-aluno`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        sala_id: sala?.id,
+        usuario_id: user?.id,
+        pergunta_id: perguntaAtual?.id, 
+        resposta_id:  alternativa.id,
+      })
+  });
+
+  if (resposta.ok) {
+     console.log('resposta salva')
+  }
+
     socket?.emit("responderPergunta", {
       roomId: sala?.id,
       userId: user?.id,
@@ -409,7 +430,6 @@ export function Sala() {
     }
   }, [socket]);
 
-  console.log(alunos);
 
   useEffect(() => {
     if (socket && user && sala?.id) {
