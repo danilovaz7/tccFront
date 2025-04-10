@@ -466,35 +466,7 @@ export function Sala() {
     const xpToUpdate = userIndex === 0 ? 1200 : 200;
     xpToUpdate === 1200 ? atualizeXP(1200) : atualizeXP(200);
 
-    const vitorias = userIndex === 0 ? 1 : 0;
-
-    const pontos = scoreboard[userIndex]?.pontos || 0;
-
-    const totalPerguntas = (dados?.total_perguntas || 0) + 12;
-    const totalPerguntasAcertadas = (dados?.total_perguntas_acertadas || 0) + pontos;
-    const totalDisputas = (dados?.total_disputas || 0) + 1;
-    const totalDisputasGanhas = (dados?.total_disputas_ganhas || 0) + vitorias;
-
-    const resposta = await fetch(`http://localhost:3000/estatisticas/${user?.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        total_perguntas: totalPerguntas,
-        total_perguntas_acertadas: totalPerguntasAcertadas,
-        total_disputas: totalDisputas,
-        total_disputas_ganhas: totalDisputasGanhas
-      })
-    });
-
-    if (resposta.ok) {
-      alert('Usuário atualizado com sucesso');
-      navigate('/home');
-    } else {
-      alert("Erro ao atualizar usuário");
-    }
+    navigate('/home');
   }
 
   function renderScoreboard() {

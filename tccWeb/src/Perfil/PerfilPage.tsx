@@ -192,11 +192,14 @@ export function PerfilPage() {
                 },
             });
             const estaticasUsuario = await response.json();
+            console.log('estaticasUsuario',estaticasUsuario)
             setDados(estaticasUsuario);
             setCarregando(false);
         }
         carregarDados();
     }, [user])
+
+    console.log('dados',dados)
 
     async function trocaAvatar() {
         try {
