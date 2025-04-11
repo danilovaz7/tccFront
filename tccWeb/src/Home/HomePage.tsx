@@ -2,7 +2,7 @@ import { FormEvent, useEffect, useState } from 'react';
 import { MdKeyboardArrowRight, } from "react-icons/md";
 import { NavLink, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
-import Navbar from '../components/Navbar/Navbar';
+
 import UserCard from '../components/UserCard/UserCard';
 import CardMateria from '../components/CardMateria/CardMateria';
 import ConfirmationPopup from '../components/ConfirmationPopup/ConfirmationPopup';
@@ -123,6 +123,7 @@ export function HomePage() {
 
     useEffect(() => {
         async function pegaUsuarios() {
+            console.log(`http://localhost:3000/usuarios?limit=5&order=nivel&orderDirection=DESC&id_turma=${usuario?.id_turma}&id_escola=${usuario?.id_escola}`)
             const response = await fetch(`http://localhost:3000/usuarios?limit=5&order=nivel&orderDirection=DESC&id_turma=${usuario?.id_turma}&id_escola=${usuario?.id_escola}`, {
                 method: 'GET',
                 headers: {
@@ -134,7 +135,7 @@ export function HomePage() {
             setUsers(usuarios)
         }
         pegaUsuarios();
-    }, [user, token])
+    }, [usuario, token])
 
     async function postSala() {
 

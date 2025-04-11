@@ -1,6 +1,9 @@
+import { user } from '@heroui/react';
 import React, { useState } from 'react';
+import { useTokenStore } from '../hooks/useTokenStore';
 
 function DashBoardPage() {
+   const { token, user } = useTokenStore();
   const [month, setMonth] = useState('');
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -8,7 +11,7 @@ function DashBoardPage() {
   const fetchDashboardStats = async (selectedMonth) => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:3000/dashboard?month=${selectedMonth}`);
+      const response = await fetch(`http://localhost:3000/escola/${user?.id}/dashboard?month=${selectedMonth}`);
       const data = await response.json();
       setStats(data);
     } catch (error) {
