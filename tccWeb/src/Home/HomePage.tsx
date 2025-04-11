@@ -223,16 +223,19 @@ console.log(usuario)
                             <div className="flex flex-col justify-start items-center gap-10">
                                 <h1 className="text-2xl md:text-3xl text-center">O que deseja fazer?</h1>
                                 <div className="w-full flex flex-col justify-center items-start gap-5">
+
+                                {(usuario?.tipo_usuario_id === 1) && (
+                                             <NavLink className="w-full" to="/addEscola">
+                                             <button className="bg-cyan-400 p-2.5 w-full rounded-md">Adicionar escola</button>
+                                         </NavLink>
+                                    )}
+                               
                                     {(usuario?.tipo_usuario_id === 4 || usuario?.tipo_usuario_id === 1) && (
-                                        <>
                                             <NavLink className="w-full" to="/addAluno">
                                                 <button className="bg-cyan-400 p-2.5 w-full rounded-md">Adicionar usuário</button>
                                             </NavLink>
-                                            <NavLink className="w-full" to="/addEscola">
-                                                <button className="bg-cyan-400 p-2.5 w-full rounded-md">Adicionar escola</button>
-                                            </NavLink>
-                                        </>
                                     )}
+
                                     {(usuario?.tipo_usuario_id === 3 || usuario?.tipo_usuario_id === 1) && (
                                         <NavLink className="w-full" to="/addPergunta">
                                             <button className="bg-cyan-400 p-2.5 w-full rounded-md">Adicionar pergunta</button>

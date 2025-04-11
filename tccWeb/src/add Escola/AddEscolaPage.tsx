@@ -42,7 +42,8 @@ export function AddEscolaPage() {
 
     const formik = useFormik({
         initialValues: {
-            nome: ''
+            nome: '',
+            cnpj: ''
         },
         onSubmit: async (values) => {
             console.log(values)
@@ -53,7 +54,8 @@ export function AddEscolaPage() {
                     'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify({
-                    nome: values.nome
+                    nome: values.nome,
+                    cnpj: values.cnpj
                 })
             });
 
@@ -80,6 +82,20 @@ export function AddEscolaPage() {
                     value={formik.values.nome}
                     name="nome"
                     placeholder="Nome..."
+                    type="text"
+                    classNames={{
+                        label: '!text-white'
+                    }}
+                />
+                 <Input
+                    isRequired
+                    errorMessage="Coloque um cnpj valido"
+                    label="Cnpj"
+                    labelPlacement="outside"
+                    onChange={formik.handleChange}
+                    value={formik.values.cnpj}
+                    name="cnpj"
+                    placeholder="Cnpj..."
                     type="text"
                     classNames={{
                         label: '!text-white'

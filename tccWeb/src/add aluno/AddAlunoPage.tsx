@@ -56,6 +56,13 @@ export function AddAlunoPage() {
         pegaUsuarios();
     }, []);
 
+    useEffect(() => {
+        if (avatares.length > 0) {
+          const selectedAvatar = avatares[contador];
+          formik.setFieldValue('id_avatar', selectedAvatar.id);
+        }
+      }, [contador, avatares]);
+
     const formik = useFormik({
         initialValues: {
             nome: '',
@@ -69,15 +76,14 @@ export function AddAlunoPage() {
             id_materia: undefined
         },
         onSubmit: async (values) => {
+            console.log(values)
             const resposta = await fetch(`http://localhost:3000/usuarios`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify({
-                    ...values, id_avatar: (contador + 1)
-                })
+                body: JSON.stringify(values)
             });
 
             if (resposta.ok) {
@@ -100,6 +106,12 @@ export function AddAlunoPage() {
         }
         carregarAvatares();
     }, [token]);
+    
+    useEffect(() => {
+        if (usuario && usuario.tipo_usuario_id !== 1) {
+          formik.setFieldValue('id_escola', usuario.id_escola);
+        }
+      }, [usuario]);
 
     useEffect(() => {
         async function carregaEscolas() {
@@ -117,9 +129,15 @@ export function AddAlunoPage() {
     }, [token]);
 
     function selecionarAvatarAleatorio() {
-        const randomIndex = Math.floor(Math.random() * avatares.length);
-        setContador(randomIndex);
-    }
+        if (avatares.length > 0) {
+          const randomIndex = Math.floor(Math.random() * avatares.length);
+          setContador(randomIndex);
+        }
+      }
+
+      if (avatares.length === 0) {
+        return <div>Carregando avatares...</div>;
+      }
 
     return (
         <div className="size-[90vw] w-screen flex flex-col justify-start items-center gap-8 p-4 sm:p-8">
@@ -222,18 +240,22 @@ export function AddAlunoPage() {
                     <SelectItem key={2} className="text-black">2° ano</SelectItem>
                     <SelectItem key={3} className="text-black">3° ano</SelectItem>
                 </Select>
+                {
+                    usuario?.tipo_usuario_id === 1 ?
+                    <Select
+                        isRequired
+                        onChange={(e) => formik.setFieldValue('id_escola', parseInt(e.target.value))}
+                        value={formik.values.id_escola}
+                        className="max-w-full sm:max-w-xs"
+                        label="Selecione a escola"
+                    >
+                        {escolas.map((escola) => (
+                            <SelectItem className="text-black" key={escola.id}>{escola.nome}</SelectItem>
+                        ))}
+                    </Select>
+                    : null
+                }
 
-                <Select
-                    isRequired
-                    onChange={(e) => formik.setFieldValue('id_escola', parseInt(e.target.value))}
-                    value={formik.values.id_escola}
-                    className="max-w-full sm:max-w-xs"
-                    label="Selecione a escola"
-                >
-                    {escolas.map((escola) => (
-                        <SelectItem className="text-black" key={escola.id}>{escola.nome}</SelectItem>
-                    ))}
-                </Select>
 
                 <div className="w-full flex flex-wrap sm:flex-nowrap justify-start items-center gap-5">
                     <label className="w-[10%] sm:w-1/10 p-2">Avatar</label>

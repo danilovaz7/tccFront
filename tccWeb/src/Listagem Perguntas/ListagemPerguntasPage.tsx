@@ -95,7 +95,6 @@ export function ListagemPerguntasPage() {
         evento.preventDefault();
 
         async function pegaPerguntas() {
-            console.log(`http://localhost:3000/materias/${pesquisa.materia_id}/perguntas/escola/${pesquisa.escola_id}/turma/${pesquisa.id_turma}`)
             const response = await fetch(`http://localhost:3000/materias/${pesquisa.materia_id}/perguntas/escola/${pesquisa.escola_id}/turma/${pesquisa.id_turma}`, {
                 method: 'GET',
                 headers: {
@@ -121,75 +120,108 @@ export function ListagemPerguntasPage() {
     return (
         <>
             <div className="w-screen flex flex-col justify-start items-center min-h-screen gap-12 mb-40">
-                
-                {usuarioNavBar.tipo_usuario_id === 1 ? <h1 className='text-white'>Ola diretor {usuarioNavBar.nome} </h1> : null}
+
+                {usuarioNavBar.tipo_usuario_id === 4 ? <h1 className='text-white'>Ola diretor {usuarioNavBar.nome} </h1> : null}
                 {usuarioNavBar.tipo_usuario_id === 3 ? <h1 className='text-white'>Ola professor {usuarioNavBar.nome} </h1> : null}
                 {
                     usuarioNavBar.tipo_usuario_id === 3 ?
-                    materias.map((materia,index) => {
-                        if (materia.id === usuarioNavBar.tipo_usuario_id) {
-                            return <h1 key={index} className='text-2xl'>Materia: {deixarPrimeiraLetraMaiuscula(materia.nome)}</h1>
-                        }
-                        return null;
-                    })
-                    : null
+                        materias.map((materia, index) => {
+                            if (materia.id === usuarioNavBar.tipo_usuario_id) {
+                                return <h1 key={materia.id} className='text-2xl'>Materia: {deixarPrimeiraLetraMaiuscula(materia.nome)}</h1>
+                            }
+                            return null;
+                        })
+                        : null
                 }
                 <Form
-                    className="w-[80%]  flex flex-row gap-4 p-5 justify-center items-center border-white border-2"
+                    className="w-[80%] flex flex-col md:flex-row gap-4 p-5 justify-center items-center border-2 border-white rounded-md"
                     onReset={() => { }}
                     onSubmit={(e) => {
                         e.preventDefault();
-                        handleSubmit(e)
+                        handleSubmit(e);
                     }}
                 >
-                    <Select isRequired onChange={(e) => { setPesquisa({ ...pesquisa, id_turma: parseInt(e.target.value) }) }} value={pesquisa.id_turma} className="max-w-xs " label="Selecione a turma">
-                        <SelectItem key={1} className='text-black' >1° ano</SelectItem>
-                        <SelectItem key={2} className='text-black' >2° ano</SelectItem>
-                        <SelectItem key={3} className='text-black' >3° ano</SelectItem>
+                    <Select
+                        isRequired
+                        onChange={(e) =>
+                            setPesquisa({ ...pesquisa, id_turma: parseInt(e.target.value) })
+                        }
+                        value={pesquisa.id_turma || ""}
+                        className="w-full md:max-w-xs"
+                        label="Selecione a turma"
+                    >
+                        <SelectItem key={1} value="1" className="text-black">
+                            1° ano
+                        </SelectItem>
+                        <SelectItem key={2} value="2" className="text-black">
+                            2° ano
+                        </SelectItem>
+                        <SelectItem key={3} value="3" className="text-black">
+                            3° ano
+                        </SelectItem>
                     </Select>
 
-                    {
-                        usuarioNavBar.tipo_usuario_id === 1 ?
-                            <Select isRequired onChange={(e) => { setPesquisa({ ...pesquisa, materia_id: parseInt(e.target.value) }) }} value={pesquisa.materia_id} className="max-w-xs " label="Selecione a matéria">
-                                {materias.map((materia,index) => (
-                                    <SelectItem  className='text-black' key={index}>{materia.nome}</SelectItem>
+                    {(usuarioNavBar.tipo_usuario_id === 1 ||
+                        usuarioNavBar.tipo_usuario_id === 4) && (
+                            <Select
+                                isRequired
+                                onChange={(e) =>
+                                    setPesquisa({ ...pesquisa, materia_id: parseInt(e.target.value) })
+                                }
+                                value={pesquisa.materia_id || ""}
+                                className="w-full md:max-w-xs"
+                                label="Selecione a matéria"
+                            >
+                                {materias.map((materia) => (
+                                    <SelectItem
+                                        key={materia.id}
+                                        value={materia.id.toString()}
+                                        className="text-black"
+                                    >
+                                        {materia.nome}
+                                    </SelectItem>
                                 ))}
                             </Select>
-                            :
-                            null
-                    }
+                        )}
 
                     <div className="flex gap-2">
-                        <Button color="primary" type="submit">
+                        <Button
+                            color="primary"
+                            type="submit"
+                            className="bg-cyan-500 hover:bg-cyan-600"
+                        >
                             Submit
                         </Button>
-                        <Button type="reset" variant="flat">
+                        <Button
+                            type="reset"
+                            variant="flat"
+                            className="border border-white text-white"
+                        >
                             Reset
                         </Button>
                     </div>
                 </Form>
 
-                <div className='w-[90%]  p-5 flex flex-row justify-center items-center flex-wrap gap-10'>
+                <div className='w-[100%] md:w-[90%]  p-2 md:p-5 flex flex-row justify-center items-center flex-wrap gap-10'>
                     {
                         perguntasMaterias
                             ? (
-                                <div className="w-[100%] flex-wrap  p-5 gap-4 flex flex-row justify-start items-center">
+                                <div className="w-[100%] flex-wrap  p-2 md:p-5 gap-4 flex flex-row justify-start items-center">
                                     {
                                         perguntasMaterias.map((perguntaMateria, index) => {
 
                                             return (
-
                                                 <Accordion key={index} className=' text-white' selectionMode="multiple">
                                                     <AccordionItem
                                                         key={index}
-                                                        className='bg-gray-700 p-5 text-white'
+                                                        className='bg-gray-700 w-[100%] p-2 md:p-5 text-white'
                                                         startContent={
                                                             "Dificuldade: " + perguntaMateria.elo_id
                                                         }
                                                         title={perguntaMateria.pergunta}
                                                     >
                                                         {
-                                                            perguntaMateria.alternativas.map((alternativa,indexx) => (
+                                                            perguntaMateria.alternativas.map((alternativa, indexx) => (
                                                                 <div className=' flex justify-between gap-5 p-5'>
 
                                                                     {
