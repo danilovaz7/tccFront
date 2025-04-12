@@ -16,7 +16,7 @@ function Navbar({ id, nivel, avatar }: NavbarProps) {
             onClick={() => {navigate('/home')}} 
             src="/src/assets/logo1Play2Learn.png" 
             alt="Logo" 
-            className="w-[70%] sm:w-[35%] cursor-pointer" 
+            className="w-[80%] sm:w-[35%] cursor-pointer" 
         />
     </div>
     

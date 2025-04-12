@@ -123,7 +123,6 @@ export function HomePage() {
 
     useEffect(() => {
         async function pegaUsuarios() {
-            console.log(`http://localhost:3000/usuarios?limit=5&order=nivel&orderDirection=DESC&id_turma=${usuario?.id_turma}&id_escola=${usuario?.id_escola}`)
             const response = await fetch(`http://localhost:3000/usuarios?limit=5&order=nivel&orderDirection=DESC&id_turma=${usuario?.id_turma}&id_escola=${usuario?.id_escola}`, {
                 method: 'GET',
                 headers: {
@@ -219,7 +218,7 @@ console.log(usuario)
                             </div>
                         </div>
                         :
-                        <div className="w-full md:w-[25%] border h-fit p-5 flex flex-col justify-start items-center gap-3 rounded-md shadow-sm">
+                        <div className="w-full mb-20 md:w-[25%] border h-fit p-5 flex flex-col justify-start items-center gap-3 rounded-md shadow-sm">
                             <div className="flex flex-col justify-start items-center gap-10">
                                 <h1 className="text-2xl md:text-3xl text-center">O que deseja fazer?</h1>
                                 <div className="w-full flex flex-col justify-center items-start gap-5">
@@ -256,14 +255,14 @@ console.log(usuario)
                 }
 
                 <div className="w-full md:w-[40%] h-auto flex flex-col justify-center items-center">
-                    <img className="w-[75%] md:w-[65%] rounded-full shadow-md" src="./src/assets/gifCentro.gif" alt="GIF" />
+                    <img className="w-[75%] md:w-[70%] rounded-full shadow-md" src="./src/assets/gifCentro.gif" alt="GIF" />
                 </div>
 
-                <div className="w-full md:w-[30%] pb-20 sm:pb-5 h-auto p-5 flex flex-col justify-start items-center gap-5 shadow-md">
+                <div className="w-full md:w-[30%] pb-20 sm:pb-5 h-fit p-5 flex flex-col justify-start items-center gap-5 shadow-md">
                     {
                         usuario?.tipo_usuario_id !== 2 ?
                             <>
-                                <h1 className="text-2xl md:text-4xl text-center">Ranking das<span className="text-yellow-400"> salas</span></h1>
+                                <h1 className="text-2xl md:text-4xl h-fit text-center">Ranking das<span className="text-yellow-400"> salas</span></h1>
                                 <div className="w-full flex flex-col gap-3">
                                     {
                                         turmas.map((turma, index) => (
