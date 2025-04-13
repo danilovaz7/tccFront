@@ -81,6 +81,7 @@ export function Sala() {
   const [scoreboard, setScoreboard] = useState<Score[]>([]);
   const [quizFinalizado, setQuizFinalizado] = useState(false);
   const [countdown, setCountdown] = useState<number | null>(null);
+  const [dificuldadeId, setDificuldadeId] = useState<number | null>(null);
 
   // BUSCA DAS MATÉRIAS
   useEffect(() => {
@@ -98,25 +99,44 @@ export function Sala() {
     getMaterias();
   }, [token]);
 
+
   const formik = useFormik({
     initialValues: { materias: [] },
     onSubmit: async (values) => {
-      const response = await fetch(
-        `http://localhost:3000/sala/${sala?.id}/perguntas/1/3/${values.materias[0]}/${values.materias[1]}/${values.materias[2]}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
+      try {
+       
+        // Verifica se a dificuldade foi selecionada
+        if (!dificuldadeId) {
+          alert("Por favor, selecione uma dificuldade!");
+          return;
         }
-      );
-      const perguntas = await response.json();
-      setPerguntasMaterias(perguntas);
-      socket?.emit("enviarPerguntas", { roomId: sala?.id, perguntas });
+        const response = await fetch(
+          `http://localhost:3000/sala/${sala?.id}/perguntas/${dificuldadeId}/3/${values.materias[0]}/${values.materias[1]}/${values.materias[2]}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+          }
+        );
+  
+        if (!response.ok) {
+          const errorData = await response.json();
+          alert(errorData.error);
+          return;
+        }
+  
+        const perguntas = await response.json();
+        setPerguntasMaterias(perguntas);
+        socket?.emit("enviarPerguntas", { roomId: sala?.id, perguntas });
+      } catch (error) {
+        console.error('Erro no envio das perguntas:', error);
+        alert('Ocorreu um erro ao enviar as perguntas.');
+      }
     },
   });
-
+  
   // BUSCA INFORMAÇÕES DO USUÁRIO
   useEffect(() => {
     async function pegaUsuarioNav() {
@@ -316,20 +336,20 @@ export function Sala() {
     const resposta = await fetch(`http://localhost:3000/sala/resposta-aluno`, {
       method: 'POST',
       headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
       },
       body: JSON.stringify({
         sala_id: sala?.id,
         usuario_id: user?.id,
-        pergunta_id: perguntaAtual?.id, 
-        resposta_id:  alternativa.id,
+        pergunta_id: perguntaAtual?.id,
+        resposta_id: alternativa.id,
       })
-  });
+    });
 
-  if (resposta.ok) {
-     console.log('resposta salva')
-  }
+    if (resposta.ok) {
+      console.log('resposta salva')
+    }
 
     socket?.emit("responderPergunta", {
       roomId: sala?.id,
@@ -429,7 +449,7 @@ export function Sala() {
       socket.off("playersUpdated", handlePlayersUpdated);
     }
   }, [socket]);
-
+console.log(alunos)
 
   useEffect(() => {
     if (socket && user && sala?.id) {
@@ -460,12 +480,13 @@ export function Sala() {
 
   async function handleVoltar(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault();
-
+  
     const userIndex = scoreboard.findIndex(scoreUser => scoreUser.userId === usuarioNavBar?.id);
-
-    const xpToUpdate = userIndex === 0 ? 1200 : 200;
-    xpToUpdate === 1200 ? atualizeXP(1200) : atualizeXP(200);
-
+    const dificuldade = dificuldadeId ?? 1;
+  
+    const xpToUpdate = userIndex === 0 ? (1000 * dificuldade) : (100 * dificuldade);
+    
+    await atualizeXP(xpToUpdate);
     navigate('/home');
   }
 
@@ -635,6 +656,21 @@ export function Sala() {
                         ))}
                       </Select>
                     ))}
+
+                    <Select
+                      className="w-full md:w-4/5 bg-gray-800 text-black"
+                      label="Selecione uma dificuldade"
+                      value={dificuldadeId ?? ""}
+                      onChange={(e) => setDificuldadeId(parseInt(e.target.value))}
+                    >
+                      <SelectItem value="1" key={1} className="text-black">{'Aprendiz'}</SelectItem>
+                      <SelectItem value="2" key={2}  className="text-black">{'Regular'}</SelectItem>
+                      <SelectItem value="3" key={3}  className="text-black">{'Estudioso'}</SelectItem>
+                      <SelectItem value="4" key={4}  className="text-black">{'Exemplar'}</SelectItem>
+                      <SelectItem value="5" key={5}  className="text-black">{'Avançado'}</SelectItem>
+                      <SelectItem value="6" key={6}  className="text-black">{'Brilhante'}</SelectItem>
+                    </Select>
+
                     <div className="flex gap-2">
                       <Button
                         size="sm"

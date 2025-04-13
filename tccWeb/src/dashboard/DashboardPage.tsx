@@ -155,11 +155,11 @@ function DashBoardPage() {
               <h2 className="text-xl font-semibold text-gray-200">
                Top 3 alunos com mais erros por turma
               </h2>
-              <p className='text-xs'>São levados em consideração erros tanto em partidas online quanto em partidas offline</p>
+              <p className='text-xs'>São levados em consideração erros tanto em partidas online quanto em treinamento offline</p>
               {stats.rankingPorTurma &&
                 Object.keys(stats.rankingPorTurma).map((turma) => (
                   <div key={turma} className="mt-4">
-                    <h3 className="text-lg font-semibold text-cyan-400">Turma: {turma}</h3>
+                    <h3 className="text-lg font-semibold text-cyan-400">Turma: {turma}º ano</h3>
                     <ul className="pl-4">
                       {stats.rankingPorTurma[turma].map((aluno: any) => (
                         <li key={aluno.id} className="text-gray-100">
