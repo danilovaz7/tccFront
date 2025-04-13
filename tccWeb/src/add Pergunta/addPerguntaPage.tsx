@@ -70,7 +70,8 @@ export function AddPerguntaPage() {
                     elo_id: values.elo_id,
                     materia_id: values.materia_id,
                     alternativas: values.alternativas,
-                    alternativaCorreta: values.alternativaCorreta
+                    alternativaCorreta: values.alternativaCorreta,
+                    criador_id: usuario?.id
                 })
             });
 

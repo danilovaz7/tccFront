@@ -170,6 +170,14 @@ export function AddAlunoPage() {
                 >
                     <SelectItem key={2} className="text-black">Aluno</SelectItem>
                     <SelectItem key={3} className="text-black">Professor</SelectItem>
+                    {
+                        usuario?.tipo_usuario_id == 1 ?
+                        <>
+                         <SelectItem key={1} className="text-black">Administrador</SelectItem>
+                         <SelectItem key={4} className="text-black">Diretor</SelectItem>
+                        </>
+                        :null
+                    }
                 </Select>
 
                 {formik.values.tipo_usuario_id == 3 && (

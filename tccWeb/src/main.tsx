@@ -62,7 +62,7 @@ const router = createBrowserRouter([
           element: <ListagemPerguntasPage />
         },
         {
-          path: '/materias/:nmMateria/:turmaId',
+          path: '/materias/:nmMateria/:turmaId/:codigo',
           element: <Materia />
         },
         {

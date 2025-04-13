@@ -57,9 +57,17 @@ interface Resposta {
 }
 
 
+interface Sala {
+    id: number;
+    codigo: string;
+    host_id: number;
+    status: string;
+  }
+
+
 function Materia() {
     const { token, user } = useTokenStore();
-    let { nmMateria, turmaId } = useParams();
+    let { nmMateria, turmaId, codigo } = useParams();
     const navigate = useNavigate();
 
     const [usuario, setUsuario] = useState<Usuario>();
@@ -68,6 +76,7 @@ function Materia() {
     const [contagem, setContagem] = useState(0);
     const [contagemAcertos, setContagemAcertos] = useState(0);
     const [fimDeJogo, setFimDeJogo] = useState(false);
+    const [sala, setSala] = useState<Sala>();
     const [eloMateria, setEloMateria] = useState<EloMateria>();
     const [perguntaAtual, setPerguntaAtual] = useState<Pergunta | null>(null);
     const [alternativasAtuais, setAlternativasAtuais] = useState<Alternativa[]>([]);
@@ -86,6 +95,23 @@ function Materia() {
             setSubeloAtualizado(2);
         }
     }, [contagemAcertos, eloMateria, user?.id]);
+
+    useEffect(() => {
+        async function pegaSala() {
+          const response = await fetch(`http://localhost:3000/sala/${codigo}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+          });
+          const salaData = await response.json();
+          setSala(salaData);
+        }
+        if (codigo) {
+          pegaSala();
+        }
+      }, [codigo, token]);
 
 
     function obterPerguntaAleatoria(): Pergunta | null {
@@ -117,7 +143,25 @@ function Materia() {
         }, 1000);
     }
 
-    function handleSelecionarAlternativa(alternativa: Alternativa) {
+    async function handleSelecionarAlternativa(alternativa: Alternativa) {
+        const resposta = await fetch(`http://localhost:3000/sala/resposta-aluno`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              sala_id: sala?.id,
+              usuario_id: user?.id,
+              pergunta_id: perguntaAtual?.id, 
+              resposta_id:  alternativa.id,
+            })
+        });
+      
+        if (resposta.ok) {
+           console.log('resposta salva')
+        }
+
         setRespostas((prevRespostas) => {
             const jaRespondida = prevRespostas.some(
                 (resposta) => resposta.pergunta.id === perguntaAtual?.id
@@ -168,7 +212,7 @@ function Materia() {
     useEffect(() => {
         if (eloMateria?.elo_id) {
             async function pegaPerguntasMateria() {
-                const response = await fetch(`http://localhost:3000/materias/${nmMateria}/perguntas/${eloMateria.elo_id}/${turmaId}`, {
+                const response = await fetch( `http://localhost:3000/sala/${sala?.id}/perguntas/${eloMateria?.elo_id}/${turmaId}/${nmMateria}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -227,6 +271,7 @@ function Materia() {
     const [eloAtualizado, setEloAtualizado] = useState<number | null>(null);
     const [subeloAtualizado, setSubeloAtualizado] = useState<number | null>(null);
 
+
     async function atualizeXP(xp: number) {
         try {
             const response = await fetch(`http://localhost:3000/usuarios/${user?.id}/atualizaexperiencia`, {
@@ -261,6 +306,17 @@ function Materia() {
             atualizeXP(20 * contagemAcertos)
         }
 
+       await fetch(`http://localhost:3000/sala/${sala?.codigo}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+              status: 'encerrada',
+              vencedor_id: usuario?.id
+            })
+          });
 
         const resposta = await fetch(`http://localhost:3000/eloMaterias/${usuario?.id}/materia/${nmMateria}`, {
             method: 'PUT',

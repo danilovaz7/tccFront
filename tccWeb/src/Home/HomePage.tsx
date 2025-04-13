@@ -64,7 +64,8 @@ export function HomePage() {
     const handleShowPopup = () => setIsPopupOpen(true);
     const handleConfirm = () => {
         setIsPopupOpen(false);
-        navigate(`/materias/${materiaSelecionada?.materia.nome}/${usuario?.id_turma}`)
+        postSalaOffline()
+        
     };
     const handleCancel = () => {
         setIsPopupOpen(false);
@@ -136,8 +137,7 @@ export function HomePage() {
         pegaUsuarios();
     }, [usuario, token])
 
-    async function postSala() {
-
+    async function postSalaOnline() {
         const code = Math.random().toString(36).substring(2, 8).toUpperCase();
         const resposta = await fetch(`http://localhost:3000/sala`, {
             method: 'POST',
@@ -147,7 +147,8 @@ export function HomePage() {
             },
             body: JSON.stringify({
                 codigo: code,
-                id_host: user?.id
+                id_host: user?.id,
+                tipo: 'online'
             })
         });
 
@@ -159,13 +160,36 @@ export function HomePage() {
         }
     }
 
+    async function postSalaOffline() {
+        const code = Math.random().toString(36).substring(2, 8).toUpperCase();
+        const resposta = await fetch(`http://localhost:3000/sala`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                codigo: code,
+                id_host: user?.id,
+                tipo: 'offline'
+            })
+        });
+
+        if (resposta.ok) {
+            alert('sala criada');
+            navigate(`/materias/${materiaSelecionada?.materia.nome}/${usuario?.id_turma}/${code}`)
+        } else {
+            alert("Erro ao criar sala");
+        }
+    }
+
     const formik = useFormik({
         initialValues: {
             codigo: '',
             id_aluno: user?.id
         },
         onSubmit: async (values) => {
-            console.log(values)
+     
             const resposta = await fetch(`http://localhost:3000/entrar/sala`, {
                 method: 'POST',
                 headers: {
@@ -188,9 +212,6 @@ export function HomePage() {
         }
     });
 
-
-console.log(usuario)
-
     return (
 
         <div className="w-11/12 flex flex-wrap overflow-x-hidden-hidden gap-10 justify-around">
@@ -201,7 +222,7 @@ console.log(usuario)
                             <h1 className="text-2xl md:text-4xl text-center">Que tal jogar com amigos?</h1>
                             <p className="text-sm md:text-base text-center">É sempre melhor evoluir juntos!</p>
                             <div className="w-full flex flex-col justify-start items-center gap-5 p-3 rounded-md ">
-                                <Button onClick={postSala} color="danger">CRIAR SALA</Button>
+                                <Button onClick={postSalaOnline} color="danger">CRIAR SALA</Button>
                                 <Form onSubmit={formik.handleSubmit} className="w-full flex flex-col justify-center items-center gap-3">
                                     <Input
                                         isRequired
