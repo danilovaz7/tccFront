@@ -144,8 +144,6 @@ export function ListagemPage() {
     return (
 <>
     <div className="w-screen flex flex-col justify-start items-center min-h-screen gap-6 sm:gap-12 mb-20 sm:mb-40 p-4 sm:p-8">
-        <h1 className="text-xl sm:text-3xl font-bold text-white text-center">OLA PROFESSOR</h1>
-
         <Form
             className="w-[95%] sm:w-[80%] flex flex-col sm:flex-row gap-4 p-4 sm:p-5 justify-center items-center border-white border-2 rounded-md"
             onReset={() => {}}
