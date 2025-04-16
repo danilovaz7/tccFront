@@ -82,6 +82,8 @@ export function Sala() {
   const [quizFinalizado, setQuizFinalizado] = useState(false);
   const [countdown, setCountdown] = useState<number | null>(null);
   const [dificuldadeId, setDificuldadeId] = useState<number | null>(null);
+  // Estado para o timer de descanso entre perguntas
+  const [restCountdown, setRestCountdown] = useState<number | null>(null);
 
   // BUSCA DAS MATÉRIAS
   useEffect(() => {
@@ -99,12 +101,10 @@ export function Sala() {
     getMaterias();
   }, [token]);
 
-
   const formik = useFormik({
     initialValues: { materias: [] },
     onSubmit: async (values) => {
       try {
-       
         // Verifica se a dificuldade foi selecionada
         if (!dificuldadeId) {
           alert("Por favor, selecione uma dificuldade!");
@@ -171,8 +171,6 @@ export function Sala() {
     carregarDados();
   }, [user, token])
 
-
-
   // SOCKET EVENTS
 
   // Countdown
@@ -197,6 +195,8 @@ export function Sala() {
       setTempoRestante(tempo);
       setVencedor(null);
       setJaRespondeu(false);
+      // Limpa o timer de descanso quando iniciar nova pergunta
+      setRestCountdown(null);
     };
     socket.on("startQuestion", handleStartQuestion);
     return () => {
@@ -222,12 +222,27 @@ export function Sala() {
     const handleResultadoPergunta = ({ vencedor, respostaCorreta, scoreboard }: { vencedor: string | null, respostaCorreta: string, scoreboard: Score[] }) => {
       setVencedor(vencedor);
       setScoreboard(scoreboard);
+      // Inicia o timer de descanso de 5 segundos
+      setRestCountdown(5);
     };
     socket.on("resultadoPergunta", handleResultadoPergunta);
     return () => {
       socket.off("resultadoPergunta", handleResultadoPergunta);
     }
   }, [socket]);
+
+  // Timer de descanso no front-end
+  useEffect(() => {
+    if (restCountdown === null) return;
+    if (restCountdown <= 0) {
+      setRestCountdown(null);
+      return;
+    }
+    const interval = setInterval(() => {
+      setRestCountdown(prev => (prev !== null ? prev - 1 : null));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [restCountdown]);
 
   // Quiz Finished
   useEffect(() => {
@@ -387,10 +402,9 @@ export function Sala() {
     }
   };
 
-  // Next Question for host
-  const handleNextQuestion = () => {
-    socket?.emit("nextQuestion", { roomId: sala?.id });
-  };
+  // Removido o botão de "Próxima Pergunta" pois agora a transição é automática.
+  // O evento "nextQuestion" continua existente no back-end (caso queira manter como fallback),
+  // mas não é mais disparado pelo front-end.
 
   // Get room data
   useEffect(() => {
@@ -449,7 +463,7 @@ export function Sala() {
       socket.off("playersUpdated", handlePlayersUpdated);
     }
   }, [socket]);
-console.log(alunos)
+  console.log(alunos)
 
   useEffect(() => {
     if (socket && user && sala?.id) {
@@ -591,8 +605,7 @@ console.log(alunos)
                   <div
                     key={index}
                     onClick={() => handleSelecionarAlternativa(alternativa)}
-                    className={`w-[100%] md:w-[45%] hover:bg-cyan-700 rounded-lg p-5 flex justify-start items-center gap-4 border-2 border-cyan-500 cursor-pointer ${jaRespondeu ? "opacity-50 pointer-events-none" : ""
-                      }`}
+                    className={`w-[100%] md:w-[45%] hover:bg-cyan-700 rounded-lg p-5 flex justify-start items-center gap-4 border-2 border-cyan-500 cursor-pointer ${jaRespondeu ? "opacity-50 pointer-events-none" : ""}`}
                   >
                     <p>{alternativa.alternativa}</p>
                   </div>
@@ -603,16 +616,12 @@ console.log(alunos)
                   {vencedor ? `Vencedor da rodada: ${vencedor}` : ""}
                 </p>
               </div>
-              {renderScoreboard()}
-              {vencedor !== null && user?.id === sala?.host_id && (
-                <Button
-                  onClick={handleNextQuestion}
-                  color="primary"
-                  className="bg-cyan-500 hover:bg-cyan-600"
-                >
-                  Próxima Pergunta
-                </Button>
+              {/* Mostra o timer de descanso quando o resultado está disponível */}
+              {vencedor !== null && restCountdown !== null && (
+                <div className="text-2xl">Próxima pergunta em: {restCountdown} segundos</div>
               )}
+              {renderScoreboard()}
+              {/* Botão de Próxima Pergunta removido, pois agora a transição é automática */}
             </div>
           )}
         </div>
@@ -766,6 +775,5 @@ console.log(alunos)
         </div>
       )}
     </div>
-
   );
 }

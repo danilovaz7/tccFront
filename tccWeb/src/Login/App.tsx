@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { FaRegEye, FaRegEyeSlash, FaRegUser } from "react-icons/fa";
 import { NavLink, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
@@ -9,7 +9,14 @@ function App() {
 
   const [hidePass, setHidePass] = useState(true)
   const navigate = useNavigate();
-  const { setToken, setUser } = useTokenStore();
+  const { setToken, setUser,   token, user } = useTokenStore();
+
+  
+useEffect(() => {
+  if (token && user) {
+    navigate('/home');
+  }
+}, [token, user]);
 
 
   async function handleSubmit(evento: FormEvent<HTMLFormElement>) {
@@ -24,8 +31,6 @@ function App() {
         credentials: 'include',
         body: JSON.stringify({ email, senha }),
       });
-
-      console.log('respoonse', response.ok);
 
       if (!response.ok) {
         const errorText = await response.text();

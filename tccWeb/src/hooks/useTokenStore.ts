@@ -6,9 +6,9 @@ interface User {
   email: string;
   senha: string;
   avatar: {
-    nome: string,
-    caminho: string
-  }
+    nome: string;
+    caminho: string;
+  };
   nivel: number;
   matricula: string;
   experiencia: number;
@@ -22,23 +22,34 @@ interface User {
 interface TokenStore {
   token: string | undefined;
   user: User | undefined;
-  setToken: (token: string) => void;
-  setUser: (user: User) => void;
+  setToken: (token: string | undefined) => void;
+  setUser: (user: User | undefined) => void;
 }
 
 export const useTokenStore = create<TokenStore>((set) => {
   const storedToken = localStorage.getItem('token');
-  const storedUser = localStorage.getItem('user');
+  // Verifica se storedUser existe e não é a string "undefined"
+  const rawUser = localStorage.getItem('user');
+  const storedUser =
+    rawUser && rawUser !== 'undefined' ? JSON.parse(rawUser) : undefined;
 
   return {
     token: storedToken ? storedToken : undefined,
-    user: storedUser ? JSON.parse(storedUser) : undefined,
+    user: storedUser,
     setToken: (token) => {
-      localStorage.setItem('token', token);
+      if (token === undefined) {
+        localStorage.removeItem('token');
+      } else {
+        localStorage.setItem('token', token);
+      }
       set({ token });
     },
     setUser: (user) => {
-      localStorage.setItem('user', JSON.stringify(user));
+      if (user === undefined) {
+        localStorage.removeItem('user');
+      } else {
+        localStorage.setItem('user', JSON.stringify(user));
+      }
       set({ user });
     }
   };
