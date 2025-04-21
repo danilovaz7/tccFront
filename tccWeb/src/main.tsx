@@ -28,6 +28,14 @@ const router = createBrowserRouter([
         element: <App />,
       },
       {
+        path: '/recupera-senha',
+        element: <RecuperaSenhaPage />,
+      },
+      {
+        path: '/redefinir-senha/:token',
+        element: <RedefinirSenhaPage />,
+      },
+      {
         element: <RootLayout />,
         children: [{
           path: '/home',
@@ -66,16 +74,8 @@ const router = createBrowserRouter([
           element: <Materia />
         },
         {
-          path: '/recupera-senha',
-          element: <RecuperaSenhaPage />
-        },
-        {
           path: '/sala/:codigo',
           element: <Sala />
-        },
-        {
-          path: '/redefinir-senha/:token',
-          element: <RedefinirSenhaPage />
         },
         {
           path: '/dashboard',

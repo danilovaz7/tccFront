@@ -39,6 +39,9 @@ export function RecuperaSenhaPage() {
 
   return (
     <div className='flex w-screen flex-col  justify-center items-center gap-4'>
+      <div className=' shadow-2xl p-5 w-screen flex '>
+        <p onClick={() => { navigate('/')}} className='text-2xl'>{'<   '}Voltar</p>
+      </div>
       <form className='flex flex-col justify-center items-center rounded-2xl w-[90%] gap-4 p-1' onSubmit={handleSubmit}>
         <h2 className='text-white mb-4'>Recuperação de Senha</h2>
         <div className='w-[50%] flex flex-row justify-around items-center border-2 border-cyan-500 rounded-md p-1'>

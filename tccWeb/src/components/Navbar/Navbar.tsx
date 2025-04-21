@@ -14,13 +14,10 @@ function Navbar({ id, nivel, avatar }: NavbarProps) {
   const { setToken, setUser } = useTokenStore();
 
   function handleLogout() {
-    // Remove o token e o usuário do localStorage
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    // Atualiza o estado global para undefined
     setToken(undefined);
     setUser(undefined);
-    // Redireciona para a tela de login
     navigate('/');
   }
 
