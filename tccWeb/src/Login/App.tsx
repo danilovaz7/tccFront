@@ -3,31 +3,27 @@ import { FaRegEye, FaRegEyeSlash, FaRegUser } from "react-icons/fa";
 import { NavLink, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 
-function App() {
-  const [email, setEmail] = useState('')
-  const [senha, setSenha] = useState('')
-
-  const [hidePass, setHidePass] = useState(true)
+function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [hidePass, setHidePass] = useState(true);
   const navigate = useNavigate();
-  const { setToken, setUser,   token, user } = useTokenStore();
+  const { setToken, setUser, token, user } = useTokenStore();
 
-  
-useEffect(() => {
-  if (token && user) {
-    navigate('/home');
-  }
-}, [token, user]);
-
+  useEffect(() => {
+    if (token && user) {
+      navigate('/home');
+    }
+  }, [token, user, navigate]);
 
   async function handleSubmit(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault();
 
     try {
+      // Requisição de login
       const response = await fetch(`http://localhost:3000/login`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({ email, senha }),
       });
@@ -39,13 +35,15 @@ useEffect(() => {
         return;
       }
 
-      const json = await response.json();
+      // Aqui, o login retorna o token
+      const { token: loginToken } = await response.json();
 
+      // Requisição para obter os dados completos do usuário através da rota /eu
       const respostaEu = await fetch(`http://localhost:3000/eu`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${json.token}`,
+          'Authorization': `Bearer ${loginToken}`,
         },
         credentials: 'include',
       });
@@ -57,13 +55,14 @@ useEffect(() => {
         return;
       }
 
-      const user = await respostaEu.json();
+      const userData = await respostaEu.json();
 
-      setToken(json.token);
-      setUser(user);
+      setToken(loginToken);
+      setUser(userData);
 
-      localStorage.setItem('token', json.token);
-      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('token', loginToken);
+      localStorage.setItem('user', JSON.stringify(userData));
+      
       navigate('/home');
     } catch (error) {
       console.error('Erro ao fazer login:', error);
@@ -71,58 +70,56 @@ useEffect(() => {
     }
   }
 
-
   return (
-    <div className='flex flex-col h-full justify-center items-center pt-32 gap-4 '>
-      <img className='w-[40%] border-2 border-black rounded-[50%] ' src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
+    <div className='flex flex-col h-full justify-center items-center pt-32 gap-4'>
+      <img
+        className='w-[40%] border-2 border-black rounded-full'
+        src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+        alt="User Icon"
+      />
 
-      <form className='flex flex-col justify-center items-center rounded-2xl w-[90%] gap-4 p-1 ' onSubmit={(evento) => handleSubmit(evento)} >
-
-        <div className='w-[90%] flex flex-row justify-around items-center border-2 border-cyan-500 rounded-md p-1 '>
-
+      <form onSubmit={handleSubmit} className='flex flex-col justify-center items-center rounded-2xl w-[90%] gap-4 p-1'>
+        <div className='w-[90%] flex flex-row justify-around items-center border-2 border-cyan-500 rounded-md p-1'>
           <input
-            className=' w-[80%] p-1.5 border-0 bg-transparent text-white focus:outline-0'
+            className='w-[80%] p-1.5 border-0 bg-transparent text-white focus:outline-none'
             type="text"
             value={email}
-            onChange={(e) => { setEmail(e.target.value) }}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder='Email...'
             required
+            autoComplete="email"
           />
           <FaRegUser />
-
         </div>
 
-
-        <div className='w-[90%] flex flex-row justify-around items-center border-2 border-cyan-500 rounded-md p-1 '>
+        <div className='w-[90%] flex flex-row justify-around items-center border-2 border-cyan-500 rounded-md p-1'>
           <input
-            className=' w-[80%] p-1.5 border-0 bg-transparent text-white focus:outline-0'
+            className='w-[80%] p-1.5 border-0 bg-transparent text-white focus:outline-none'
             type={hidePass ? "password" : "text"}
             value={senha}
-            onChange={(e) => { setSenha(e.target.value) }}
+            onChange={(e) => setSenha(e.target.value)}
             placeholder='Senha...'
             required
+            autoComplete="current-password"
           />
-          <div className='verSenha' onClick={() => { setHidePass(!hidePass) }}>
-            {
-              hidePass
-                ?
-                <FaRegEye />
-                :
-                <FaRegEyeSlash />
-            }
-          </div >
+          <div className='cursor-pointer' onClick={() => setHidePass(!hidePass)}>
+            {hidePass ? <FaRegEye /> : <FaRegEyeSlash />}
+          </div>
         </div>
 
-        <button className='w-[35%] bg-cyan-400 flex justify-center items-center p-1.5 rounded-md text-black hover:bg-cyan-700  '>Entrar</button>
+        <button
+          type='submit'
+          className='w-[35%] bg-cyan-400 flex justify-center items-center p-1.5 rounded-md text-black hover:bg-cyan-700'
+        >
+          Entrar
+        </button>
+        
         <NavLink to="/recupera-senha">
-          <button>Esqueci minha senha</button>
+          <button type='button'>Esqueci minha senha</button>
         </NavLink>
       </form>
     </div>
-
-
-
-  )
+  );
 }
 
-export default App
+export default LoginPage;

@@ -335,7 +335,7 @@ export function HomePage() {
                         <h1 className="text-cyan-400 text-3xl md:text-5xl text-center">Aperfeiçoe seus conhecimentos</h1>
                         <h3 className="text-xl md:text-3xl text-center">Selecione a matéria que deseja treinar</h3>
 
-                        <div className="w-full p-2.5 shadow-2xl flex gap-3 flex-wrap rounded-lg justify-center items-center">
+                        <div className="w-full p-2 shadow-2xl flex gap-3 flex-wrap rounded-lg justify-center items-center">
                             {
                                 eloMaterias.map((eloMateria, index) => {
                                     let eloIcon = '';
