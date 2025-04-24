@@ -65,6 +65,10 @@ export function AddEscolaPage() {
         }
     });
 
+    if(usuario?.tipo_usuario_id === 2){
+        navigate('/home')
+    }
+
     return (
         <div className="size-[90vw] w-screen flex flex-col justify-start items-center gap-8">
             <h1 className="text-2xl font-bold">Adicione aqui uma escola nova</h1>

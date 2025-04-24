@@ -1,5 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
+
 import { useTokenStore } from '../hooks/useTokenStore';
 import { Form, Input, Button, Select, SelectItem } from "@heroui/react";
 import CardAlunoLista from '../components/CardAlunoLista/CardAlunoLista';
@@ -57,6 +58,7 @@ export function ListagemPage() {
     const [eloMaterias, setEloMaterias] = useState<EloMateria[]>([]);
     const [materias, setMaterias] = useState<[]>([]);
     const { token, user } = useTokenStore();
+    const navigate = useNavigate();
 
     const [pesquisa, setPesquisa] = useState<Pesquisa>({
         id_turma: null,
@@ -140,6 +142,10 @@ export function ListagemPage() {
         return <p>Carregando...</p>;
     }
 
+    
+    if(usuarioNavBar?.tipo_usuario_id === 2){
+        navigate('/home')
+    }
 
     return (
 <>

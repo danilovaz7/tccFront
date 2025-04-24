@@ -43,6 +43,7 @@ export function ListagemPerguntasPage() {
     const [perguntasMaterias, setPerguntasMateria] = useState<Pergunta[]>([]);
     const [materias, setMaterias] = useState<Materia[]>([]);
     const { token, user } = useTokenStore();
+    const navigate = useNavigate();
 
     const [pesquisa, setPesquisa] = useState<Pesquisa>({
         id_turma: null,
@@ -116,6 +117,11 @@ export function ListagemPerguntasPage() {
     if (!usuarioNavBar) {
         return <p>Carregando...</p>;
     }
+
+    if(usuarioNavBar?.tipo_usuario_id === 2){
+        navigate('/home')
+    }
+
 
     return (
         <>

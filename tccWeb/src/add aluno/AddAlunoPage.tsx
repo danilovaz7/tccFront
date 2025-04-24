@@ -139,6 +139,11 @@ export function AddAlunoPage() {
         return <div>Carregando avatares...</div>;
       }
 
+      
+    if(usuario?.tipo_usuario_id === 2){
+        navigate('/home')
+    }
+
     return (
         <div className="size-[90vw] w-screen flex flex-col justify-start items-center gap-8 p-4 sm:p-8">
             <h1 className="text-xl sm:text-2xl font-bold text-center">Adicione aqui um aluno novo</h1>

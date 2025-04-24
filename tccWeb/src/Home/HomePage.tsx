@@ -131,7 +131,11 @@ export function HomePage() {
                     'Authorization': `Bearer ${token}`
                 },
             })
+            if(!response.ok){
+                return
+            }
             const usuarios = await response.json()
+           
             setUsers(usuarios)
         }
         pegaUsuarios();
@@ -211,7 +215,7 @@ export function HomePage() {
             }
         }
     });
-
+  
     return (
 
         <div className="w-11/12 flex flex-wrap overflow-x-hidden-hidden gap-10 justify-around">

@@ -41,6 +41,11 @@ export function AddPerguntaPage() {
         pegaUsuarios();
     }, []);
 
+    
+    if(usuario?.tipo_usuario_id === 2){
+        navigate('/home')
+    }
+
     const formik = useFormik({
         enableReinitialize: true,
         initialValues: {
