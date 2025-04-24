@@ -113,7 +113,7 @@ function Materia() {
         }
       }, [codigo, token]);
 
-
+      console.log(perguntasMateria)
     function obterPerguntaAleatoria(): Pergunta | null {
         const perguntasRestantes = perguntasMateria.filter((_, index) => !perguntasExibidas.has(index));
         if (perguntasRestantes.length === 0) {
