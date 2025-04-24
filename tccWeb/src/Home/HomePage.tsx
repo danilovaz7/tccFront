@@ -6,7 +6,7 @@ import { useTokenStore } from '../hooks/useTokenStore';
 import UserCard from '../components/UserCard/UserCard';
 import CardMateria from '../components/CardMateria/CardMateria';
 import ConfirmationPopup from '../components/ConfirmationPopup/ConfirmationPopup';
-import { Form, Input, Button } from "@heroui/react";
+import { Form, Input, Button, Alert } from "@heroui/react";
 import { useFormik } from 'formik';
 import 'swiper/swiper-bundle.css';
 
@@ -59,13 +59,15 @@ export function HomePage() {
     const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
     const [turmas, setTurmas] = useState<Turmas[]>([])
     const [materiaSelecionada, setMateriaSelecionada] = useState<EloMateria | null>(null);
+    const [mensagem, setMensagem] = useState('')
+    const [mensagemCor, setMensagemCor] = useState('')
 
 
     const handleShowPopup = () => setIsPopupOpen(true);
     const handleConfirm = () => {
         setIsPopupOpen(false);
         postSalaOffline()
-        
+
     };
     const handleCancel = () => {
         setIsPopupOpen(false);
@@ -86,8 +88,12 @@ export function HomePage() {
                     'Authorization': `Bearer ${token}`,
                 },
             });
+            if (!response.ok) {
+                return
+            }
             const usuarioAtual = await response.json();
             setUsuario(usuarioAtual);
+
         }
         pegaUsuarios();
     }, [user, token]);
@@ -101,6 +107,9 @@ export function HomePage() {
                     'Authorization': `Bearer ${token}`,
                 },
             });
+            if (!response.ok) {
+                return
+            }
             const arrayTurmas = await response.json();
             setTurmas(arrayTurmas);
         }
@@ -116,6 +125,9 @@ export function HomePage() {
                     'Authorization': `Bearer ${token}`,
                 },
             });
+            if (!response.ok) {
+                return
+            }
             const eloMaterias = await response.json();
             setEloMaterias(eloMaterias);
         }
@@ -131,11 +143,11 @@ export function HomePage() {
                     'Authorization': `Bearer ${token}`
                 },
             })
-            if(!response.ok){
+            if (!response.ok) {
                 return
             }
             const usuarios = await response.json()
-           
+
             setUsers(usuarios)
         }
         pegaUsuarios();
@@ -157,10 +169,12 @@ export function HomePage() {
         });
 
         if (resposta.ok) {
-            alert('sala criada');
+            setMensagem('sala criada')
+            setMensagemCor('success')
             navigate(`/sala/${code}`);
         } else {
-            alert("Erro ao criar sala");
+            setMensagem('erro ao criar sala')
+            setMensagemCor('danger')
         }
     }
 
@@ -180,10 +194,7 @@ export function HomePage() {
         });
 
         if (resposta.ok) {
-            alert('sala criada');
             navigate(`/materias/${materiaSelecionada?.materia.nome}/${usuario?.id_turma}/${code}`)
-        } else {
-            alert("Erro ao criar sala");
         }
     }
 
@@ -193,7 +204,7 @@ export function HomePage() {
             id_aluno: user?.id
         },
         onSubmit: async (values) => {
-     
+
             const resposta = await fetch(`http://localhost:3000/entrar/sala`, {
                 method: 'POST',
                 headers: {
@@ -210,12 +221,12 @@ export function HomePage() {
             if (resposta.ok) {
                 navigate(`/sala/${values.codigo}`);
             } else {
-
-                alert(erro.error)
+                setMensagemCor('warning')
+                setMensagem(erro.error)
             }
         }
     });
-  
+
     return (
 
         <div className="w-11/12 flex flex-wrap overflow-x-hidden-hidden gap-10 justify-around">
@@ -240,6 +251,14 @@ export function HomePage() {
                                     />
                                     <Button className="w-full" color="danger" type="submit">ENTRAR EM SALA</Button>
                                 </Form>
+                                {
+                                    mensagem ?
+                                    <div className="flex items-center justify-center w-full">
+                                        <Alert color={mensagemCor} title={mensagem} />
+                                    </div>
+                                    : null
+                                }
+
                             </div>
                         </div>
                         :
@@ -248,16 +267,16 @@ export function HomePage() {
                                 <h1 className="text-2xl md:text-3xl text-center">O que deseja fazer?</h1>
                                 <div className="w-full flex flex-col justify-center items-start gap-5">
 
-                                {(usuario?.tipo_usuario_id === 1) && (
-                                             <NavLink className="w-full" to="/addEscola">
-                                             <button className="bg-cyan-400 p-2.5 w-full rounded-md">Adicionar escola</button>
-                                         </NavLink>
+                                    {(usuario?.tipo_usuario_id === 1) && (
+                                        <NavLink className="w-full" to="/addEscola">
+                                            <button className="bg-cyan-400 p-2.5 w-full rounded-md">Adicionar escola</button>
+                                        </NavLink>
                                     )}
-                               
+
                                     {(usuario?.tipo_usuario_id === 4 || usuario?.tipo_usuario_id === 1) && (
-                                            <NavLink className="w-full" to="/addAluno">
-                                                <button className="bg-cyan-400 p-2.5 w-full rounded-md">Adicionar usuário</button>
-                                            </NavLink>
+                                        <NavLink className="w-full" to="/addAluno">
+                                            <button className="bg-cyan-400 p-2.5 w-full rounded-md">Adicionar usuário</button>
+                                        </NavLink>
                                     )}
 
                                     {(usuario?.tipo_usuario_id === 3 || usuario?.tipo_usuario_id === 1) && (
@@ -328,10 +347,6 @@ export function HomePage() {
                     }
                 </div>
             </div>
-
-
-
-
 
             {
                 usuario?.tipo_usuario_id === 2 ?

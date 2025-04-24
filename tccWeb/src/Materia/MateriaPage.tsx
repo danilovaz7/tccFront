@@ -277,8 +277,9 @@ function Materia() {
             const response = await fetch(`http://localhost:3000/usuarios/${user?.id}/atualizaexperiencia`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
-                },
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                  },
                 body: JSON.stringify({ xpGanho: xp })
             });
 
@@ -333,11 +334,8 @@ function Materia() {
         });
 
         if (resposta.ok) {
-            alert('Usuário atualizado com sucesso');
             navigate('/home');
-        } else {
-            alert("Erro ao atualizar usuário");
-        }
+        } 
     }
 
     return (

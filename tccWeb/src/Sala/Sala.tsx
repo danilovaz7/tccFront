@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 import { useSocket } from '../hooks/useSocket';
 
-import { Form, Input, Button, Select, SelectItem } from "@heroui/react";
+import { Form, Input, Button, Select, SelectItem, Alert } from "@heroui/react";
 import { useFormik } from 'formik';
 import UserCard from '../components/UserCard/UserCard';
 
@@ -82,6 +82,8 @@ export function Sala() {
   const [quizFinalizado, setQuizFinalizado] = useState(false);
   const [countdown, setCountdown] = useState<number | null>(null);
   const [dificuldadeId, setDificuldadeId] = useState<number | null>(null);
+  const [mensagem, setMensagem] = useState('')
+  const [mensagemCor, setMensagemCor] = useState('')
   // Estado para o timer de descanso entre perguntas
   const [restCountdown, setRestCountdown] = useState<number | null>(null);
 
@@ -107,7 +109,8 @@ export function Sala() {
       try {
         // Verifica se a dificuldade foi selecionada
         if (!dificuldadeId) {
-          alert("Por favor, selecione uma dificuldade!");
+          setMensagem("Por favor, selecione uma dificuldade!");
+          setMensagemCor('danger')
           return;
         }
         const response = await fetch(
@@ -120,23 +123,27 @@ export function Sala() {
             },
           }
         );
-  
+
         if (!response.ok) {
           const errorData = await response.json();
-          alert(errorData.error);
+          setMensagem(errorData.error);
+          setMensagemCor('danger')
           return;
         }
-  
+
         const perguntas = await response.json();
         setPerguntasMaterias(perguntas);
+        setMensagem('perguntas enviadas com êxito');
+          setMensagemCor('success')
         socket?.emit("enviarPerguntas", { roomId: sala?.id, perguntas });
       } catch (error) {
         console.error('Erro no envio das perguntas:', error);
-        alert('Ocorreu um erro ao enviar as perguntas.');
+        setMensagem('Ocorreu um erro ao enviar as perguntas.');
+          setMensagemCor('danger')
       }
     },
   });
-  
+
   // BUSCA INFORMAÇÕES DO USUÁRIO
   useEffect(() => {
     async function pegaUsuarioNav() {
@@ -476,7 +483,8 @@ export function Sala() {
       const response = await fetch(`http://localhost:3000/usuarios/${user?.id}/atualizaexperiencia`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ xpGanho: xp })
       });
@@ -494,12 +502,12 @@ export function Sala() {
 
   async function handleVoltar(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault();
-  
+
     const userIndex = scoreboard.findIndex(scoreUser => scoreUser.userId === usuarioNavBar?.id);
     const dificuldade = dificuldadeId ?? 1;
-  
+
     const xpToUpdate = userIndex === 0 ? (1000 * dificuldade) : (100 * dificuldade);
-    
+
     await atualizeXP(xpToUpdate);
     navigate('/home');
   }
@@ -673,11 +681,11 @@ export function Sala() {
                       onChange={(e) => setDificuldadeId(parseInt(e.target.value))}
                     >
                       <SelectItem value="1" key={1} className="text-black">{'Aprendiz'}</SelectItem>
-                      <SelectItem value="2" key={2}  className="text-black">{'Regular'}</SelectItem>
-                      <SelectItem value="3" key={3}  className="text-black">{'Estudioso'}</SelectItem>
-                      <SelectItem value="4" key={4}  className="text-black">{'Exemplar'}</SelectItem>
-                      <SelectItem value="5" key={5}  className="text-black">{'Avançado'}</SelectItem>
-                      <SelectItem value="6" key={6}  className="text-black">{'Brilhante'}</SelectItem>
+                      <SelectItem value="2" key={2} className="text-black">{'Regular'}</SelectItem>
+                      <SelectItem value="3" key={3} className="text-black">{'Estudioso'}</SelectItem>
+                      <SelectItem value="4" key={4} className="text-black">{'Exemplar'}</SelectItem>
+                      <SelectItem value="5" key={5} className="text-black">{'Avançado'}</SelectItem>
+                      <SelectItem value="6" key={6} className="text-black">{'Brilhante'}</SelectItem>
                     </Select>
 
                     <div className="flex gap-2">
@@ -699,6 +707,13 @@ export function Sala() {
                       </Button>
                     </div>
                   </Form>
+                  {
+                                    mensagem ?
+                                    <div className="flex items-center justify-center w-full">
+                                        <Alert color={mensagemCor} title={mensagem} />
+                                    </div>
+                                    : null
+                                }
                 </>
               ) : (
                 <div className="w-full flex flex-col justify-center items-center gap-4">
