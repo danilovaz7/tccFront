@@ -2,6 +2,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { FaRegEye, FaRegEyeSlash, FaRegUser } from "react-icons/fa";
 import { NavLink, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
+import { Alert } from "@heroui/react";
 
 function LoginPage() {
   const [email, setEmail] = useState('');
@@ -9,6 +10,8 @@ function LoginPage() {
   const [hidePass, setHidePass] = useState(true);
   const navigate = useNavigate();
   const { setToken, setUser, token, user } = useTokenStore();
+  const [mensagem, setMensagem] = useState('')
+  const [mensagemCor, setMensagemCor] = useState('')
 
   useEffect(() => {
     if (token && user) {
@@ -31,7 +34,8 @@ function LoginPage() {
       if (!response.ok) {
         const errorText = await response.text();
         console.error('Erro no login:', errorText);
-        alert('Falha no login');
+        setMensagem('Falha no login')
+        setMensagemCor('danger')
         return;
       }
 
@@ -51,7 +55,8 @@ function LoginPage() {
       if (!respostaEu.ok) {
         const errorText = await respostaEu.text();
         console.error('Erro ao obter dados do usuário:', errorText);
-        alert('Erro ao obter dados do usuário');
+        setMensagem('Erro ao obter dados do usuário')
+        setMensagemCor('danger')
         return;
       }
 
@@ -62,11 +67,12 @@ function LoginPage() {
 
       localStorage.setItem('token', loginToken);
       localStorage.setItem('user', JSON.stringify(userData));
-      
+
       navigate('/home');
     } catch (error) {
       console.error('Erro ao fazer login:', error);
-      alert('Erro inesperado, tente novamente.');
+      setMensagem('Erro inesperado, tente novamente.')
+      setMensagemCor('danger')
     }
   }
 
@@ -107,13 +113,21 @@ function LoginPage() {
           </div>
         </div>
 
+        {
+          mensagem ?
+            <div className="flex items-center justify-center w-full">
+              <Alert color={mensagemCor} title={mensagem} />
+            </div>
+            : null
+        }
+
         <button
           type='submit'
           className='w-[35%] bg-cyan-400 flex justify-center items-center p-1.5 rounded-md text-black hover:bg-cyan-700'
         >
           Entrar
         </button>
-        
+
         <NavLink to="/recupera-senha">
           <button type='button'>Esqueci minha senha</button>
         </NavLink>

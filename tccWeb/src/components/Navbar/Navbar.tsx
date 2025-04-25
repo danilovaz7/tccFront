@@ -45,8 +45,8 @@ function Navbar({ id, nivel, avatar }: NavbarProps) {
         </NavLink>
       </div>
 
-      <button onClick={handleLogout} className='bg-cyan-500 p-3 rounded-lg'>
-        <FaPowerOff size={16} color="black" />
+      <button onClick={handleLogout} className='bg-cyan-500 p-3  rounded-lg'>
+        <p className='font-bold text-lg text-black'>Sair</p>
       </button>
     </div>
   );
