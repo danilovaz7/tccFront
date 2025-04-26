@@ -134,12 +134,12 @@ export function Sala() {
         const perguntas = await response.json();
         setPerguntasMaterias(perguntas);
         setMensagem('perguntas enviadas com êxito');
-          setMensagemCor('success')
+        setMensagemCor('success')
         socket?.emit("enviarPerguntas", { roomId: sala?.id, perguntas });
       } catch (error) {
         console.error('Erro no envio das perguntas:', error);
         setMensagem('Ocorreu um erro ao enviar as perguntas.');
-          setMensagemCor('danger')
+        setMensagemCor('danger')
       }
     },
   });
@@ -609,15 +609,18 @@ export function Sala() {
                 <p>Tempo restante: {tempoRestante} segundos</p>
               </div>
               <div className="w-full md:w-[90%] p-5 flex flex-col md:flex-wrap md:flex-row justify-center items-center gap-5">
-                {alternativasAtuais.map((alternativa, index) => (
-                  <div
-                    key={index}
-                    onClick={() => handleSelecionarAlternativa(alternativa)}
-                    className={`w-[100%] md:w-[45%] hover:bg-cyan-700 rounded-lg p-5 flex justify-start items-center gap-4 border-2 border-cyan-500 cursor-pointer ${jaRespondeu ? "opacity-50 pointer-events-none" : ""}`}
-                  >
-                    <p>{alternativa.alternativa}</p>
-                  </div>
-                ))}
+                {[...alternativasAtuais]
+                  .sort(() => Math.random() - 0.5)
+                  .map((alternativa, index) => (
+                    <div
+                      key={index}
+                      onClick={() => handleSelecionarAlternativa(alternativa)}
+                      className={`w-[100%] md:w-[45%] hover:bg-cyan-700 rounded-lg p-5 flex justify-start items-center gap-4 border-2 border-cyan-500 cursor-pointer ${jaRespondeu ? "opacity-50 pointer-events-none" : ""}`}
+                    >
+                      <p>{alternativa.alternativa}</p>
+                    </div>
+                  ))
+                }
               </div>
               <div>
                 <p className="text-2xl font-bold">
@@ -708,12 +711,12 @@ export function Sala() {
                     </div>
                   </Form>
                   {
-                                    mensagem ?
-                                    <div className="flex items-center justify-center w-full">
-                                        <Alert color={mensagemCor} title={mensagem} />
-                                    </div>
-                                    : null
-                                }
+                    mensagem ?
+                      <div className="flex items-center justify-center w-full">
+                        <Alert color={mensagemCor} title={mensagem} />
+                      </div>
+                      : null
+                  }
                 </>
               ) : (
                 <div className="w-full flex flex-col justify-center items-center gap-4">

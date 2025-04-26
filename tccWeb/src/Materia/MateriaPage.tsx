@@ -62,7 +62,7 @@ interface Sala {
     codigo: string;
     host_id: number;
     status: string;
-  }
+}
 
 
 function Materia() {
@@ -98,22 +98,22 @@ function Materia() {
 
     useEffect(() => {
         async function pegaSala() {
-          const response = await fetch(`http://localhost:3000/sala/${codigo}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
-            },
-          });
-          const salaData = await response.json();
-          setSala(salaData);
+            const response = await fetch(`http://localhost:3000/sala/${codigo}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            const salaData = await response.json();
+            setSala(salaData);
         }
         if (codigo) {
-          pegaSala();
+            pegaSala();
         }
-      }, [codigo, token]);
+    }, [codigo, token]);
 
-      console.log(perguntasMateria)
+
     function obterPerguntaAleatoria(): Pergunta | null {
         const perguntasRestantes = perguntasMateria.filter((_, index) => !perguntasExibidas.has(index));
         if (perguntasRestantes.length === 0) {
@@ -151,15 +151,15 @@ function Materia() {
                 'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify({
-              sala_id: sala?.id,
-              usuario_id: user?.id,
-              pergunta_id: perguntaAtual?.id, 
-              resposta_id:  alternativa.id,
+                sala_id: sala?.id,
+                usuario_id: user?.id,
+                pergunta_id: perguntaAtual?.id,
+                resposta_id: alternativa.id,
             })
         });
-      
+
         if (resposta.ok) {
-           console.log('resposta salva')
+            console.log('resposta salva')
         }
 
         setRespostas((prevRespostas) => {
@@ -212,7 +212,7 @@ function Materia() {
     useEffect(() => {
         if (eloMateria?.elo_id) {
             async function pegaPerguntasMateria() {
-                const response = await fetch( `http://localhost:3000/sala/${sala?.id}/perguntas/${eloMateria?.elo_id}/${turmaId}/${nmMateria}`, {
+                const response = await fetch(`http://localhost:3000/sala/${sala?.id}/perguntas/${eloMateria?.elo_id}/${turmaId}/${nmMateria}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -279,7 +279,7 @@ function Materia() {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
-                  },
+                },
                 body: JSON.stringify({ xpGanho: xp })
             });
 
@@ -307,17 +307,17 @@ function Materia() {
             atualizeXP(20 * contagemAcertos)
         }
 
-       await fetch(`http://localhost:3000/sala/${sala?.codigo}`, {
+        await fetch(`http://localhost:3000/sala/${sala?.codigo}`, {
             method: 'PUT',
             headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-              status: 'encerrada',
-              vencedor_id: usuario?.id
+                status: 'encerrada',
+                vencedor_id: usuario?.id
             })
-          });
+        });
 
         const resposta = await fetch(`http://localhost:3000/eloMaterias/${usuario?.id}/materia/${nmMateria}`, {
             method: 'PUT',
@@ -335,7 +335,7 @@ function Materia() {
 
         if (resposta.ok) {
             navigate('/home');
-        } 
+        }
     }
 
     return (
@@ -381,20 +381,22 @@ function Materia() {
                         <p className="text-base sm:text-2xl">{perguntaAtual?.pergunta}</p>
                     </div>
                     <div className="w-full sm:w-[90%] p-4 sm:p-5 flex flex-wrap justify-center items-center gap-4 sm:gap-5">
-                        {alternativasAtuais.map((alternativa, index) => (
-                            <div
-                                key={index}
-                                onClick={() => {
-                                    if (alternativa.correta === true) {
-                                        setContagemAcertos(contagemAcertos + 1);
-                                    }
-                                    handleSelecionarAlternativa(alternativa);
-                                }}
-                                className="w-[70%] sm:w-[45%] hover:bg-cyan-900 rounded-lg p-3 sm:p-5 flex justify-start items-center gap-3 sm:gap-4 border-2 border-cyan-300"
-                            >
-                                <p className="text-sm sm:text-base">{alternativa.alternativa}</p>
-                            </div>
-                        ))}
+                        {[...alternativasAtuais]
+                            .sort(() => Math.random() - 0.5)
+                            .map((alternativa, index) => (
+                                <div
+                                    key={index}
+                                    onClick={() => {
+                                        if (alternativa.correta === true) {
+                                            setContagemAcertos(contagemAcertos + 1);
+                                        }
+                                        handleSelecionarAlternativa(alternativa);
+                                    }}
+                                    className="w-[70%] sm:w-[45%] hover:bg-cyan-900 rounded-lg p-3 sm:p-5 flex justify-start items-center gap-3 sm:gap-4 border-2 border-cyan-300"
+                                >
+                                    <p className="text-sm sm:text-base">{alternativa.alternativa}</p>
+                                </div>
+                            ))}
                     </div>
                 </div>
             ) : (
