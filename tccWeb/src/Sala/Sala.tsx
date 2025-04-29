@@ -197,9 +197,11 @@ export function Sala() {
     if (!socket) return;
     const handleStartQuestion = ({ pergunta, tempo }: { pergunta: Pergunta, tempo: number }) => {
       setCountdown(null);
+      const alternativasEmbaralhadas = [...pergunta.alternativas].sort(() => Math.random() - 0.5);
       setPerguntaAtual(pergunta);
-      setAlternativasAtuais(pergunta.alternativas);
+      setAlternativasAtuais(alternativasEmbaralhadas);
       setTempoRestante(tempo);
+      
       setVencedor(null);
       setJaRespondeu(false);
       // Limpa o timer de descanso quando iniciar nova pergunta
@@ -609,18 +611,15 @@ export function Sala() {
                 <p>Tempo restante: {tempoRestante} segundos</p>
               </div>
               <div className="w-full md:w-[90%] p-5 flex flex-col md:flex-wrap md:flex-row justify-center items-center gap-5">
-                {[...alternativasAtuais]
-                  .sort(() => Math.random() - 0.5)
-                  .map((alternativa, index) => (
-                    <div
-                      key={index}
-                      onClick={() => handleSelecionarAlternativa(alternativa)}
-                      className={`w-[100%] md:w-[45%] hover:bg-cyan-700 rounded-lg p-5 flex justify-start items-center gap-4 border-2 border-cyan-500 cursor-pointer ${jaRespondeu ? "opacity-50 pointer-events-none" : ""}`}
-                    >
-                      <p>{alternativa.alternativa}</p>
-                    </div>
-                  ))
-                }
+                {alternativasAtuais.map((alternativa, index) => ( // Sem o .sort()
+                  <div
+                    key={index}
+                    onClick={() => handleSelecionarAlternativa(alternativa)}
+                    className={`w-[100%] md:w-[45%] hover:bg-cyan-700 rounded-lg p-5 flex justify-start items-center gap-4 border-2 border-cyan-500 cursor-pointer ${jaRespondeu ? "opacity-50 pointer-events-none" : ""}`}
+                  >
+                    <p>{alternativa.alternativa}</p>
+                  </div>
+                ))}
               </div>
               <div>
                 <p className="text-2xl font-bold">
