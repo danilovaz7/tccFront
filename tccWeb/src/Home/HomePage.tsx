@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, Suspense, useState, use, Usable } from 'react';
 import { MdKeyboardArrowRight, } from "react-icons/md";
 import { NavLink, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
@@ -6,9 +6,9 @@ import { useTokenStore } from '../hooks/useTokenStore';
 import UserCard from '../components/UserCard/UserCard';
 import CardMateria from '../components/CardMateria/CardMateria';
 import ConfirmationPopup from '../components/ConfirmationPopup/ConfirmationPopup';
-import { Form, Input, Button, Alert } from "@heroui/react";
+import { Form, Input, Button, Alert, Skeleton } from "@heroui/react";
 import { useFormik } from 'formik';
-import 'swiper/swiper-bundle.css';
+// import 'swiper/swiper-bundle.css';
 
 
 interface Usuario {
@@ -55,13 +55,11 @@ export function HomePage() {
     const { token, user } = useTokenStore();
     const [usuario, setUsuario] = useState<Usuario>();
     const [eloMaterias, setEloMaterias] = useState<EloMateria[]>([]);
-    const [usuarios, setUsers] = useState<Usuario[]>([])
     const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
     const [turmas, setTurmas] = useState<Turmas[]>([])
     const [materiaSelecionada, setMateriaSelecionada] = useState<EloMateria | null>(null);
     const [mensagem, setMensagem] = useState('')
     const [mensagemCor, setMensagemCor] = useState('')
-
 
     const handleShowPopup = () => setIsPopupOpen(true);
     const handleConfirm = () => {
@@ -134,24 +132,7 @@ export function HomePage() {
         pegaEloMaterias();
     }, [user, token]);
 
-    useEffect(() => {
-        async function pegaUsuarios() {
-            const response = await fetch(`http://localhost:3000/usuarios?limit=5&order=nivel&orderDirection=DESC&id_turma=${usuario?.id_turma}&id_escola=${usuario?.id_escola}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-            })
-            if (!response.ok) {
-                return
-            }
-            const usuarios = await response.json()
 
-            setUsers(usuarios)
-        }
-        pegaUsuarios();
-    }, [usuario, token])
 
     async function postSalaOnline() {
         const code = Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -227,8 +208,80 @@ export function HomePage() {
         }
     });
 
-    return (
+    async function fetchAlunos() {
+        try {
+            await new Promise(resolve => setTimeout(resolve, 3000));
+            const response = await fetch(`http://localhost:3000/usuarios?limit=5&order=nivel&orderDirection=DESC&id_turma=${usuario?.id_turma}&id_escola=${usuario?.id_escola}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            })
+            if (!response.ok) {
+                return
+            }
 
+            const data = await response.json();
+            return data;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    function ListaAlunos({ alunosPromisse }: { alunosPromisse: Usable<Usuario[]> }) {
+        const usuarios = use(alunosPromisse);
+        return (
+            <div className="w-full flex flex-col justify-center items-center gap-3">
+                {
+                    usuarios.map((usuarioRank, index) => (
+                        <UserCard
+                            key={index}
+                            id={usuarioRank.id}
+                            nivel={usuarioRank.nivel}
+                            nome={usuarioRank.nome}
+                            avatar={usuarioRank.avatar.caminho}
+                            classe={`${index === 0 ? 'w-full' : 'w-[90%]'} ${index === 0 ? 'bg-yellow-400' : 'bg-gray-400'} flex justify-around items-center text-black p-2.5 cursor-pointer rounded-md transition-transform hover:scale-105`}
+                            onClick={() => navigate(`/perfil/${usuarioRank.id}`)}
+                        />
+                    ))
+                }
+                <Button onClick={() => { navigate(`/ranking/${usuario?.id_turma}/${usuario?.id_escola}`); }} color="primary" className="mt-3">
+                    Ver mais <span><MdKeyboardArrowRight size={16} /></span>
+                </Button>
+            </div>
+        )
+    }
+
+    function AlunoCarregando() {
+        return (
+            <div className='w-full bg-gray-500 flex justify-around items-center p-2.5 rounded-md transition-transform hover:scale-105' >
+                <Skeleton className="rounded-full w-12 h-12 bg-gray-500">
+                    <div className="h-12 rounded-lg bg-default-300" />
+                </Skeleton>
+                <Skeleton className="rounded-lg w-[20%] bg-gray-600">
+                    <div className="h-5 rounded-lg bg-default-300" />
+                </Skeleton>
+                <Skeleton className="rounded-lg w-[15%] bg-gray-600">
+                    <div className="h-4 rounded-lg bg-default-300" />
+                </Skeleton>
+            </div>
+        )
+    }
+
+    function Carregando() {
+        return (
+            <div className="w-full flex flex-col justify-center items-center gap-5 p-2">
+                <AlunoCarregando />
+                <AlunoCarregando />
+                <AlunoCarregando />
+                <AlunoCarregando />
+                <AlunoCarregando />
+            </div>
+        )
+    }
+
+    return (
         <div className="w-11/12 flex flex-wrap overflow-x-hidden-hidden gap-10 justify-around">
             <div className="w-11/12 flex flex-wrap justify-around flex-col md:flex-row gap-5">
                 {
@@ -253,10 +306,10 @@ export function HomePage() {
                                 </Form>
                                 {
                                     mensagem ?
-                                    <div className="flex items-center justify-center w-full">
-                                        <Alert color={mensagemCor} title={mensagem} />
-                                    </div>
-                                    : null
+                                        <div className="flex items-center justify-center w-full">
+                                            <Alert color={mensagemCor} title={mensagem} />
+                                        </div>
+                                        : null
                                 }
 
                             </div>
@@ -325,24 +378,10 @@ export function HomePage() {
                             :
                             <>
                                 <h1 className="text-2xl md:text-4xl text-center">Ranking da <span className="text-yellow-400">sala</span></h1>
-                                <div className="w-full flex flex-col justify-center items-center gap-3">
-                                    {
-                                        usuarios.map((usuarioRank, index) => (
-                                            <UserCard
-                                                key={index}
-                                                id={usuarioRank.id}
-                                                nivel={usuarioRank.nivel}
-                                                nome={usuarioRank.nome}
-                                                avatar={usuarioRank.avatar.caminho}
-                                                classe={`${index === 0 ? 'w-full' : 'w-[90%]'} ${index === 0 ? 'bg-yellow-400' : 'bg-gray-400'} flex justify-around items-center text-black p-2.5 cursor-pointer rounded-md transition-transform hover:scale-105`}
-                                                onClick={() => navigate(`/perfil/${usuarioRank.id}`)}
-                                            />
-                                        ))
-                                    }
-                                    <Button onClick={() => { navigate(`/ranking/${usuario?.id_turma}/${usuario?.id_escola}`); }} color="primary" className="mt-3">
-                                        Ver mais <span><MdKeyboardArrowRight size={16} /></span>
-                                    </Button>
-                                </div>
+                                <Suspense fallback={<Carregando />}>
+                                    <ListaAlunos alunosPromisse={fetchAlunos()} />
+                                </Suspense>
+
                             </>
                     }
                 </div>

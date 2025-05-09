@@ -18,7 +18,6 @@ function UserCard({ id, nivel, avatar, nome, classe,onClick }: UserCardProps) {
             {avatar && <Avatar size='lg' src={avatar} />}
             <p>{nome}</p>
             {nivel && <p>Lvl {nivel}</p>}
-            
         </div>
     );
 }
