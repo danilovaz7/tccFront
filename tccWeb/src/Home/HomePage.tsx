@@ -54,7 +54,6 @@ export function HomePage() {
 
     const { token, user } = useTokenStore();
     const [usuario, setUsuario] = useState<Usuario>();
-    const [eloMaterias, setEloMaterias] = useState<EloMateria[]>([]);
     const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
     const [turmas, setTurmas] = useState<Turmas[]>([])
     const [materiaSelecionada, setMateriaSelecionada] = useState<EloMateria | null>(null);
@@ -114,26 +113,6 @@ export function HomePage() {
         pegaTurmas();
     }, [user, token]);
 
-    useEffect(() => {
-        async function pegaEloMaterias() {
-            const response = await fetch(`http://localhost:3000/eloMaterias/${user?.id}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-            if (!response.ok) {
-                return
-            }
-            const eloMaterias = await response.json();
-            setEloMaterias(eloMaterias);
-        }
-        pegaEloMaterias();
-    }, [user, token]);
-
-
-
     async function postSalaOnline() {
         const code = Math.random().toString(36).substring(2, 8).toUpperCase();
         const resposta = await fetch(`http://localhost:3000/sala`, {
@@ -185,7 +164,6 @@ export function HomePage() {
             id_aluno: user?.id
         },
         onSubmit: async (values) => {
-
             const resposta = await fetch(`http://localhost:3000/entrar/sala`, {
                 method: 'POST',
                 headers: {
@@ -210,7 +188,7 @@ export function HomePage() {
 
     async function fetchAlunos() {
         try {
-            await new Promise(resolve => setTimeout(resolve, 3000));
+            await new Promise(resolve => setTimeout(resolve, 1000));
             const response = await fetch(`http://localhost:3000/usuarios?limit=5&order=nivel&orderDirection=DESC&id_turma=${usuario?.id_turma}&id_escola=${usuario?.id_escola}`, {
                 method: 'GET',
                 headers: {
@@ -218,6 +196,27 @@ export function HomePage() {
                     'Authorization': `Bearer ${token}`
                 },
             })
+            if (!response.ok) {
+                return
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async function fetchEloMaterias() {
+        try {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            const response = await fetch(`http://localhost:3000/eloMaterias/${user?.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
             if (!response.ok) {
                 return
             }
@@ -253,10 +252,52 @@ export function HomePage() {
         )
     }
 
+
+    function ListaMaterias({ eloMateriasPromisse }: { eloMateriasPromisse: Usable<EloMateria[]> }) {
+        const eloMaterias = use(eloMateriasPromisse);
+        return (
+            <div className="w-full p-2 shadow-2xl flex gap-3 flex-wrap rounded-lg justify-center items-center">
+                {
+                    eloMaterias.map((eloMateria, index) => {
+                        let eloIcon = '';
+
+                        switch (eloMateria.subelo_id) {
+                            case 1:
+                                eloIcon = eloMateria.elo.elo1;
+                                break;
+                            case 2:
+                                eloIcon = eloMateria.elo.elo2;
+                                break;
+                            case 3:
+                                eloIcon = eloMateria.elo.elo3;
+                                break;
+                            default:
+                                eloIcon = '';
+                        }
+
+                        return (
+                            <CardMateria
+                                key={index}
+                                id={0}
+                                materiaLogo={eloMateria.materia.icone}
+                                nome={eloMateria.materia.nome}
+                                icon={eloIcon}
+                                onClick={() => {
+                                    handleMateriaClick(eloMateria);
+                                    handleShowPopup();
+                                }}
+                            />
+                        );
+                    })
+                }
+            </div>
+        )
+    }
+
     function AlunoCarregando() {
         return (
             <div className='w-full bg-gray-500 flex justify-around items-center p-2.5 rounded-md transition-transform hover:scale-105' >
-                <Skeleton className="rounded-full w-12 h-12 bg-gray-500">
+                <Skeleton className="rounded-full w-12 h-12 bg-gray-600">
                     <div className="h-12 rounded-lg bg-default-300" />
                 </Skeleton>
                 <Skeleton className="rounded-lg w-[20%] bg-gray-600">
@@ -269,7 +310,24 @@ export function HomePage() {
         )
     }
 
-    function Carregando() {
+    function EloMateriaCarregando() {
+        return (
+            <div className="flex flex-col md:flex-row justify-center md:justify-around gap-3 rounded-md p-4 items-center text-white bg-gray-800 w-[45%] md:w-1/5 cursor-pointer transition-transform ease-in-out hover:scale-105">
+                <Skeleton className="rounded-full w-12 h-12 bg-gray-600">
+                    <div className="h-12 rounded-lg bg-default-300" />
+                </Skeleton>
+                <Skeleton className="rounded-lg w-[20%] bg-gray-600">
+                    <div className="h-5 rounded-lg bg-default-300" />
+                </Skeleton>
+                <Skeleton className="rounded-full w-12 h-12 bg-gray-600">
+                    <div className="h-12 rounded-lg bg-default-300" />
+                </Skeleton>
+            </div>
+        )
+    }
+
+
+    function CarregandoAlunos() {
         return (
             <div className="w-full flex flex-col justify-center items-center gap-5 p-2">
                 <AlunoCarregando />
@@ -277,6 +335,22 @@ export function HomePage() {
                 <AlunoCarregando />
                 <AlunoCarregando />
                 <AlunoCarregando />
+            </div>
+        )
+    }
+
+    function CarregandoEloMaterias() {
+        return (
+            <div className="w-full p-2 shadow-2xl flex gap-3 flex-wrap rounded-lg justify-center items-center">
+                <EloMateriaCarregando />
+                <EloMateriaCarregando />
+                <EloMateriaCarregando />
+                <EloMateriaCarregando />
+                <EloMateriaCarregando />
+                <EloMateriaCarregando />
+                <EloMateriaCarregando />
+                <EloMateriaCarregando />
+                <EloMateriaCarregando />
             </div>
         )
     }
@@ -378,7 +452,7 @@ export function HomePage() {
                             :
                             <>
                                 <h1 className="text-2xl md:text-4xl text-center">Ranking da <span className="text-yellow-400">sala</span></h1>
-                                <Suspense fallback={<Carregando />}>
+                                <Suspense fallback={<CarregandoAlunos />}>
                                     <ListaAlunos alunosPromisse={fetchAlunos()} />
                                 </Suspense>
 
@@ -393,41 +467,10 @@ export function HomePage() {
                         <h1 className="text-cyan-400 text-3xl md:text-5xl text-center">Aperfeiçoe seus conhecimentos</h1>
                         <h3 className="text-xl md:text-3xl text-center">Selecione a matéria que deseja treinar</h3>
 
-                        <div className="w-full p-2 shadow-2xl flex gap-3 flex-wrap rounded-lg justify-center items-center">
-                            {
-                                eloMaterias.map((eloMateria, index) => {
-                                    let eloIcon = '';
+                        <Suspense fallback={<CarregandoEloMaterias />}>
+                            <ListaMaterias eloMateriasPromisse={fetchEloMaterias()} />
+                        </Suspense>
 
-                                    switch (eloMateria.subelo_id) {
-                                        case 1:
-                                            eloIcon = eloMateria.elo.elo1;
-                                            break;
-                                        case 2:
-                                            eloIcon = eloMateria.elo.elo2;
-                                            break;
-                                        case 3:
-                                            eloIcon = eloMateria.elo.elo3;
-                                            break;
-                                        default:
-                                            eloIcon = '';
-                                    }
-
-                                    return (
-                                        <CardMateria
-                                            key={index}
-                                            id={0}
-                                            materiaLogo={eloMateria.materia.icone}
-                                            nome={eloMateria.materia.nome}
-                                            icon={eloIcon}
-                                            onClick={() => {
-                                                handleMateriaClick(eloMateria);
-                                                handleShowPopup();
-                                            }}
-                                        />
-                                    );
-                                })
-                            }
-                        </div>
                         <ConfirmationPopup
                             isOpen={isPopupOpen}
                             message={`Deseja treinar ${materiaSelecionada?.materia.nome} ?`}
