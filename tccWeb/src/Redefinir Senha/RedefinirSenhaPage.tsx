@@ -78,13 +78,13 @@ export function RedefinirSenhaPage() {
   return (
     <div className='flex w-screen flex-col h-full justify-center items-center pt-32 gap-4'>
       <Form
-        className="w-[80%] flex flex-col justify-center gap-4 border-2 p-10 border-white"
+        className="w-[80%] flex flex-col items-center justify-center gap-4  p-10"
         onSubmit={formik.handleSubmit}
       >
         <h2 className='text-white mb-4'>Redefinir Senha</h2>
         {isTokenValid ? (
           <>
-            <div className='w-[50%] flex flex-row justify-around items-center border-2 border-cyan-500 rounded-md p-1'>
+            <div className='w-[50%] flex flex-row justify-around items-center  rounded-md p-1'>
               <Input
                 isRequired
                 errorMessage={erroSenha}
@@ -98,7 +98,7 @@ export function RedefinirSenhaPage() {
                 classNames={{ label: '!text-white' }}
               />
             </div>
-            <div className='w-[50%] flex flex-row justify-around items-center border-2 border-cyan-500 rounded-md p-1'>
+            <div className='w-[50%] flex flex-row justify-around items-center  rounded-md p-1'>
               <Input
                 isRequired
                 errorMessage={erroConfirmSenha}
