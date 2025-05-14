@@ -2,13 +2,15 @@ import { FormEvent, useEffect, Suspense, useState, use, Usable } from 'react';
 import { MdKeyboardArrowRight, } from "react-icons/md";
 import { NavLink, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import UserCard from '../components/UserCard/UserCard';
 import CardMateria from '../components/CardMateria/CardMateria';
 import ConfirmationPopup from '../components/ConfirmationPopup/ConfirmationPopup';
 import { Form, Input, Button, Alert, Skeleton } from "@heroui/react";
 import { useFormik } from 'formik';
-// import 'swiper/swiper-bundle.css';
+import { useQueries, useQuery, useQueryErrorResetBoundary, useSuspenseQuery } from '@tanstack/react-query';
+
 
 
 interface Usuario {
@@ -51,6 +53,7 @@ interface EloMateria {
 
 export function HomePage() {
     const navigate = useNavigate();
+    const {reset} = useQueryErrorResetBoundary();
 
     const { token, user } = useTokenStore();
     const [usuario, setUsuario] = useState<Usuario>();
@@ -187,49 +190,44 @@ export function HomePage() {
     });
 
     async function fetchAlunos() {
-        try {
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            const response = await fetch(`http://localhost:3000/usuarios?limit=5&order=nivel&orderDirection=DESC&id_turma=${usuario?.id_turma}&id_escola=${usuario?.id_escola}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-            })
-            if (!response.ok) {
-                return
-            }
-
-            const data = await response.json();
-            return data;
-        } catch (err) {
-            throw err;
+        const response = await fetch(`http://localhost:3000/usuarios?limit=5&order=nivel&orderDirection=DESC&id_turma=${usuario?.id_turma}&id_escola=${usuario?.id_escola}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        })
+        if (!response.ok) {
+            return
         }
+
+        const data = await response.json();
+        return data;
     }
 
     async function fetchEloMaterias() {
-        try {
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            const response = await fetch(`http://localhost:3000/eloMaterias/${user?.id}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-            if (!response.ok) {
-                return
-            }
-
-            const data = await response.json();
-            return data;
-        } catch (err) {
-            throw err;
+        const response = await fetch(`http://localhost:3000/eloMaterias/${user?.id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+        if (!response.ok) {
+            return
         }
+
+        const data = await response.json();
+        return data;
     }
 
-    function ListaAlunos({ alunosPromisse }: { alunosPromisse: Usable<Usuario[]> }) {
-        const usuarios = use(alunosPromisse);
+    function ListaAlunos() {
+        const { data: usuarios } = useSuspenseQuery({
+            queryKey: ['usuarios', 'alunos'],
+            queryFn: () => {
+                return fetchAlunos();
+            },
+        })
         return (
             <div className="w-full flex flex-col justify-center items-center gap-3">
                 {
@@ -252,9 +250,13 @@ export function HomePage() {
         )
     }
 
-
-    function ListaMaterias({ eloMateriasPromisse }: { eloMateriasPromisse: Usable<EloMateria[]> }) {
-        const eloMaterias = use(eloMateriasPromisse);
+    function ListaMaterias() {
+        const { data: eloMaterias } = useSuspenseQuery({
+            queryKey: ['eloMateria'],
+            queryFn: () => {
+                return fetchEloMaterias();
+            },
+        })
         return (
             <div className="w-full p-2 shadow-2xl flex gap-3 flex-wrap rounded-lg justify-center items-center">
                 {
@@ -452,9 +454,18 @@ export function HomePage() {
                             :
                             <>
                                 <h1 className="text-2xl md:text-4xl text-center">Ranking da <span className="text-yellow-400">sala</span></h1>
-                                <Suspense fallback={<CarregandoAlunos />}>
-                                    <ListaAlunos alunosPromisse={fetchAlunos()} />
-                                </Suspense>
+                                <ErrorBoundary onReset={reset} fallbackRender={({resetErrorBoundary}) => {
+                                    return (
+                                        <div className='flex justify-center items-center'>
+                                            <p className='text-red-700'>OII</p>
+                                            <button onClick={(() => resetErrorBoundary())}>Tente novamente</button>
+                                        </div>
+                                    )
+                                }} >
+                                    <Suspense fallback={<CarregandoAlunos />}>
+                                        <ListaAlunos />
+                                    </Suspense>
+                                </ErrorBoundary>
 
                             </>
                     }
@@ -466,10 +477,11 @@ export function HomePage() {
                     <div className="w-11/12 flex flex-col justify-center items-center gap-4 pb-14">
                         <h1 className="text-cyan-400 text-3xl md:text-5xl text-center">Aperfeiçoe seus conhecimentos</h1>
                         <h3 className="text-xl md:text-3xl text-center">Selecione a matéria que deseja treinar</h3>
-
-                        <Suspense fallback={<CarregandoEloMaterias />}>
-                            <ListaMaterias eloMateriasPromisse={fetchEloMaterias()} />
-                        </Suspense>
+                        <ErrorBoundary fallback={<p>AAA ERRO MALUCO</p>} >
+                            <Suspense fallback={<CarregandoEloMaterias />}>
+                                <ListaMaterias />
+                            </Suspense>
+                        </ErrorBoundary>
 
                         <ConfirmationPopup
                             isOpen={isPopupOpen}

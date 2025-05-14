@@ -31,7 +31,7 @@ function Navbar({ id, nivel, avatar }: NavbarProps) {
           className="w-[80%] sm:w-[35%] cursor-pointer"
         />
       </div>
-      
+
       <div className="flex items-center justify-end w-[40%] sm:w-[20%] gap-4">
         <NavLink to={`/perfil/${id}`} className="w-full">
           <div className="w-full flex items-center justify-around gap-2 p-2 sm:p-3 border border-white rounded-md">
