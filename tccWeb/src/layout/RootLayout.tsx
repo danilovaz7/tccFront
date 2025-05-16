@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar/Navbar";
 import { useTokenStore } from "../hooks/useTokenStore";
 import { Outlet } from "react-router";
-import { useParams, useNavigate } from 'react-router';
+import { NavLink, useNavigate } from 'react-router';
+import { useParams } from 'react-router';
+import { useQueries, useQuery, useQueryErrorResetBoundary, useSuspenseQuery } from '@tanstack/react-query';
 
 interface Usuario {
     id: number,
@@ -21,12 +23,10 @@ export function RootLayout() {
 
     const [usuario, setUsuario] = useState<Usuario>();
     const { token, user } = useTokenStore();
-    const navigate = useNavigate();
 
     if (usuario === null) {
         return <div>Carregando usuário…</div>;
-        // ou: return <Navigate to="/home" replace />;
-      }
+    }
 
     useEffect(() => {
         async function pegaUsuarios() {
@@ -46,12 +46,12 @@ export function RootLayout() {
     return (
         <div className=" overflow-x-hidden w-screen flex flex-col justify-start items-center h-screen gap-12">
             <Navbar
-  id={usuario?.id}
-  nivel={usuario?.nivel}
-  avatar={usuario?.avatar?.caminho ?? ""}
-/>
+                id={usuario?.id}
+                nivel={usuario?.nivel}
+                avatar={usuario?.avatar?.caminho ?? ""}
+            />
 
-            <Outlet/>
+            <Outlet />
         </div>
     );
 }

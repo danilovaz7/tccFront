@@ -26,7 +26,7 @@ interface Usuario {
     }
 }
 
-interface Turmas {
+interface Turma {
     id: number,
     nome: string,
 }
@@ -53,12 +53,11 @@ interface EloMateria {
 
 export function HomePage() {
     const navigate = useNavigate();
-    const {reset} = useQueryErrorResetBoundary();
+    const { reset } = useQueryErrorResetBoundary();
 
     const { token, user } = useTokenStore();
     const [usuario, setUsuario] = useState<Usuario>();
     const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
-    const [turmas, setTurmas] = useState<Turmas[]>([])
     const [materiaSelecionada, setMateriaSelecionada] = useState<EloMateria | null>(null);
     const [mensagem, setMensagem] = useState('')
     const [mensagemCor, setMensagemCor] = useState('')
@@ -88,9 +87,7 @@ export function HomePage() {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-            if (!response.ok) {
-                return
-            }
+
             const usuarioAtual = await response.json();
             setUsuario(usuarioAtual);
 
@@ -98,23 +95,6 @@ export function HomePage() {
         pegaUsuarios();
     }, [user, token]);
 
-    useEffect(() => {
-        async function pegaTurmas() {
-            const response = await fetch(`http://localhost:3000/turmas`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-            if (!response.ok) {
-                return
-            }
-            const arrayTurmas = await response.json();
-            setTurmas(arrayTurmas);
-        }
-        pegaTurmas();
-    }, [user, token]);
 
     async function postSalaOnline() {
         const code = Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -197,11 +177,21 @@ export function HomePage() {
                 'Authorization': `Bearer ${token}`
             },
         })
-        if (!response.ok) {
-            return
-        }
 
-        const data = await response.json();
+        const data: Usuario[] = await response.json();
+        return data;
+    }
+
+    async function fetchTurmas() {
+        const response = await fetch(`http://localhost:3000/turmas`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        })
+
+        const data: Turma[] = await response.json();
         return data;
     }
 
@@ -213,11 +203,8 @@ export function HomePage() {
                 'Authorization': `Bearer ${token}`,
             },
         });
-        if (!response.ok) {
-            return
-        }
-
-        const data = await response.json();
+       
+        const data: EloMateria[] = await response.json();
         return data;
     }
 
@@ -246,6 +233,31 @@ export function HomePage() {
                 <Button onClick={() => { navigate(`/ranking/${usuario?.id_turma}/${usuario?.id_escola}`); }} color="primary" className="mt-3">
                     Ver mais <span><MdKeyboardArrowRight size={16} /></span>
                 </Button>
+            </div>
+        )
+    }
+
+    function ListaTurmas() {
+        const { data: turmas } = useSuspenseQuery({
+            queryKey: ['turmas'],
+            queryFn: () => {
+                return fetchTurmas();
+            },
+        })
+        return (
+            <div className="w-full flex flex-col gap-3">
+                {
+                    turmas.map((turma, index) => (
+                        <div
+                            key={index}
+                            className="w-full flex justify-between items-center p-3 bg-cyan-500 rounded-md hover:bg-cyan-700 text-white cursor-pointer"
+                            onClick={() => navigate(`/ranking/${index + 1}/${usuario?.id_escola}`)}
+                        >
+                            <h2 className="text-sm md:text-base">{turma.nome}</h2>
+                            <MdKeyboardArrowRight size={24} />
+                        </div>
+                    ))
+                }
             </div>
         )
     }
@@ -296,7 +308,7 @@ export function HomePage() {
         )
     }
 
-    function AlunoCarregando() {
+    function CardCarregando() {
         return (
             <div className='w-full bg-gray-500 flex justify-around items-center p-2.5 rounded-md transition-transform hover:scale-105' >
                 <Skeleton className="rounded-full w-12 h-12 bg-gray-600">
@@ -332,14 +344,24 @@ export function HomePage() {
     function CarregandoAlunos() {
         return (
             <div className="w-full flex flex-col justify-center items-center gap-5 p-2">
-                <AlunoCarregando />
-                <AlunoCarregando />
-                <AlunoCarregando />
-                <AlunoCarregando />
-                <AlunoCarregando />
+                <CardCarregando />
+                <CardCarregando />
+                <CardCarregando />
+                <CardCarregando />
+                <CardCarregando />
             </div>
         )
     }
+    function CarregandoTurmas() {
+        return (
+            <div className="w-full flex flex-col justify-center items-center gap-5 p-2">
+                <CardCarregando />
+                <CardCarregando />
+                <CardCarregando />
+            </div>
+        )
+    }
+
 
     function CarregandoEloMaterias() {
         return (
@@ -436,25 +458,23 @@ export function HomePage() {
                         usuario?.tipo_usuario_id !== 2 ?
                             <>
                                 <h1 className="text-2xl md:text-4xl h-fit text-center">Ranking das<span className="text-yellow-400"> salas</span></h1>
-                                <div className="w-full flex flex-col gap-3">
-                                    {
-                                        turmas.map((turma, index) => (
-                                            <div
-                                                key={index}
-                                                className="w-full flex justify-between items-center p-3 bg-cyan-500 rounded-md hover:bg-cyan-700 text-white cursor-pointer"
-                                                onClick={() => navigate(`/ranking/${index + 1}/${usuario?.id_escola}`)}
-                                            >
-                                                <h2 className="text-sm md:text-base">{turma.nome}</h2>
-                                                <MdKeyboardArrowRight size={24} />
-                                            </div>
-                                        ))
-                                    }
-                                </div>
+                                <ErrorBoundary onReset={reset} fallbackRender={({ resetErrorBoundary }) => {
+                                    return (
+                                        <div className='flex justify-center items-center'>
+                                            <p className='text-red-700'>OII</p>
+                                            <button onClick={(() => resetErrorBoundary())}>Tente novamente</button>
+                                        </div>
+                                    )
+                                }} >
+                                    <Suspense fallback={<CarregandoTurmas />}>
+                                        <ListaTurmas />
+                                    </Suspense>
+                                </ErrorBoundary>
                             </>
                             :
                             <>
                                 <h1 className="text-2xl md:text-4xl text-center">Ranking da <span className="text-yellow-400">sala</span></h1>
-                                <ErrorBoundary onReset={reset} fallbackRender={({resetErrorBoundary}) => {
+                                <ErrorBoundary onReset={reset} fallbackRender={({ resetErrorBoundary }) => {
                                     return (
                                         <div className='flex justify-center items-center'>
                                             <p className='text-red-700'>OII</p>
@@ -477,6 +497,7 @@ export function HomePage() {
                     <div className="w-11/12 flex flex-col justify-center items-center gap-4 pb-14">
                         <h1 className="text-cyan-400 text-3xl md:text-5xl text-center">Aperfeiçoe seus conhecimentos</h1>
                         <h3 className="text-xl md:text-3xl text-center">Selecione a matéria que deseja treinar</h3>
+
                         <ErrorBoundary fallback={<p>AAA ERRO MALUCO</p>} >
                             <Suspense fallback={<CarregandoEloMaterias />}>
                                 <ListaMaterias />
