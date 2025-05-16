@@ -40,7 +40,7 @@ export function RankingPage() {
       setUsers(usuarios);
     }
     pegaUsuarios();
-  }, [id_turma, id_escola, token]); // evite depender de "usuario" para buscar a lista
+  }, [id_turma, id_escola, token]); 
 
   useEffect(() => {
     async function pegaUsuarioAtual() {
