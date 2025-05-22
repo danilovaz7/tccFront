@@ -21,34 +21,10 @@ interface Usuario {
 
 export function RootLayout() {
 
-    const [usuario, setUsuario] = useState<Usuario>();
-    const { token, user } = useTokenStore();
-
-    if (usuario === null) {
-        return <div>Carregando usuário…</div>;
-    }
-
-    useEffect(() => {
-        async function pegaUsuarios() {
-            const response = await fetch(`http://localhost:3000/usuarios/${user?.id}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-            const usuarioAtual = await response.json();
-            setUsuario(usuarioAtual);
-        }
-        pegaUsuarios();
-    }, [user, token]);
-
     return (
         <div className=" overflow-x-hidden w-screen flex flex-col justify-start items-center h-screen gap-12">
             <Navbar
-                id={usuario?.id}
-                nivel={usuario?.nivel}
-                avatar={usuario?.avatar?.caminho ?? ""}
+               
             />
 
             <Outlet />
