@@ -27,7 +27,6 @@ function LoginPage() {
       const response = await fetch(`http://localhost:3000/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify({ email, senha }),
       });
 
@@ -49,7 +48,6 @@ function LoginPage() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${loginToken}`,
         },
-        credentials: 'include',
       });
 
       if (!respostaEu.ok) {
@@ -77,15 +75,15 @@ function LoginPage() {
   }
 
   return (
-    <div className='flex flex-col h-full justify-center items-center pt-32 gap-4'>
+    <div className='flex flex-col h-full justify-center items-center pt-28 gap-4'>
       <img
-        className='w-[40%] border-2 border-black rounded-full'
-        src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+        className='w-[30%] rounded-full'
+        src="./src/assets/userDefault.png"
         alt="User Icon"
       />
 
       <form onSubmit={handleSubmit} className='flex flex-col justify-center items-center rounded-2xl w-[90%] gap-4 p-1'>
-        <div className='w-[90%] flex flex-row justify-around items-center border-2 border-cyan-500 rounded-md p-1'>
+        <div className='w-[40%] flex flex-row justify-around items-center border-2 border-cyan-500 rounded-md p-1'>
           <input
             className='w-[80%] p-1.5 border-0 bg-transparent text-white focus:outline-none'
             type="text"
@@ -98,7 +96,7 @@ function LoginPage() {
           <FaRegUser />
         </div>
 
-        <div className='w-[90%] flex flex-row justify-around items-center border-2 border-cyan-500 rounded-md p-1'>
+        <div className='w-[40%] flex flex-row justify-around items-center border-2 border-cyan-500 rounded-md p-1'>
           <input
             className='w-[80%] p-1.5 border-0 bg-transparent text-white focus:outline-none'
             type={hidePass ? "password" : "text"}
