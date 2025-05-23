@@ -9,7 +9,7 @@ export function useMaterias() {
  
     useEffect(() => {
         async function getMaterias() {
-            const response = await fetch(`http://localhost:3000/materias`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/materias`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

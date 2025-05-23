@@ -35,7 +35,7 @@ function Navbar() {
   }
 
   async function fetchUser() {
-    const response = await fetch(`http://localhost:3000/usuarios/${user?.id}`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/${user?.id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

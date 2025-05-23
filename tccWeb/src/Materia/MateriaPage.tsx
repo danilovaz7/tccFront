@@ -98,7 +98,7 @@ function Materia() {
 
     useEffect(() => {
         async function pegaSala() {
-            const response = await fetch(`http://localhost:3000/sala/${codigo}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/sala/${codigo}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -144,7 +144,7 @@ function Materia() {
     }
 
     async function handleSelecionarAlternativa(alternativa: Alternativa) {
-        const resposta = await fetch(`http://localhost:3000/sala/resposta-aluno`, {
+        const resposta = await fetch(`${import.meta.env.VITE_API_URL}/sala/resposta-aluno`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -195,7 +195,7 @@ function Materia() {
 
     useEffect(() => {
         async function pegaUsuarioNav() {
-            const response = await fetch(`http://localhost:3000/usuarios/${user?.id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/${user?.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -212,7 +212,7 @@ function Materia() {
     useEffect(() => {
         if (eloMateria?.elo_id) {
             async function pegaPerguntasMateria() {
-                const response = await fetch(`http://localhost:3000/sala/${sala?.id}/perguntas/${eloMateria?.elo_id}/${turmaId}/${nmMateria}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/sala/${sala?.id}/perguntas/${eloMateria?.elo_id}/${turmaId}/${nmMateria}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -229,7 +229,7 @@ function Materia() {
 
     useEffect(() => {
         async function pegaAlternativas() {
-            const response = await fetch(`http://localhost:3000/materias/perguntas/${perguntaAtual?.id}/alternativas`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/materias/perguntas/${perguntaAtual?.id}/alternativas`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -244,7 +244,7 @@ function Materia() {
 
     useEffect(() => {
         async function pegaEloMaterias() {
-            const response = await fetch(`http://localhost:3000/eloMaterias/${usuario?.id}/materia/${nmMateria}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/eloMaterias/${usuario?.id}/materia/${nmMateria}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -274,7 +274,7 @@ function Materia() {
 
     async function atualizeXP(xp: number) {
         try {
-            const response = await fetch(`http://localhost:3000/usuarios/${user?.id}/atualizaexperiencia`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/${user?.id}/atualizaexperiencia`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -307,7 +307,7 @@ function Materia() {
             atualizeXP(20 * contagemAcertos)
         }
 
-        await fetch(`http://localhost:3000/sala/${sala?.codigo}`, {
+        await fetch(`${import.meta.env.VITE_API_URL}/sala/${sala?.codigo}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -319,7 +319,7 @@ function Materia() {
             })
         });
 
-        const resposta = await fetch(`http://localhost:3000/eloMaterias/${usuario?.id}/materia/${nmMateria}`, {
+        const resposta = await fetch(`${import.meta.env.VITE_API_URL}/eloMaterias/${usuario?.id}/materia/${nmMateria}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

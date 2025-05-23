@@ -11,7 +11,7 @@ function DashBoardPage() {
     setLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:3000/escola/${user?.id}/dashboard?month=${selectedMonth}`,
+        `${import.meta.env.VITE_API_URL}/escola/${user?.id}/dashboard?month=${selectedMonth}`,
         { headers: { 'Authorization': `Bearer ${token}` } }
       );
       const data = await response.json();

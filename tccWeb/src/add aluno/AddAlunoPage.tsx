@@ -43,7 +43,7 @@ export function AddAlunoPage() {
 
     useEffect(() => {
         async function pegaUsuarios() {
-            const response = await fetch(`http://localhost:3000/usuarios/${user?.id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/${user?.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ export function AddAlunoPage() {
         },
         onSubmit: async (values) => {
             console.log(values)
-            const resposta = await fetch(`http://localhost:3000/usuarios`, {
+            const resposta = await fetch(`${import.meta.env.VITE_API_URL}/usuarios`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ export function AddAlunoPage() {
 
     useEffect(() => {
         async function carregarAvatares() {
-            const response = await fetch(`http://localhost:3000/avatares`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/avatares`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -115,7 +115,7 @@ export function AddAlunoPage() {
 
     useEffect(() => {
         async function carregaEscolas() {
-            const response = await fetch(`http://localhost:3000/escolas`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/escolas`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

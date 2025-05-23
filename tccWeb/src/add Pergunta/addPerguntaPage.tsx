@@ -28,7 +28,7 @@ export function AddPerguntaPage() {
 
     useEffect(() => {
         async function pegaUsuarios() {
-            const response = await fetch(`http://localhost:3000/usuarios/${user?.id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/${user?.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ export function AddPerguntaPage() {
                 alert('somente professores podem adicionar perguntas')
                 return;
             }
-            const resposta = await fetch(`http://localhost:3000/criar-pergunta`, {
+            const resposta = await fetch(`${import.meta.env.VITE_API_URL}/criar-pergunta`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

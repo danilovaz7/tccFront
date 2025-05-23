@@ -27,7 +27,7 @@ export function AddEscolaPage() {
 
     useEffect(() => {
         async function pegaUsuarios() {
-            const response = await fetch(`http://localhost:3000/usuarios/${user?.id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/${user?.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export function AddEscolaPage() {
         },
         onSubmit: async (values) => {
             console.log(values)
-            const resposta = await fetch(`http://localhost:3000/criar-escola`, {
+            const resposta = await fetch(`${import.meta.env.VITE_API_URL}/criar-escola`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

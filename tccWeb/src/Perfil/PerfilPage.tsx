@@ -84,7 +84,7 @@ export function PerfilPage() {
     };
     useEffect(() => {
         async function pegaUsuario() {
-            const response = await fetch(`http://localhost:3000/usuarios/${idUsuario}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/${idUsuario}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -100,7 +100,7 @@ export function PerfilPage() {
     useEffect(() => {
         async function pegaUsuarios() {
 
-            const response = await fetch(`http://localhost:3000/usuarios?order=nivel&orderDirection=DESC&id_turma=${usuario?.id_turma}&id_escola=${usuario?.id_escola} `, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/usuarios?order=nivel&orderDirection=DESC&id_turma=${usuario?.id_turma}&id_escola=${usuario?.id_escola} `, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -117,7 +117,7 @@ export function PerfilPage() {
 
     useEffect(() => {
         async function pegaCargos() {
-            const response = await fetch(`http://localhost:3000/cargos`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/cargos`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ export function PerfilPage() {
 
     useEffect(() => {
         async function pegaUsuarioNav() {
-            const response = await fetch(`http://localhost:3000/usuarios/${user?.id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/${user?.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -147,7 +147,7 @@ export function PerfilPage() {
 
     useEffect(() => {
         async function carregarAvatares() {
-            const response = await fetch(`http://localhost:3000/avatares`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/avatares`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -162,7 +162,7 @@ export function PerfilPage() {
 
     useEffect(() => {
         async function pegaEloMaterias() {
-            const response = await fetch(`http://localhost:3000/eloMaterias/${usuario?.id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/eloMaterias/${usuario?.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -184,7 +184,7 @@ export function PerfilPage() {
 
     useEffect(() => {
         async function carregarDados() {
-            const response = await fetch(`http://localhost:3000/estatisticas/${idUsuario}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/estatisticas/${idUsuario}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -203,7 +203,7 @@ export function PerfilPage() {
 
     async function trocaAvatar() {
         try {
-            const response = await fetch(`http://localhost:3000/usuarios/${user?.id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/${user?.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'

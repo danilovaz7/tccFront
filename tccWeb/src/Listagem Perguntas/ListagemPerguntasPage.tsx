@@ -53,7 +53,7 @@ export function ListagemPerguntasPage() {
 
     useEffect(() => {
         async function pegaUsuarioNav() {
-            const response = await fetch(`http://localhost:3000/usuarios/${user?.id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/${user?.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ export function ListagemPerguntasPage() {
 
     useEffect(() => {
         async function getMaterias() {
-            const response = await fetch(`http://localhost:3000/materias`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/materias`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ export function ListagemPerguntasPage() {
         evento.preventDefault();
 
         async function pegaPerguntas() {
-            const response = await fetch(`http://localhost:3000/materias/${pesquisa.materia_id}/perguntas/escola/${pesquisa.escola_id}/turma/${pesquisa.id_turma}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/materias/${pesquisa.materia_id}/perguntas/escola/${pesquisa.escola_id}/turma/${pesquisa.id_turma}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

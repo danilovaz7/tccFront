@@ -68,7 +68,7 @@ export function ListagemPage() {
 
     useEffect(() => {
         async function pegaUsuarioNav() {
-            const response = await fetch(`http://localhost:3000/usuarios/${user?.id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/${user?.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ export function ListagemPage() {
 
     useEffect(() => {
         async function getMaterias() {
-            const response = await fetch(`http://localhost:3000/materias`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/materias`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -110,7 +110,7 @@ export function ListagemPage() {
         console.log(pesquisa)
         async function pegaUsuarios() {
 
-            const response = await fetch(`http://localhost:3000/usuarios?id_turma=${pesquisa.id_turma}&order=${pesquisa.order}&orderDirection=DESC&materiaId=${pesquisa.materia_id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/usuarios?id_turma=${pesquisa.id_turma}&order=${pesquisa.order}&orderDirection=DESC&materiaId=${pesquisa.materia_id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -121,7 +121,7 @@ export function ListagemPage() {
             setUsers(usuarios)
         }
         async function pegaEloMaterais() {
-            const response = await fetch(`http://localhost:3000/eloMaterias/materias/${pesquisa.materia_id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/eloMaterias/materias/${pesquisa.materia_id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

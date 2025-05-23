@@ -80,7 +80,7 @@ export function HomePage() {
 
     useEffect(() => {
         async function pegaUsuarios() {
-            const response = await fetch(`http://localhost:3000/usuarios/${user?.id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/${user?.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -98,7 +98,7 @@ export function HomePage() {
 
     async function postSalaOnline() {
         const code = Math.random().toString(36).substring(2, 8).toUpperCase();
-        const resposta = await fetch(`http://localhost:3000/sala`, {
+        const resposta = await fetch(`${import.meta.env.VITE_API_URL}/sala`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -123,7 +123,7 @@ export function HomePage() {
 
     async function postSalaOffline() {
         const code = Math.random().toString(36).substring(2, 8).toUpperCase();
-        const resposta = await fetch(`http://localhost:3000/sala`, {
+        const resposta = await fetch(`${import.meta.env.VITE_API_URL}/sala`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -147,7 +147,7 @@ export function HomePage() {
             id_aluno: user?.id
         },
         onSubmit: async (values) => {
-            const resposta = await fetch(`http://localhost:3000/entrar/sala`, {
+            const resposta = await fetch(`${import.meta.env.VITE_API_URL}/entrar/sala`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -170,7 +170,7 @@ export function HomePage() {
     });
 
     async function fetchAlunos() {
-        const response = await fetch(`http://localhost:3000/usuarios?limit=5&order=nivel&orderDirection=DESC&id_turma=${usuario?.id_turma}&id_escola=${usuario?.id_escola}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/usuarios?limit=5&order=nivel&orderDirection=DESC&id_turma=${usuario?.id_turma}&id_escola=${usuario?.id_escola}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -183,7 +183,7 @@ export function HomePage() {
     }
 
     async function fetchTurmas() {
-        const response = await fetch(`http://localhost:3000/turmas`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/turmas`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -196,7 +196,7 @@ export function HomePage() {
     }
 
     async function fetchEloMaterias() {
-        const response = await fetch(`http://localhost:3000/eloMaterias/${user?.id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/eloMaterias/${user?.id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

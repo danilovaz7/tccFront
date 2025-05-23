@@ -27,7 +27,7 @@ export function RankingPage() {
   useEffect(() => {
     async function pegaUsuarios() {
       const response = await fetch(
-        `http://localhost:3000/usuarios?order=nivel&orderDirection=DESC&id_turma=${id_turma}&id_escola=${id_escola}`,
+        `${import.meta.env.VITE_API_URL}/usuarios?order=nivel&orderDirection=DESC&id_turma=${id_turma}&id_escola=${id_escola}`,
         {
           method: 'GET',
           headers: {
@@ -44,7 +44,7 @@ export function RankingPage() {
 
   useEffect(() => {
     async function pegaUsuarioAtual() {
-      const response = await fetch(`http://localhost:3000/usuarios/${user?.id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/${user?.id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

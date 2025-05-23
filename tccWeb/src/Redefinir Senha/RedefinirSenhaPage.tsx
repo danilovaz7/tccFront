@@ -44,7 +44,7 @@ export function RedefinirSenhaPage() {
     validate: validatePassword,
     onSubmit: async (values) => {
       try {
-        const response = await fetch(`http://localhost:3000/reset-password/${token}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/reset-password/${token}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

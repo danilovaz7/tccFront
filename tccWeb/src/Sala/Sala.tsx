@@ -90,7 +90,7 @@ export function Sala() {
   // BUSCA DAS MATÉRIAS
   useEffect(() => {
     async function getMaterias() {
-      const response = await fetch(`http://localhost:3000/materias`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/materias`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ export function Sala() {
           return;
         }
         const response = await fetch(
-          `http://localhost:3000/sala/${sala?.id}/perguntas/${dificuldadeId}/3/${values.materias[0]}/${values.materias[1]}/${values.materias[2]}`,
+          `${import.meta.env.VITE_API_URL}/sala/${sala?.id}/perguntas/${dificuldadeId}/3/${values.materias[0]}/${values.materias[1]}/${values.materias[2]}`,
           {
             method: 'GET',
             headers: {
@@ -147,7 +147,7 @@ export function Sala() {
   // BUSCA INFORMAÇÕES DO USUÁRIO
   useEffect(() => {
     async function pegaUsuarioNav() {
-      const response = await fetch(`http://localhost:3000/usuarios/${user?.id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/${user?.id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -164,7 +164,7 @@ export function Sala() {
 
   useEffect(() => {
     async function carregarDados() {
-      const response = await fetch(`http://localhost:3000/estatisticas/${user?.id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/estatisticas/${user?.id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -320,7 +320,7 @@ export function Sala() {
   }, [socket, sala]);
 
   async function atualizarSala(status: string, vencedorId: number | null) {
-    const resposta = await fetch(`http://localhost:3000/sala/${sala?.codigo}`, {
+    const resposta = await fetch(`${import.meta.env.VITE_API_URL}/sala/${sala?.codigo}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -357,7 +357,7 @@ export function Sala() {
     if (jaRespondeu) return;
     setJaRespondeu(true);
 
-    const resposta = await fetch(`http://localhost:3000/sala/resposta-aluno`, {
+    const resposta = await fetch(`${import.meta.env.VITE_API_URL}/sala/resposta-aluno`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -418,7 +418,7 @@ export function Sala() {
   // Get room data
   useEffect(() => {
     async function pegaSala() {
-      const response = await fetch(`http://localhost:3000/sala/${codigo}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/sala/${codigo}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -436,7 +436,7 @@ export function Sala() {
   // Get room students
   useEffect(() => {
     async function pegaSalaAlunos() {
-      const response = await fetch(`http://localhost:3000/sala-alunos/${sala?.id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/sala-alunos/${sala?.id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -482,7 +482,7 @@ export function Sala() {
 
   async function atualizeXP(xp: number) {
     try {
-      const response = await fetch(`http://localhost:3000/usuarios/${user?.id}/atualizaexperiencia`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/${user?.id}/atualizaexperiencia`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
