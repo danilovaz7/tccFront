@@ -10,6 +10,6 @@ FROM nginx:stable-alpine
 
 COPY --from=builder /dist /usr/share/nginx/html
 
-COPY nginx.conf /etc/nginx/nginx.config
+COPY nginx.conf /etc/nginx/nginx.conf
 
 CMD ["nginx", "-g", "daemon off;"]
