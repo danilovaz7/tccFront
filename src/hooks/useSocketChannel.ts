@@ -8,7 +8,7 @@ export function useSocket() {
 
   useEffect(() => {
           if (!socket) return;
-          const funcao = ({ alunosAtualizados }: { alunosAtualizados: [] }) => {
+          const funcao = ({  }: { alunosAtualizados: [] }) => {
             
           };
           socket.on("atualizar_sala", funcao);

@@ -77,7 +77,7 @@ export function Sala() {
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [chatText, setChatText] = useState<string>("");
   const [dados, setDados] = useState<Estatisticas | null>(null);
-  const [perguntasMaterias, setPerguntasMaterias] = useState<Pergunta[]>([]);
+  const [_perguntasMaterias, setPerguntasMaterias] = useState<Pergunta[]>([]);
   const [carregando, setCarregando] = useState(true);
 
   const [quizStarted, setQuizStarted] = useState(false);
@@ -139,7 +139,7 @@ export function Sala() {
         }
 
         const perguntas = await response.json();
-         setPerguntasMaterias(perguntas);
+        setPerguntasMaterias(perguntas);
         setMensagem('perguntas enviadas com êxito');
         setMensagemCor('success')
         socket?.emit("enviarPerguntas", { roomId: sala?.id, perguntas });
@@ -235,7 +235,7 @@ export function Sala() {
   // Question Result
   useEffect(() => {
     if (!socket) return;
-    const handleResultadoPergunta = ({  vencedor, respostaCorreta, scoreboard }: { vencedor: string | null, respostaCorreta: string, scoreboard: Score[] }) => {
+    const handleResultadoPergunta = ({  vencedor, scoreboard }: { vencedor: string | null, scoreboard: Score[] }) => {
       setVencedor(vencedor);
       setScoreboard(scoreboard);
       // Inicia o timer de descanso de 5 segundos
