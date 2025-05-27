@@ -98,8 +98,8 @@ function Navbar() {
       <ErrorBoundary onReset={reset} fallbackRender={({ resetErrorBoundary }) => {
         return (
           <div className='flex justify-center items-center'>
-            <p className='text-red-700'>OII</p>
-            <button onClick={(() => resetErrorBoundary())}>Tente novamente</button>
+            <p className='text-red-700'>Ocorreu um erro</p>
+            <button onClick={(() => resetErrorBoundary())}>Recarregue a pagina</button>
           </div>
         )
       }} >
