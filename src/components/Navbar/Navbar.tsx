@@ -4,7 +4,7 @@ import { useTokenStore } from '../../hooks/useTokenStore';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import {  useQueryErrorResetBoundary, useSuspenseQuery } from '@tanstack/react-query';
-import logo from '../assets/logo1Play2Learn.png';
+import logo from '../../assets/logo1Play2Learn.png';
 
 
 interface Usuario {
