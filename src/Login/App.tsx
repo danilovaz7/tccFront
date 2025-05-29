@@ -3,6 +3,7 @@ import { FaRegEye, FaRegEyeSlash, FaRegUser } from "react-icons/fa";
 import { NavLink, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 import { Alert } from "@heroui/react";
+import userDefaultImagem from '../assets/userDefault.png';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
@@ -78,7 +79,7 @@ function LoginPage() {
     <div className='flex flex-col h-full justify-center items-center pt-28 gap-4'>
       <img
         className='w-[30%] rounded-full'
-        src="/src/assets/userDefault.png"
+        src={userDefaultImagem}
         alt="User Icon"
       />
 
