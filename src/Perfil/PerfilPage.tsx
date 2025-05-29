@@ -199,10 +199,12 @@ export function PerfilPage() {
             const response = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/${user?.id}`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({ id_avatar: selectedAvatarId })
             });
+            
 
             if (!response.ok) {
                 throw new Error(`Erro ao atualizar usuário: ${response.statusText}`);
