@@ -4,6 +4,8 @@ import { useTokenStore } from '../../hooks/useTokenStore';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import {  useQueryErrorResetBoundary, useSuspenseQuery } from '@tanstack/react-query';
+import logo from '../assets/logo1Play2Learn.png';
+
 
 interface Usuario {
   id: number,
@@ -89,7 +91,7 @@ function Navbar() {
       <div className="flex items-center justify-start w-[60%] sm:w-[70%]">
         <img
           onClick={() => { navigate('/home') }}
-          src="/src/assets/logo1Play2Learn.png"
+          src={logo}
           alt="Logo"
           className="w-[80%] sm:w-[35%] cursor-pointer"
         />

@@ -10,6 +10,7 @@ import ConfirmationPopup from '../components/ConfirmationPopup/ConfirmationPopup
 import { Form, Input, Button, Alert, Skeleton } from "@heroui/react";
 import { useFormik } from 'formik';
 import { useQueryErrorResetBoundary, useSuspenseQuery } from '@tanstack/react-query';
+import gifCentro from '../assets/gifCentro.gif';
 
 
 
@@ -61,6 +62,7 @@ export function HomePage() {
     const [materiaSelecionada, setMateriaSelecionada] = useState<EloMateria | null>(null);
     const [mensagem, setMensagem] = useState('')
     const [mensagemCor, setMensagemCor] = useState<"default" | "primary" | "secondary" | "success" | "warning" | "danger" | undefined>(undefined)
+    
 
     const handleShowPopup = () => setIsPopupOpen(true);
     const handleConfirm = () => {
@@ -450,7 +452,7 @@ export function HomePage() {
                 }
 
                 <div className="w-full md:w-[40%] h-auto flex flex-col justify-center items-center">
-                    <img className="w-[75%] md:w-[70%] rounded-full shadow-md" src="./src/assets/gifCentro.gif" alt="GIF" />
+                    <img className="w-[75%] md:w-[70%] rounded-full shadow-md" src={gifCentro} alt="GIF" />
                 </div>
 
                 <div className="w-full md:w-[30%] pb-20 sm:pb-5 h-fit p-5 flex flex-col justify-start items-center gap-5 shadow-md">
