@@ -78,7 +78,7 @@ function LoginPage() {
     <div className='flex flex-col h-full justify-center items-center pt-28 gap-4'>
       <img
         className='w-[30%] rounded-full'
-        src="./src/assets/userDefault.png"
+        src="/assets/userDefault.png"
         alt="User Icon"
       />
 
