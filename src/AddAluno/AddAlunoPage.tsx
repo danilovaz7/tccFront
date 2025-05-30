@@ -207,9 +207,7 @@ export function AddAlunoPage() {
                     name="email"
                     placeholder="Email..."
                     type="email"
-                    classNames={{
-                        label: '!text-white',
-                    }}
+                  
                 />
 
                 <Select
@@ -236,9 +234,7 @@ export function AddAlunoPage() {
                     type="text"
                     maxLength={6}
                     minLength={6}
-                    classNames={{
-                        label: '!text-white',
-                    }}
+                  
                 />
 
                 <Select

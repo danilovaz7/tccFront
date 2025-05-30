@@ -536,14 +536,14 @@ export function Sala() {
   }
 
   if (!usuarioNavBar) {
-    return <p className="text-white p-5">Carregando...</p>;
+    return <p className=" p-5">Carregando...</p>;
   }
   if (!sala || !sala.codigo) return null;
-  if (carregando && usuarioNavBar?.tipo_usuario_id === 2) return <p className="text-white p-5">Carregando estatísticas...</p>;
-  if (!dados && usuarioNavBar?.tipo_usuario_id === 2) return <p className="text-white p-5">Erro ao carregar estatísticas.</p>;
+  if (carregando && usuarioNavBar?.tipo_usuario_id === 2) return <p className=" p-5">Carregando estatísticas...</p>;
+  if (!dados && usuarioNavBar?.tipo_usuario_id === 2) return <p className=" p-5">Erro ao carregar estatísticas.</p>;
 
   return (
-    <div className="min-h-screen md:w-[100%] text-white">
+    <div className="min-h-screen md:w-[100%] ">
       {quizFinalizado ? (
         <div className="w-full flex flex-col justify-start items-center gap-12 pb-10 mb-40 px-4">
           <h1 className="text-3xl font-bold">Quiz Finalizado!</h1>
@@ -581,7 +581,7 @@ export function Sala() {
                   value={chatText}
                   onChange={(e) => setChatText(e.target.value)}
                   placeholder="Digite sua mensagem..."
-                  className="flex-1 bg-gray-800 text-white"
+                  className="flex-1  "
                 />
                 <Button
                   type="submit"
@@ -666,7 +666,7 @@ export function Sala() {
                         key={materiaKey}
                         onChange={(e) => handleSelectMateria(e, index)}
                         value={selectedMaterias[index] || ""}
-                        className="w-full md:w-4/5 bg-gray-800 text-black"
+                        className="w-full md:w-4/5  text-black"
                         label={`Selecione a disciplina ${index + 1}`}
                       >
                         {materias.map((materia) => (
@@ -682,7 +682,7 @@ export function Sala() {
                     ))}
 
                     <Select
-                      className="w-full md:w-4/5 bg-gray-800 text-black"
+                      className="w-full md:w-4/5  text-black"
                       label="Selecione uma dificuldade"
                       value={dificuldadeId ?? ""}
                       onChange={(e) => setDificuldadeId(parseInt(e.target.value))}
@@ -708,7 +708,7 @@ export function Sala() {
                         size="sm"
                         type="reset"
                         variant="flat"
-                        className="border border-cyan-500 text-white"
+                        className="border border-cyan-500 "
                       >
                         Limpar
                       </Button>
@@ -750,7 +750,7 @@ export function Sala() {
                     id={aluno.usuario.id}
                     nivel={aluno.usuario.nivel}
                     nome={aluno.usuario.nome}
-                    classe="w-full md:w-3/5 bg-gray-800 flex justify-between items-center text-white p-2.5 cursor-pointer rounded-md"
+                    classe="w-full md:w-3/5 bg-gray-800 flex justify-between items-center  p-2.5 cursor-pointer rounded-md"
                   />
                 ))}
               </div>
@@ -782,7 +782,7 @@ export function Sala() {
                   value={chatText}
                   onChange={(e) => setChatText(e.target.value)}
                   placeholder="Digite sua mensagem..."
-                  className="flex-1 bg-gray-800 text-white"
+                  className="flex-1  "
                 />
                 <Button
                   type="submit"
