@@ -86,7 +86,7 @@ function LoginPage() {
       <form onSubmit={handleSubmit} className='flex flex-col justify-center items-center rounded-2xl w-[90%] gap-4 p-1'>
         <div className='w-[40%] flex flex-row justify-around items-center border-2 border-cyan-500 rounded-md p-1'>
           <input
-            className='w-[80%] p-1.5 border-0 bg-transparent text-white focus:outline-none'
+            className='w-[80%] p-1.5 border-0 bg-transparent  focus:outline-none'
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -99,7 +99,7 @@ function LoginPage() {
 
         <div className='w-[40%] flex flex-row justify-around items-center border-2 border-cyan-500 rounded-md p-1'>
           <input
-            className='w-[80%] p-1.5 border-0 bg-transparent text-white focus:outline-none'
+            className='w-[80%] p-1.5 border-0 bg-transparent  focus:outline-none'
             type={hidePass ? "password" : "text"}
             value={senha}
             onChange={(e) => setSenha(e.target.value)}

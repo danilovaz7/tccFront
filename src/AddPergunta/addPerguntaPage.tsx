@@ -105,7 +105,7 @@ export function AddPerguntaPage() {
                     <p>Tornar pergunta pública</p>
                     <Checkbox
                         onChange={() => { setIsChecked(!isCheked) }}
-                        className='text-white' ></Checkbox>
+                         ></Checkbox>
                 </div>
                 
                 <Input
@@ -118,9 +118,7 @@ export function AddPerguntaPage() {
                     name="pergunta"
                     placeholder="Pergunta..."
                     type="text"
-                    classNames={{
-                        label: '!text-white'
-                    }}
+                    
                 />
 
                 <Select
@@ -161,9 +159,7 @@ export function AddPerguntaPage() {
                     name="alternativas.0"
                     placeholder="Alternativa 1..."
                     type="text"
-                    classNames={{
-                        label: '!text-white'
-                    }}
+                    
                 />
 
                 <Input
@@ -176,9 +172,7 @@ export function AddPerguntaPage() {
                     name="alternativas.1"
                     placeholder="Alternativa 2..."
                     type="text"
-                    classNames={{
-                        label: '!text-white'
-                    }}
+                    
                 />
 
                 <Input
@@ -191,9 +185,7 @@ export function AddPerguntaPage() {
                     name="alternativas.2"
                     placeholder="Alternativa 3..."
                     type="text"
-                    classNames={{
-                        label: '!text-white'
-                    }}
+                    
                 />
 
                 <Input
@@ -206,9 +198,7 @@ export function AddPerguntaPage() {
                     name="alternativas.3"
                     placeholder="Alternativa 4..."
                     type="text"
-                    classNames={{
-                        label: '!text-white'
-                    }}
+                    
                 />
 
                 <Select

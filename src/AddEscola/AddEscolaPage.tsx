@@ -87,9 +87,7 @@ export function AddEscolaPage() {
                     name="nome"
                     placeholder="Nome..."
                     type="text"
-                    classNames={{
-                        label: '!text-white'
-                    }}
+                    
                 />
                  <Input
                     isRequired
@@ -101,9 +99,7 @@ export function AddEscolaPage() {
                     name="cnpj"
                     placeholder="Cnpj..."
                     type="text"
-                    classNames={{
-                        label: '!text-white'
-                    }}
+                   
                 />
                 <div className="flex gap-2">
                     <Button size='lg' color="primary" type="submit">

@@ -163,9 +163,7 @@ export function AddAlunoPage() {
                     name="nome"
                     placeholder="Nome..."
                     type="text"
-                    classNames={{
-                        label: '!text-white',
-                    }}
+                   
                 />
                 <Select
                     isRequired

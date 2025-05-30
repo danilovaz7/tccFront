@@ -57,7 +57,7 @@ function Navbar() {
     return (
       <div className="flex items-center justify-end w-[40%] sm:w-[20%] gap-4">
         <NavLink to={`/perfil/${usuario.id}`} className="w-full">
-          <div className="w-full flex items-center justify-around gap-2 p-2 sm:p-3 border border-white rounded-md">
+          <div className="w-full flex items-center justify-around gap-2 p-2 sm:p-3 border border-cyan-500 rounded-md">
             <p className="text-sm sm:text-xl">Nível {usuario.nivel}</p>
             <img
               className="w-12 sm:w-16 rounded-full"
@@ -74,7 +74,7 @@ function Navbar() {
   function CarregandoCardNavBar() {
     return (
       <div className="flex items-center justify-end w-[40%] sm:w-[20%] gap-4">
-        <div className="w-full flex items-center justify-around gap-2 p-2 sm:p-3 border border-white rounded-md">
+        <div className="w-full flex items-center justify-around gap-2 p-2 sm:p-3 border border-cyan-500 rounded-md">
           <Skeleton className="rounded-lg w-[20%] bg-gray-600">
             <div className="h-5 rounded-lg bg-default-300" />
           </Skeleton>
