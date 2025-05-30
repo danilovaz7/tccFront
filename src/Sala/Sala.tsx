@@ -652,6 +652,9 @@ export function Sala() {
                 <p>
                   Prontos: {readyPlayers.length} / {alunos.length}
                 </p>
+                   <p>
+                  Porfavor, envie as disciplinas e dificuldade antes de iniciar a partida
+                </p>
               </div>
               {user?.id === sala?.host_id ? (
                 <>
@@ -750,7 +753,7 @@ export function Sala() {
                     id={aluno.usuario.id}
                     nivel={aluno.usuario.nivel}
                     nome={aluno.usuario.nome}
-                    classe="w-full md:w-3/5 bg-gray-800 flex justify-between items-center  p-2.5 cursor-pointer rounded-md"
+                    classe="w-full md:w-3/5 bg-gray-800 flex justify-between items-center text-white p-2.5 cursor-pointer rounded-md"
                   />
                 ))}
               </div>
