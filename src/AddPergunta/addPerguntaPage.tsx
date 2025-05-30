@@ -111,8 +111,7 @@ export function AddPerguntaPage() {
                 <Input
                     isRequired
                     errorMessage="Coloque um pergunta valido"
-                    label="Pergunta"
-                    labelPlacement="outside"
+                    
                     onChange={formik.handleChange}
                     value={formik.values.pergunta}
                     name="pergunta"
@@ -152,8 +151,7 @@ export function AddPerguntaPage() {
                 <Input
                     isRequired
                     errorMessage="Coloque uma alternativa valida"
-                    label="Alternativa 1"
-                    labelPlacement="outside"
+                  
                     onChange={formik.handleChange}
                     value={formik.values.alternativas[0]}
                     name="alternativas.0"
@@ -165,8 +163,7 @@ export function AddPerguntaPage() {
                 <Input
                     isRequired
                     errorMessage="Coloque uma alternativa valida"
-                    label="Alternativa 2"
-                    labelPlacement="outside"
+                    
                     onChange={formik.handleChange}
                     value={formik.values.alternativas[1]}
                     name="alternativas.1"
@@ -178,8 +175,7 @@ export function AddPerguntaPage() {
                 <Input
                     isRequired
                     errorMessage="Coloque uma alternativa valida"
-                    label="Alternativa 3"
-                    labelPlacement="outside"
+                    
                     onChange={formik.handleChange}
                     value={formik.values.alternativas[2]}
                     name="alternativas.2"
@@ -191,8 +187,7 @@ export function AddPerguntaPage() {
                 <Input
                     isRequired
                     errorMessage="Coloque uma alternativa valida"
-                    label="Alternativa 4"
-                    labelPlacement="outside"
+                  
                     onChange={formik.handleChange}
                     value={formik.values.alternativas[3]}
                     name="alternativas.3"

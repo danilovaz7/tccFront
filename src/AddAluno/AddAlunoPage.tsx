@@ -156,8 +156,7 @@ export function AddAlunoPage() {
                 <Input
                     isRequired
                     errorMessage="Coloque um nome válido"
-                    label="Nome"
-                    labelPlacement="outside"
+                  
                     onChange={formik.handleChange}
                     value={formik.values.nome}
                     name="nome"
@@ -200,8 +199,7 @@ export function AddAlunoPage() {
                 <Input
                     isRequired
                     errorMessage="Insira um email válido 'exemplo@email.com'"
-                    label="Email"
-                    labelPlacement="outside"
+               
                     onChange={formik.handleChange}
                     value={formik.values.email}
                     name="email"
@@ -225,10 +223,10 @@ export function AddAlunoPage() {
                     isRequired
                     className="max-w-full sm:max-w-xs"
                     errorMessage="Insira uma matrícula válida de 6 dígitos"
-                    label="Matrícula"
+             
                     onChange={formik.handleChange}
                     value={formik.values.matricula}
-                    labelPlacement="outside"
+               
                     name="matricula"
                     placeholder="Matrícula..."
                     type="text"

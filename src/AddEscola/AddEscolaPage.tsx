@@ -80,8 +80,7 @@ export function AddEscolaPage() {
                 <Input
                     isRequired
                     errorMessage="Coloque um nome valido"
-                    label="Nome"
-                    labelPlacement="outside"
+                  
                     onChange={formik.handleChange}
                     value={formik.values.nome}
                     name="nome"
@@ -92,8 +91,7 @@ export function AddEscolaPage() {
                  <Input
                     isRequired
                     errorMessage="Coloque um cnpj valido"
-                    label="Cnpj"
-                    labelPlacement="outside"
+                    
                     onChange={formik.handleChange}
                     value={formik.values.cnpj}
                     name="cnpj"
