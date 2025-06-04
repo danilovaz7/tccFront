@@ -3,7 +3,7 @@ import { Skeleton } from "@heroui/react";
 import { useTokenStore } from '../../hooks/useTokenStore';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import {  useQueryErrorResetBoundary, useSuspenseQuery } from '@tanstack/react-query';
+import { useQueryErrorResetBoundary, useSuspenseQuery } from '@tanstack/react-query';
 import logo from '../../assets/logo1Play2Learn.png';
 
 
@@ -20,19 +20,9 @@ interface Usuario {
   }
 }
 
-function Navbar() {
-  const navigate = useNavigate();
-  const { setToken, setUser } = useTokenStore();
-  const { token, user } = useTokenStore();
-  const { reset } = useQueryErrorResetBoundary();
+function CardNavbar() {
 
-  function handleLogout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setToken(undefined);
-    setUser(undefined);
-    navigate('/');
-  }
+  const { token, user } = useTokenStore();
 
   async function fetchUser() {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/${user?.id}`, {
@@ -47,29 +37,29 @@ function Navbar() {
     return data;
   }
 
-  function CardNavbar() {
-    const { data: usuario } = useSuspenseQuery({
-      queryKey: ['usuarios', 'nav'],
-      queryFn: () => {
-        return fetchUser();
-      },
-    })
-    return (
-      <div className="flex items-center justify-end w-[40%] sm:w-[20%] gap-4">
-        <NavLink to={`/perfil/${usuario.id}`} className="w-full">
-          <div className="w-full flex items-center justify-around gap-2 p-2 sm:p-3 border border-cyan-500 rounded-md">
-            <p className="text-sm sm:text-xl">Nível {usuario.nivel}</p>
-            <img
-              className="w-12 sm:w-16 rounded-full"
-              src={usuario.avatar.caminho}
-              alt="Imagem de perfil"
-            />
-          </div>
-        </NavLink>
-      </div>
+  const { data: usuario } = useSuspenseQuery({
+    queryKey: ['usuarios', 'nav'],
+    queryFn: () => {
+      return fetchUser();
+    },
+  })
+  return (
+    <div className="flex items-center justify-end w-[40%] sm:w-[20%] gap-4">
+      <NavLink to={`/perfil/${usuario.id}`} className="w-full">
+        <div className="w-full flex items-center justify-around gap-2 p-2 sm:p-3 border border-cyan-500 rounded-md">
+          <p className="text-sm sm:text-xl">Nível {usuario.nivel}</p>
+          <img
+            className="w-12 sm:w-16 rounded-full"
+            src={usuario.avatar.caminho}
+            alt="Imagem de perfil"
+          />
+        </div>
+      </NavLink>
+    </div>
 
-    )
-  }
+  )
+}
+
 
   function CarregandoCardNavBar() {
     return (
@@ -86,6 +76,18 @@ function Navbar() {
     )
   }
 
+function Navbar() {
+  const navigate = useNavigate();
+  const { setToken, setUser } = useTokenStore();
+  const { reset } = useQueryErrorResetBoundary();
+
+  function handleLogout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setToken(undefined);
+    setUser(undefined);
+    navigate('/');
+  }
   return (
     <div className="flex w-full items-center justify-between shadow-2xl p-3">
       <div className="flex items-center justify-start w-[60%] sm:w-[70%]">
@@ -114,8 +116,6 @@ function Navbar() {
         <p className='font-bold text-lg text-black'>Sair</p>
       </button>
     </div>
-
-
   );
 }
 
