@@ -538,14 +538,14 @@ export function Sala() {
   }
 
   if (!usuarioNavBar) {
-    return <p className="text-white p-5">Carregando...</p>;
+    return <p className=" p-5">Carregando...</p>;
   }
   if (!sala || !sala.codigo) return null;
-  if (carregando && usuarioNavBar?.tipo_usuario_id === 2) return <p className="text-white p-5">Carregando estatísticas...</p>;
-  if (!dados && usuarioNavBar?.tipo_usuario_id === 2) return <p className="text-white p-5">Erro ao carregar estatísticas.</p>;
+  if (carregando && usuarioNavBar?.tipo_usuario_id === 2) return <p className=" p-5">Carregando estatísticas...</p>;
+  if (!dados && usuarioNavBar?.tipo_usuario_id === 2) return <p className=" p-5">Erro ao carregar estatísticas.</p>;
 
   return (
-    <div className="min-h-screen md:w-[100%] text-white">
+    <div className="min-h-screen md:w-[100%] ">
       {quizFinalizado ? (
         <div className="w-full flex flex-col justify-start items-center gap-12 pb-10 mb-40 px-4">
           <h1 className="text-3xl font-bold">Quiz Finalizado!</h1>
@@ -583,7 +583,7 @@ export function Sala() {
                   value={chatText}
                   onChange={(e) => setChatText(e.target.value)}
                   placeholder="Digite sua mensagem..."
-                  className="flex-1 bg-gray-800 text-white"
+                  className="flex-1  "
                 />
                 <Button
                   type="submit"
@@ -651,7 +651,16 @@ export function Sala() {
                 <p>
                   Código de sala: <span className="font-bold text-3xl">{codigo}</span>
                 </p>
+<<<<<<< HEAD
 
+=======
+                <p>
+                  Prontos: {readyPlayers.length} / {alunos.length}
+                </p>
+                   <p>
+                  Porfavor, envie as disciplinas e dificuldade antes de iniciar a partida
+                </p>
+>>>>>>> b8da7f9b820a2b03542d822ff611bd6025397546
               </div>
               {user?.id === sala?.host_id ? (
                 <>
@@ -668,6 +677,7 @@ export function Sala() {
                     onSubmit={formik.handleSubmit}
                     onReset={formik.handleReset}
                   >
+<<<<<<< HEAD
                     {["materia1", "materia2", "materia3"].map((_, index) => {
                       const materiasFiltradas = materias.filter((m) => {
                         const jaEscolhidaEmOutro =
@@ -691,9 +701,30 @@ export function Sala() {
                         </Select>
                       );
                     })}
+=======
+                    {["materia1", "materia2", "materia3"].map((materiaKey, index) => (
+                      <Select
+                        key={materiaKey}
+                        onChange={(e) => handleSelectMateria(e, index)}
+                        value={selectedMaterias[index] || ""}
+                        className="w-full md:w-4/5  text-black"
+                        label={`Selecione a disciplina ${index + 1}`}
+                      >
+                        {materias.map((materia) => (
+                          <SelectItem
+                            key={`${materia.id}-${index}`}
+                            
+                            className="text-black"
+                          >
+                            {materia.nome}
+                          </SelectItem>
+                        ))}
+                      </Select>
+                    ))}
+>>>>>>> b8da7f9b820a2b03542d822ff611bd6025397546
 
                     <Select
-                      className="w-full md:w-4/5 bg-gray-800 text-black"
+                      className="w-full md:w-4/5  text-black"
                       label="Selecione uma dificuldade"
                       value={dificuldadeId ?? ""}
                       onChange={(e) => setDificuldadeId(parseInt(e.target.value))}
@@ -707,6 +738,7 @@ export function Sala() {
                     </Select>
 
                     <div className="flex gap-2">
+<<<<<<< HEAD
                       {!questionsSent && (
                         <Button
                           size="lg"
@@ -717,6 +749,24 @@ export function Sala() {
                           Enviar
                         </Button>
                       )}
+=======
+                      <Button
+                        size="sm"
+                        color="primary"
+                        type="submit"
+                        className="bg-cyan-500 hover:bg-cyan-600"
+                      >
+                        Enviar
+                      </Button>
+                      <Button
+                        size="sm"
+                        type="reset"
+                        variant="flat"
+                        className="border border-cyan-500 "
+                      >
+                        Limpar
+                      </Button>
+>>>>>>> b8da7f9b820a2b03542d822ff611bd6025397546
                     </div>
                   </Form>
                 </>
@@ -790,7 +840,7 @@ export function Sala() {
                   value={chatText}
                   onChange={(e) => setChatText(e.target.value)}
                   placeholder="Digite sua mensagem..."
-                  className="flex-1 bg-gray-800 text-white"
+                  className="flex-1  "
                 />
                 <Button
                   type="submit"

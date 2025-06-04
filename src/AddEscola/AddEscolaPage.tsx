@@ -80,30 +80,24 @@ export function AddEscolaPage() {
                 <Input
                     isRequired
                     errorMessage="Coloque um nome valido"
-                    label="Nome"
-                    labelPlacement="outside"
+                  
                     onChange={formik.handleChange}
                     value={formik.values.nome}
                     name="nome"
                     placeholder="Nome..."
                     type="text"
-                    classNames={{
-                        label: '!text-white'
-                    }}
+                    
                 />
                  <Input
                     isRequired
                     errorMessage="Coloque um cnpj valido"
-                    label="Cnpj"
-                    labelPlacement="outside"
+                    
                     onChange={formik.handleChange}
                     value={formik.values.cnpj}
                     name="cnpj"
                     placeholder="Cnpj..."
                     type="text"
-                    classNames={{
-                        label: '!text-white'
-                    }}
+                   
                 />
                 <div className="flex gap-2">
                     <Button size='lg' color="primary" type="submit">

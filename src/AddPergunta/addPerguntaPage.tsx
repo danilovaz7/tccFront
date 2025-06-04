@@ -105,22 +105,19 @@ export function AddPerguntaPage() {
                     <p>Tornar pergunta pública</p>
                     <Checkbox
                         onChange={() => { setIsChecked(!isCheked) }}
-                        className='text-white' ></Checkbox>
+                         ></Checkbox>
                 </div>
                 
                 <Input
                     isRequired
                     errorMessage="Coloque um pergunta valido"
-                    label="Pergunta"
-                    labelPlacement="outside"
+                    
                     onChange={formik.handleChange}
                     value={formik.values.pergunta}
                     name="pergunta"
                     placeholder="Pergunta..."
                     type="text"
-                    classNames={{
-                        label: '!text-white'
-                    }}
+                    
                 />
 
                 <Select
@@ -154,61 +151,49 @@ export function AddPerguntaPage() {
                 <Input
                     isRequired
                     errorMessage="Coloque uma alternativa valida"
-                    label="Alternativa 1"
-                    labelPlacement="outside"
+                  
                     onChange={formik.handleChange}
                     value={formik.values.alternativas[0]}
                     name="alternativas.0"
                     placeholder="Alternativa 1..."
                     type="text"
-                    classNames={{
-                        label: '!text-white'
-                    }}
+                    
                 />
 
                 <Input
                     isRequired
                     errorMessage="Coloque uma alternativa valida"
-                    label="Alternativa 2"
-                    labelPlacement="outside"
+                    
                     onChange={formik.handleChange}
                     value={formik.values.alternativas[1]}
                     name="alternativas.1"
                     placeholder="Alternativa 2..."
                     type="text"
-                    classNames={{
-                        label: '!text-white'
-                    }}
+                    
                 />
 
                 <Input
                     isRequired
                     errorMessage="Coloque uma alternativa valida"
-                    label="Alternativa 3"
-                    labelPlacement="outside"
+                    
                     onChange={formik.handleChange}
                     value={formik.values.alternativas[2]}
                     name="alternativas.2"
                     placeholder="Alternativa 3..."
                     type="text"
-                    classNames={{
-                        label: '!text-white'
-                    }}
+                    
                 />
 
                 <Input
                     isRequired
                     errorMessage="Coloque uma alternativa valida"
-                    label="Alternativa 4"
-                    labelPlacement="outside"
+                  
                     onChange={formik.handleChange}
                     value={formik.values.alternativas[3]}
                     name="alternativas.3"
                     placeholder="Alternativa 4..."
                     type="text"
-                    classNames={{
-                        label: '!text-white'
-                    }}
+                    
                 />
 
                 <Select

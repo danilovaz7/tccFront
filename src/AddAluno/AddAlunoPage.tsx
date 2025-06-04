@@ -156,16 +156,13 @@ export function AddAlunoPage() {
                 <Input
                     isRequired
                     errorMessage="Coloque um nome válido"
-                    label="Nome"
-                    labelPlacement="outside"
+                  
                     onChange={formik.handleChange}
                     value={formik.values.nome}
                     name="nome"
                     placeholder="Nome..."
                     type="text"
-                    classNames={{
-                        label: '!text-white',
-                    }}
+                   
                 />
                 <Select
                     isRequired
@@ -202,16 +199,13 @@ export function AddAlunoPage() {
                 <Input
                     isRequired
                     errorMessage="Insira um email válido 'exemplo@email.com'"
-                    label="Email"
-                    labelPlacement="outside"
+               
                     onChange={formik.handleChange}
                     value={formik.values.email}
                     name="email"
                     placeholder="Email..."
                     type="email"
-                    classNames={{
-                        label: '!text-white',
-                    }}
+                  
                 />
 
                 <Select
@@ -229,18 +223,16 @@ export function AddAlunoPage() {
                     isRequired
                     className="max-w-full sm:max-w-xs"
                     errorMessage="Insira uma matrícula válida de 6 dígitos"
-                    label="Matrícula"
+             
                     onChange={formik.handleChange}
                     value={formik.values.matricula}
-                    labelPlacement="outside"
+               
                     name="matricula"
                     placeholder="Matrícula..."
                     type="text"
                     maxLength={6}
                     minLength={6}
-                    classNames={{
-                        label: '!text-white',
-                    }}
+                  
                 />
 
                 <Select
