@@ -118,6 +118,7 @@ export function ListagemPage() {
                     'Authorization': `Bearer ${token}`
                 },
             })
+            
             const usuarios = await response.json()
             setUsers(usuarios)
         }
