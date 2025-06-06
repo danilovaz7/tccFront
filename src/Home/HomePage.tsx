@@ -272,7 +272,7 @@ export function HomePage() {
             },
         })
         return (
-            <div className="w-full p-2 shadow-2xl flex gap-3 flex-wrap rounded-lg justify-center items-center">
+            <div className="w-full p-2 shadow-2xl flex gap-5 flex-wrap rounded-lg justify-center items-center">
                 {
                     eloMaterias.map((eloMateria, index) => {
                         let eloIcon = '';
@@ -496,7 +496,7 @@ export function HomePage() {
 
             {
                 usuario?.tipo_usuario_id === 2 ?
-                    <div className="w-11/12 flex flex-col justify-center items-center gap-4 pb-14">
+                    <div className="w-full flex flex-col justify-center items-center gap-4 pb-14">
                         <h1 className="text-cyan-400 text-3xl md:text-5xl text-center">Aperfeiçoe seus conhecimentos</h1>
                         <h3 className="text-xl md:text-3xl text-center">Selecione a matéria que deseja treinar</h3>
 

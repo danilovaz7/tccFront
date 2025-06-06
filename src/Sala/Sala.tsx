@@ -651,6 +651,7 @@ export function Sala() {
                 <p>
                   Código de sala: <span className="font-bold text-3xl">{codigo}</span>
                 </p>
+                <p className='text-lg'><span className='text-yellow-300'>Antes</span> de iniciar a partida, envie as disciplinas!</p>
               </div>
               {user?.id === sala?.host_id ? (
                 <>
