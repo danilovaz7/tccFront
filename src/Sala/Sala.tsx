@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router';
 import { useTokenStore } from '../hooks/useTokenStore';
 import { useSocket } from '../hooks/useSocket';
 
-import { Form, Input, Button, Select, SelectItem, Alert,  } from "@heroui/react";
+import { Form, Input, Button, Select, SelectItem, Alert, } from "@heroui/react";
 import { useFormik } from 'formik';
 import UserCard from '../components/UserCard/UserCard';
 
@@ -42,7 +42,7 @@ interface Sala {
 interface ChatMessage {
   message: string;
   sender: string
- }
+}
 
 interface Estatisticas {
   total_disputas: number;
@@ -79,6 +79,7 @@ export function Sala() {
   const [dados, setDados] = useState<Estatisticas | null>(null);
   const [_perguntasMaterias, setPerguntasMaterias] = useState<Pergunta[]>([]);
   const [carregando, setCarregando] = useState(true);
+  const [questionsSent, setQuestionsSent] = useState(false);
 
   const [quizStarted, setQuizStarted] = useState(false);
   const [readyPlayers, setReadyPlayers] = useState<number[]>([]);
@@ -143,6 +144,7 @@ export function Sala() {
         setMensagem('perguntas enviadas com êxito');
         setMensagemCor('success')
         socket?.emit("enviarPerguntas", { roomId: sala?.id, perguntas });
+        setQuestionsSent(true);
       } catch (error) {
         console.error('Erro no envio das perguntas:', error);
         setMensagem('Ocorreu um erro ao enviar as perguntas.');
@@ -208,7 +210,7 @@ export function Sala() {
       setPerguntaAtual(pergunta);
       setAlternativasAtuais(alternativasEmbaralhadas);
       setTempoRestante(tempo);
-      
+
       setVencedor(null);
       setJaRespondeu(false);
       // Limpa o timer de descanso quando iniciar nova pergunta
@@ -235,7 +237,7 @@ export function Sala() {
   // Question Result
   useEffect(() => {
     if (!socket) return;
-    const handleResultadoPergunta = ({  vencedor, scoreboard }: { vencedor: string | null, scoreboard: Score[] }) => {
+    const handleResultadoPergunta = ({ vencedor, scoreboard }: { vencedor: string | null, scoreboard: Score[] }) => {
       setVencedor(vencedor);
       setScoreboard(scoreboard);
       // Inicia o timer de descanso de 5 segundos
@@ -351,7 +353,7 @@ export function Sala() {
     if (!socket) return;
     const handleReceberPerguntas = (perguntas: any) => {
       console.log("Perguntas recebidas via Socket:", perguntas);
-       setPerguntasMaterias(perguntas);
+      setPerguntasMaterias(perguntas);
     };
     socket.on("receberPerguntas", handleReceberPerguntas);
     return () => {
@@ -649,40 +651,45 @@ export function Sala() {
                 <p>
                   Código de sala: <span className="font-bold text-3xl">{codigo}</span>
                 </p>
-                <p>
-                  Prontos: {readyPlayers.length} / {alunos.length}
-                </p>
-                   <p>
-                  Porfavor, envie as disciplinas e dificuldade antes de iniciar a partida
-                </p>
               </div>
               {user?.id === sala?.host_id ? (
                 <>
                   <h1 className="text-xl font-bold">Selecione 3 disciplinas</h1>
+
+                  {mensagem ? (
+                    <div className="flex items-center justify-center w-full">
+                      <Alert color={mensagemCor} title={mensagem} />
+                    </div>
+                  ) : null}
+
                   <Form
                     className="w-full flex flex-col justify-center items-center gap-4"
                     onSubmit={formik.handleSubmit}
                     onReset={formik.handleReset}
                   >
-                    {["materia1", "materia2", "materia3"].map((materiaKey, index) => (
-                      <Select
-                        key={materiaKey}
-                        onChange={(e) => handleSelectMateria(e, index)}
-                        value={selectedMaterias[index] || ""}
-                        className="w-full md:w-4/5  text-black"
-                        label={`Selecione a disciplina ${index + 1}`}
-                      >
-                        {materias.map((materia) => (
-                          <SelectItem
-                            key={`${materia.id}-${index}`}
-                            
-                            className="text-black"
-                          >
-                            {materia.nome}
-                          </SelectItem>
-                        ))}
-                      </Select>
-                    ))}
+                    {["materia1", "materia2", "materia3"].map((_, index) => {
+                      const materiasFiltradas = materias.filter((m) => {
+                        const jaEscolhidaEmOutro =
+                          selectedMaterias.includes(m.id) && selectedMaterias[index] !== m.id;
+                        return !jaEscolhidaEmOutro;
+                      });
+
+                      return (
+                        <Select
+                          key={index}
+                          onChange={(e) => handleSelectMateria(e, index)}
+                          value={selectedMaterias[index] || ""}
+                          className="w-full md:w-4/5 bg-gray-800 text-black"
+                          label={`Selecione a disciplina ${index + 1}`}
+                        >
+                          {materiasFiltradas.map((materia) => (
+                            <SelectItem key={materia.id} className="text-black">
+                              {materia.nome}
+                            </SelectItem>
+                          ))}
+                        </Select>
+                      );
+                    })}
 
                     <Select
                       className="w-full md:w-4/5  text-black"
@@ -690,40 +697,27 @@ export function Sala() {
                       value={dificuldadeId ?? ""}
                       onChange={(e) => setDificuldadeId(parseInt(e.target.value))}
                     >
-                      <SelectItem  key={1} className="text-black">{'Aprendiz'}</SelectItem>
-                      <SelectItem  key={2} className="text-black">{'Regular'}</SelectItem>
-                      <SelectItem  key={3} className="text-black">{'Estudioso'}</SelectItem>
-                      <SelectItem  key={4} className="text-black">{'Exemplar'}</SelectItem>
-                      <SelectItem  key={5} className="text-black">{'Avançado'}</SelectItem>
-                      <SelectItem  key={6} className="text-black">{'Brilhante'}</SelectItem>
+                      <SelectItem key={1} className="text-black">{'Aprendiz'}</SelectItem>
+                      <SelectItem key={2} className="text-black">{'Regular'}</SelectItem>
+                      <SelectItem key={3} className="text-black">{'Estudioso'}</SelectItem>
+                      <SelectItem key={4} className="text-black">{'Exemplar'}</SelectItem>
+                      <SelectItem key={5} className="text-black">{'Avançado'}</SelectItem>
+                      <SelectItem key={6} className="text-black">{'Brilhante'}</SelectItem>
                     </Select>
 
                     <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        color="primary"
-                        type="submit"
-                        className="bg-cyan-500 hover:bg-cyan-600"
-                      >
-                        Enviar
-                      </Button>
-                      <Button
-                        size="sm"
-                        type="reset"
-                        variant="flat"
-                        className="border border-cyan-500 "
-                      >
-                        Limpar
-                      </Button>
+                      {!questionsSent && (
+                        <Button
+                          size="lg"
+                          color="primary"
+                          type="submit"
+                          className="bg-cyan-500 hover:bg-cyan-600"
+                        >
+                          Enviar
+                        </Button>
+                      )}
                     </div>
                   </Form>
-                  {
-                    mensagem ?
-                      <div className="flex items-center justify-center w-full">
-                        <Alert color={mensagemCor} title={mensagem} />
-                      </div>
-                      : null
-                  }
                 </>
               ) : (
                 <div className="w-full flex flex-col justify-center items-center gap-4">
@@ -746,6 +740,9 @@ export function Sala() {
             {/* Lista de jogadores */}
             <div className="w-full md:w-[40%] p-5 flex flex-col items-center gap-5">
               <h1 className="text-xl font-bold">Lista de jogadores</h1>
+              <p className='text-2xl'>
+                Prontos: {readyPlayers.length} / {alunos.length}
+              </p>
               <div className="flex flex-col items-center gap-5 w-full pb-10">
                 {alunos.map((aluno) => (
                   <UserCard
@@ -763,7 +760,14 @@ export function Sala() {
                   size="lg"
                   onClick={handlePronto}
                   color="primary"
-                  className="bg-cyan-500 hover:bg-cyan-600"
+                  disabled={readyPlayers.includes(user?.id!)}
+                  className={`
+    ${readyPlayers.includes(user?.id!)
+                      ? "bg-gray-600 cursor-not-allowed opacity-50"
+                      : "bg-cyan-500 hover:bg-cyan-600"
+                    } 
+    text-white
+  `}
                 >
                   Pronto
                 </Button>
