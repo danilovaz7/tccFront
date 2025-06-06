@@ -111,7 +111,7 @@ export function ListagemPage() {
         console.log(pesquisa)
         async function pegaUsuarios() {
 
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/usuarios?id_turma=${pesquisa.id_turma}&order=${pesquisa.order}&orderDirection=DESC&materiaId=${pesquisa.materia_id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/usuarios?id_turma=${pesquisa.id_turma}&id_escola=${usuarioNavBar?.id_escola}&order=${pesquisa.order}&orderDirection=DESC&materiaId=${pesquisa.materia_id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
